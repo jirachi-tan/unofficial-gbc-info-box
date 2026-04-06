@@ -19,7 +19,7 @@ import { eventsData, type EventItem } from "./data/events";
 type ViewKey = "focus" | "timeline" | "calendar";
 
 const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{ className?: string }> }> = [
-  { key: "focus", label: "注目日", icon: Clock3 },
+  { key: "focus", label: "今日", icon: Clock3 },
   { key: "timeline", label: "タイムライン", icon: ListTree },
   { key: "calendar", label: "カレンダー", icon: CalendarDays },
 ];
@@ -292,8 +292,8 @@ function HeroSection({
           </div>
 
           <div className="stats-grid">
-            <StatTile icon={CalendarDays} label="注目月の予定" value={String(monthCount)} />
-            <StatTile icon={Clock3} label="注目日の件数" value={String(focusCount)} />
+            <StatTile icon={CalendarDays} label="今月の予定" value={String(monthCount)} />
+            <StatTile icon={Clock3} label="今日の件数" value={String(focusCount)} />
             <StatTile icon={Music4} label="カテゴリ数" value={String(categoryCount)} />
             <StatTile icon={Sparkles} label="基準日" value={formatDisplayDate(referenceDate)} />
           </div>
@@ -364,7 +364,7 @@ function FocusView({ events, referenceDate }: { events: EventItem[]; referenceDa
         <div className="panel-head">
           <div>
             <div className="eyebrow pink">focus day</div>
-            <h2 className="panel-title">注目日の予定</h2>
+            <h2 className="panel-title">今日の予定</h2>
           </div>
           <div className="date-pill">{formatDisplayDate(referenceDate)}</div>
         </div>
@@ -432,7 +432,7 @@ function TimelineView({ events, referenceDate }: { events: EventItem[]; referenc
           <div className="eyebrow sky">timeline</div>
           <h2 className="panel-title">時系列で見る予定一覧</h2>
         </div>
-        <div className="muted-text">注目日以降の予定を表示</div>
+        <div className="muted-text">今日以降の予定を表示</div>
       </div>
 
       <div className="timeline-wrap">
@@ -518,7 +518,7 @@ function CalendarView({
               <ChevronRight className="icon-18" />
             </button>
             <button className="button pink-soft-button" type="button" onClick={goToReference}>
-              注目日へ戻る
+              今日へ戻る
             </button>
           </div>
         </div>
@@ -584,7 +584,7 @@ function CalendarView({
             <h3 className="panel-title small-title">{formatDisplayDate(selectedDate)} の予定</h3>
             <div className="muted-text">全 {selectedDayEvents.length} 件</div>
           </div>
-          {isSameDate(selectedDate, referenceDate) && <span className="date-pill">注目日</span>}
+          {isSameDate(selectedDate, referenceDate) && <span className="date-pill">今日</span>}
         </div>
 
         <div className="selected-note">
@@ -653,8 +653,8 @@ export default function App() {
             </div>
 
             <div className="info-grid">
-              <InfoCard title="注目日" text="基準日に重なっているイベントを一覧化して把握しやすく表示。" />
-              <InfoCard title="タイムライン" text="注目日以降の予定を時系列で追いやすい一覧に整理。" />
+              <InfoCard title="今日" text="今日に重なっているイベントを一覧化して把握しやすく表示。" />
+              <InfoCard title="タイムライン" text="今日以降の予定を時系列で追いやすい一覧に整理。" />
               <InfoCard title="カレンダー" text="1か月単位で俯瞰しつつ、クリックでその日の全件を確認。" />
             </div>
           </div>
