@@ -5,15 +5,14 @@ import {
   CalendarDays,
   Clock3,
   Music4,
-  Radio,
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid,
   ListTree,
   CircleAlert,
   ExternalLink,
   Menu,
+  Link as LinkIcon,
 } from "lucide-react";
 import { eventsData, type EventItem } from "./data/events";
 
