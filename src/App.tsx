@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CalendarDays,
@@ -533,6 +533,17 @@ function CalendarView({
     return getSortedEvents(events.filter((event) => isInRange(selectedDate, event.date, event.endDate)));
   }, [events, selectedDate]);
 
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      const element = document.querySelector('#selected-day-section');
+      if (element) {
+        const headerHeight = (document.querySelector('.header-nav') as HTMLElement | null)?.offsetHeight || 0;
+        const offsetTop = element.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+        window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+      }
+    }
+  }, [selectedDate]);
+
   const goToReference = () => {
     const d = parseYmd(referenceDate);
     setMonthDate(new Date(d.getFullYear(), d.getMonth(), 1));
@@ -612,7 +623,7 @@ function CalendarView({
       </section>
 
       <aside className="panel sidebar-stack">
-        <section className="panel">
+        <section className="panel" id="selected-day-section">
           <div className="panel-head compact">
             <div>
               <div className="eyebrow pink">selected day</div>
