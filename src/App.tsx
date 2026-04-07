@@ -12,6 +12,7 @@ import {
   ExternalLink,
   Menu,
   Link as LinkIcon,
+  ChevronUp,
 } from "lucide-react";
 import { eventsData, type EventItem } from "./data/events";
 
@@ -277,7 +278,7 @@ function HeroSection({
           <div className="hero-copy">
             <div className="hero-chip">
               <Sparkles className="icon-14" />
-              fan made schedule portal
+              fan made GBC portal
             </div>
 
             <h1 className="hero-title">【非公式】ガルクラの箱</h1>
@@ -379,61 +380,62 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
 }
 
 function UpcomingButton({ view }: { view: ViewKey }) {
-  const [showTopButton, setShowTopButton] = useState(false);
+  const handleTopClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowTopButton(entry.isIntersecting);
-      },
-      { threshold: 0 }
-    );
-
-    const upcomingSection = document.querySelector('#upcoming-section');
-    if (upcomingSection) {
-      observer.observe(upcomingSection);
+  const handleViewClick = () => {
+    const section = document.querySelector('#schedule-switch');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
+  };
 
-    return () => {
-      if (upcomingSection) observer.unobserve(upcomingSection);
-    };
-  }, [view]);
-
-  const handleClick = () => {
-    if (showTopButton) {
-      if (view === "focus") {
-        const section = document.querySelector('#focus-section');
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      } else {
-        const section = document.querySelector('#calendar-section');
-        if (section) {
-          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }
-    } else {
-      const section = document.querySelector('#upcoming-section');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+  const handleUpcomingClick = () => {
+    const section = document.querySelector('#upcoming-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
   return (
-    <AnimatePresence>
+    <div className="upcoming-buttons">
       <motion.button
         className="upcoming-button"
-        onClick={handleClick}
+        onClick={handleTopClick}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.22 }}
-        aria-label={showTopButton ? (view === "focus" ? "scroll to focus section" : "scroll to calendar section") : "scroll to upcoming events"}
+        aria-label="scroll to top"
       >
-        <span>{showTopButton ? (view === "focus" ? '↑ 今日の予定に戻る' : '↑ カレンダーに戻る') : '↓ 直近の予定を見る'}</span>
+        <ChevronUp className="icon-16" />
+        <span>TOP</span>
       </motion.button>
-    </AnimatePresence>
+
+      <motion.button
+        className="upcoming-button"
+        onClick={handleViewClick}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, delay: 0.1 }}
+        aria-label="scroll to schedule switch"
+      >
+        {view === "focus" ? <Clock3 className="icon-16" /> : <CalendarDays className="icon-16" />}
+        <span>{view === "focus" ? "今日" : "カレンダー"}</span>
+      </motion.button>
+
+      <motion.button
+        className="upcoming-button"
+        onClick={handleUpcomingClick}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, delay: 0.2 }}
+        aria-label="scroll to upcoming events"
+      >
+        <CalendarDays className="icon-16" />
+        <span>直近</span>
+      </motion.button>
+    </div>
   );
 }
 
@@ -709,7 +711,7 @@ export default function App() {
         />
 
         <section className="intro-grid">
-          <div className="panel">
+          <div className="panel" id="schedule-switch">
             <div className="panel-head">
               <div>
                 <div className="eyebrow muted">schedule hub</div>
