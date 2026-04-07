@@ -378,7 +378,7 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
   );
 }
 
-function UpcomingButton() {
+function UpcomingButton({ view }: { view: ViewKey }) {
   const [showTopButton, setShowTopButton] = useState(false);
 
   useEffect(() => {
@@ -401,7 +401,17 @@ function UpcomingButton() {
 
   const handleClick = () => {
     if (showTopButton) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      if (view === "focus") {
+        const section = document.querySelector('#focus-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      } else {
+        const section = document.querySelector('#calendar-section');
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
     } else {
       const section = document.querySelector('#upcoming-section');
       if (section) {
@@ -419,9 +429,9 @@ function UpcomingButton() {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
         transition={{ duration: 0.22 }}
-        aria-label={showTopButton ? "scroll to top" : "scroll to upcoming events"}
+        aria-label={showTopButton ? (view === "focus" ? "scroll to focus section" : "scroll to calendar section") : "scroll to upcoming events"}
       >
-        <span>{showTopButton ? '↑ 一番上に戻る' : '↓ 直近の予定を見る'}</span>
+        <span>{showTopButton ? (view === "focus" ? '↑ 今日の予定に戻る' : '↑ カレンダーに戻る') : '↓ 直近の予定を見る'}</span>
       </motion.button>
     </AnimatePresence>
   );
@@ -433,7 +443,7 @@ function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventI
 
   return (
     <div className="two-column">
-      <section className="panel">
+      <section className="panel" id="focus-section">
         <div className="panel-head">
           <div>
             <div className="eyebrow pink">focus day</div>
@@ -536,7 +546,7 @@ function CalendarView({
 
   return (
     <div className="calendar-layout">
-      <section className="panel">
+      <section className="panel" id="calendar-section">
         <div className="panel-head">
           <div>
             <div className="eyebrow violet">monthly calendar</div>
@@ -782,7 +792,7 @@ export default function App() {
         </footer>
       </main>
 
-      <UpcomingButton />
+      <UpcomingButton view={view} />
 
       <AnimatePresence>
         {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
