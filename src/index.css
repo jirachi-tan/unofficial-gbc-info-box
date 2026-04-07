@@ -832,15 +832,20 @@ button {
 }
 
 .calendar-cell-selected {
-  border-color: #f9a8d4;
-  background: linear-gradient(135deg, #fdf2f8, #eff6ff);
-  box-shadow: 0 10px 24px rgba(217, 70, 239, 0.08);
+  border-color: #f472b6;
+  background: linear-gradient(135deg, #fff1f2, #eef2ff);
+  box-shadow: 0 14px 32px rgba(244, 114, 182, 0.18);
+}
+
+.calendar-cell-selected .calendar-day-number {
+  background: #f472b6;
+  color: white;
 }
 
 .calendar-cell-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
   margin-bottom: 10px;
 }
@@ -873,6 +878,17 @@ button {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+.calendar-event-summary {
+  border-radius: 12px;
+  border: 1px solid #fce7f3;
+  background: linear-gradient(90deg, #fdf2f8, white, #eff6ff);
+  color: #be185d;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 8px;
+  text-align: center;
 }
 
 .calendar-more {

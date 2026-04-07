@@ -596,24 +596,11 @@ function CalendarView({
               >
                 <div className="calendar-cell-head">
                   <span className={cn("calendar-day-number", isReference && "calendar-day-reference")}>{day.getDate()}</span>
-                  {dayEvents.length > 1 && <span className="calendar-count-pill">{dayEvents.length}予定</span>}
                 </div>
 
                 <div className="calendar-cell-body">
                   {dayEvents.length > 0 ? (
-                    <>
-                      <div className={cn("mini-event-row", getCategoryTone(dayEvents[0].category).mini)} title={dayEvents[0].title}>
-                        <span className="mini-event-title">{dayEvents[0].title}</span>
-                      </div>
-                      {dayEvents[1] && (
-                        <div className="desktop-mini">
-                          <div className={cn("mini-event-row", getCategoryTone(dayEvents[1].category).mini, "mini-event-row-secondary")} title={dayEvents[1].title}>
-                            <span className="mini-event-title">{dayEvents[1].title}</span>
-                          </div>
-                        </div>
-                      )}
-                      {dayEvents.length > 1 && <div className="calendar-more">ほか {dayEvents.length - 1}件</div>}
-                    </>
+                    <div className="calendar-event-summary">{dayEvents.length}件の予定</div>
                   ) : (
                     <div className="calendar-empty">予定なし</div>
                   )}
@@ -636,7 +623,7 @@ function CalendarView({
           </div>
 
           <div className="selected-note">
-            カレンダーでは代表予定のみ表示し、日付を押すとここにその日の予定をすべて展開します。
+            カレンダーではその日の予定件数のみを表示します。日付を押すとここにその日の詳細を展開し、右側で確認できます。
           </div>
 
           <div className="selected-list">
