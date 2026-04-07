@@ -1079,6 +1079,8 @@ code {
     animation: pulse-dot 2s infinite;
   }
 }
+
+@media (min-width: 900px) {
   .desktop-only {
     display: inline-flex;
   }
