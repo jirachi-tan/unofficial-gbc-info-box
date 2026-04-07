@@ -57,6 +57,83 @@ function formatTimeRange(time?: string | null, endTime?: string | null) {
   return "終日";
 }
 
+function nthWeekdayOfMonth(year: number, month: number, weekday: number, nth: number) {
+  const first = new Date(year, month, 1);
+  const day = first.getDay();
+  const offset = (weekday - day + 7) % 7;
+  return new Date(year, month, 1 + offset + 7 * (nth - 1));
+}
+
+function equinoxDay(year: number, spring: boolean) {
+  const yearOffset = year - 1980;
+  if (spring) {
+    return Math.floor(20.8431 + 0.242194 * yearOffset - Math.floor(yearOffset / 4));
+  }
+  return Math.floor(23.2488 + 0.242194 * yearOffset - Math.floor(yearOffset / 4));
+}
+
+function getJapaneseHolidays(year: number) {
+  const holidays = new Set<string>();
+  const add = (date: Date) => holidays.add(formatYmd(date));
+
+  add(new Date(year, 0, 1));
+  add(nthWeekdayOfMonth(year, 0, 1, 2));
+  add(new Date(year, 1, 11));
+  add(new Date(year, 3, 29));
+  add(new Date(year, 4, 3));
+  add(new Date(year, 4, 4));
+  add(new Date(year, 4, 5));
+  add(nthWeekdayOfMonth(year, 6, 1, 3));
+  add(new Date(year, 7, 11));
+  add(nthWeekdayOfMonth(year, 8, 1, 3));
+  add(nthWeekdayOfMonth(year, 9, 1, 2));
+  add(new Date(year, 10, 3));
+  add(new Date(year, 10, 23));
+  add(new Date(year, 1, 23));
+
+  add(new Date(year, 2, equinoxDay(year, true)));
+  add(new Date(year, 8, equinoxDay(year, false)));
+
+  const originals = Array.from(holidays);
+  for (const dateStr of originals) {
+    const date = parseYmd(dateStr);
+    if (date.getDay() === 0) {
+      const substitute = new Date(date);
+      do {
+        substitute.setDate(substitute.getDate() + 1);
+      } while (holidays.has(formatYmd(substitute)));
+      add(substitute);
+    }
+  }
+
+  const start = new Date(year, 0, 1);
+  const end = new Date(year, 11, 31);
+  for (let current = new Date(start); current <= end; current.setDate(current.getDate() + 1)) {
+    const key = formatYmd(current);
+    if (!holidays.has(key)) {
+      const prev = new Date(current);
+      prev.setDate(prev.getDate() - 1);
+      const next = new Date(current);
+      next.setDate(next.getDate() + 1);
+      if (holidays.has(formatYmd(prev)) && holidays.has(formatYmd(next))) {
+        add(current);
+      }
+    }
+  }
+
+  return holidays;
+}
+
+const holidayCache = new Map<number, Set<string>>();
+
+function isJapaneseHoliday(date: Date) {
+  const year = date.getFullYear();
+  if (!holidayCache.has(year)) {
+    holidayCache.set(year, getJapaneseHolidays(year));
+  }
+  return holidayCache.get(year)!.has(formatYmd(date));
+}
+
 function formatPeriod(event: EventItem) {
   if (event.periodText) return event.periodText;
   if (event.endDate && event.endDate !== event.date) {
@@ -592,7 +669,12 @@ function CalendarView({
             const isCurrentMonth = day.getMonth() === currentMonth;
             const isReference = isSameDate(ymd, referenceDate);
             const isSelected = isSameDate(ymd, selectedDate);
-
+            const isHoliday = isJapaneseHoliday(day);
+            const dayNumberClass = cn(
+              "calendar-day-number",
+              day.getDay() === 6 && "calendar-day-number-saturday",
+              (day.getDay() === 0 || isHoliday) && "calendar-day-number-sunday"
+            );
             return (
               <button
                 key={ymd}
@@ -606,12 +688,18 @@ function CalendarView({
                 onClick={() => setSelectedDate(ymd)}
               >
                 <div className="calendar-cell-head">
-                  <span className={cn("calendar-day-number", isReference && "calendar-day-reference")}>{day.getDate()}</span>
+                  <span className={dayNumberClass}>{day.getDate()}</span>
                 </div>
 
                 <div className="calendar-cell-body">
                   {dayEvents.length > 0 ? (
-                    <div className="calendar-event-summary">{dayEvents.length}件の予定</div>
+                    <div className="calendar-event-summary">
+                      <div className="calendar-event-count">
+                        <span>{dayEvents.length}</span>
+                        <small>件</small>
+                      </div>
+                      <div className="calendar-event-label">予定</div>
+                    </div>
                   ) : (
                     <div className="calendar-empty">予定なし</div>
                   )}
