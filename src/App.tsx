@@ -448,16 +448,24 @@ function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventI
           {focusEvents.length === 0 ? (
             <div className="empty-card">この日に重なる掲載イベントはありません。</div>
           ) : (
-            focusEvents.map((event, index) => (
-              <motion.div
-                key={event.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.04 }}
-              >
-                <EventCard event={event} />
-              </motion.div>
-            ))
+            <div className="mini-list">
+              {focusEvents.map((event, index) => (
+                <motion.div
+                  key={event.id}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.04 }}
+                >
+                  <div className="mini-card" onClick={() => setSelectedEvent(event)}>
+                    <div className="mini-card-date">
+                      {formatTimeRange(event.time, event.endTime)}
+                    </div>
+                    <div className="mini-card-title">{event.title}</div>
+                    <div className="mini-card-place">{event.place ?? "-"}</div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           )}
         </div>
       </section>
