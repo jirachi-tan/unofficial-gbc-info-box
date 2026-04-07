@@ -16,11 +16,10 @@ import {
 } from "lucide-react";
 import { eventsData, type EventItem } from "./data/events";
 
-type ViewKey = "focus" | "timeline" | "calendar";
+type ViewKey = "focus" | "calendar";
 
 const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{ className?: string }> }> = [
   { key: "focus", label: "今日", icon: Clock3 },
-  { key: "timeline", label: "タイムライン", icon: ListTree },
   { key: "calendar", label: "カレンダー", icon: CalendarDays },
 ];
 
@@ -505,55 +504,6 @@ function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventI
   );
 }
 
-function TimelineView({ events, referenceDate }: { events: EventItem[]; referenceDate: string }) {
-  const timelineEvents = getSortedEvents(events.filter((event) => (event.endDate ?? event.date) >= referenceDate)).slice(0, 40);
-
-  return (
-    <section className="panel">
-      <div className="panel-head no-border">
-        <div>
-          <div className="eyebrow sky">timeline</div>
-          <h2 className="panel-title">時系列で見る予定一覧</h2>
-        </div>
-        <div className="muted-text">今日以降の予定を表示</div>
-      </div>
-
-      <div className="timeline-wrap">
-        <div className="timeline-line" />
-        <div className="timeline-stack">
-          {timelineEvents.map((event, index) => (
-            <motion.article
-              key={event.id}
-              className="timeline-card"
-              initial={{ opacity: 0, x: 24 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.03 }}
-            >
-              <div className="timeline-dot" />
-              <div className="event-meta-row">
-                <EventBadge category={event.category} />
-                <span className="muted-text">
-                  {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
-                  {event.endDate && event.endDate !== event.date ? ` ～ ${formatDisplayDate(event.endDate)}` : ""}
-                </span>
-              </div>
-              <h3 className="event-title">{event.title}</h3>
-              <div className="muted-line">{event.place ?? "場所未設定"}</div>
-              {event.note && <p className="event-note">{event.note}</p>}
-              {event.officialLink && (
-                <a className="event-link" href={event.officialLink} target="_blank" rel="noreferrer">
-                  <LinkIcon className="icon-14" />
-                  公式リンク
-                </a>
-              )}
-            </motion.article>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-}
-
 function CalendarView({
   events,
   monthDate,
@@ -771,18 +721,6 @@ export default function App() {
               transition={{ duration: 0.22 }}
             >
               <FocusView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} />
-            </motion.div>
-          )}
-
-          {view === "timeline" && (
-            <motion.div
-              key="timeline"
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.22 }}
-            >
-              <TimelineView events={events} referenceDate={referenceDate} />
             </motion.div>
           )}
 

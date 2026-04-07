@@ -565,7 +565,6 @@ button {
 }
 
 .event-card,
-.timeline-card,
 .mini-card {
   border: 1px solid #e2e8f0;
   background: rgba(255, 255, 255, 0.92);
@@ -765,42 +764,6 @@ button {
   padding: 28px;
   border-radius: 24px;
   font-size: 14px;
-}
-
-.timeline-wrap {
-  position: relative;
-  padding-left: 28px;
-}
-
-.timeline-line {
-  position: absolute;
-  left: 10px;
-  top: 8px;
-  bottom: 8px;
-  width: 1px;
-  background: linear-gradient(to bottom, #f472b6, #7dd3fc, transparent);
-}
-
-.timeline-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-
-.timeline-card {
-  position: relative;
-}
-
-.timeline-dot {
-  position: absolute;
-  left: -24px;
-  top: 26px;
-  width: 14px;
-  height: 14px;
-  border-radius: 999px;
-  border: 2px solid white;
-  background: linear-gradient(135deg, #ec4899, #38bdf8);
-  box-shadow: 0 0 18px rgba(59, 130, 246, 0.25);
 }
 
 .month-toolbar {
@@ -1161,14 +1124,6 @@ code {
 
   .panel-title {
     font-size: 28px;
-  }
-
-  .timeline-wrap {
-    padding-left: 24px;
-  }
-
-  .timeline-dot {
-    left: -20px;
   }
 
   .calendar-cell {
