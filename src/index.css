@@ -1040,43 +1040,37 @@ code {
   background: #f1f5f9;
 }
 
-.upcoming-hint {
+.upcoming-button {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  border: none;
+  background: linear-gradient(90deg, #ec4899, #38bdf8);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(236, 72, 153, 0.3);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
   display: none;
 }
 
-@keyframes pulse-dot {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 16px rgba(236, 72, 153, 0.6), 0 0 32px rgba(56, 189, 248, 0.3);
-  }
-  50% {
-    transform: scale(1.2);
-    box-shadow: 0 0 20px rgba(236, 72, 153, 0.8), 0 0 40px rgba(56, 189, 248, 0.4);
-  }
+.upcoming-button:hover {
+  box-shadow: 0 12px 32px rgba(236, 72, 153, 0.4);
+  transform: translateX(-50%) translateY(-2px);
+}
+
+.upcoming-button:active {
+  transform: translateX(-50%) translateY(0);
 }
 
 @media (max-width: 640px) {
-  .modal-content {
-    max-width: 90vw;
-    padding: 16px;
-  }
-
-  .upcoming-hint {
-    position: fixed;
-    bottom: 28px;
-    right: 20px;
-    z-index: 50;
-    pointer-events: none;
+  .upcoming-button {
     display: block;
-  }
-
-  .hint-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 999px;
-    background: linear-gradient(135deg, #ec4899, #38bdf8);
-    box-shadow: 0 0 16px rgba(236, 72, 153, 0.6), 0 0 32px rgba(56, 189, 248, 0.3);
-    animation: pulse-dot 2s infinite;
   }
 }
 

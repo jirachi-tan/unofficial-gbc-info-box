@@ -380,20 +380,51 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
   );
 }
 
-function UpcomingHint({ isVisible }: { isVisible: boolean }) {
+function UpcomingButton() {
+  const [showTopButton, setShowTopButton] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowTopButton(entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    const upcomingSection = document.querySelector('#upcoming-section');
+    if (upcomingSection) {
+      observer.observe(upcomingSection);
+    }
+
+    return () => {
+      if (upcomingSection) observer.unobserve(upcomingSection);
+    };
+  }, []);
+
+  const handleClick = () => {
+    if (showTopButton) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const section = document.querySelector('#upcoming-section');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  };
+
   return (
     <AnimatePresence>
-      {isVisible && (
-        <motion.div
-          className="upcoming-hint"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.8 }}
-          transition={{ duration: 0.22 }}
-        >
-          <div className="hint-dot" />
-        </motion.div>
-      )}
+      <motion.button
+        className="upcoming-button"
+        onClick={handleClick}
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: 20 }}
+        transition={{ duration: 0.22 }}
+        aria-label={showTopButton ? "scroll to top" : "scroll to upcoming events"}
+      >
+        <span>{showTopButton ? '↑ 一番上に戻る' : '↓ 直近の予定を見る'}</span>
+      </motion.button>
     </AnimatePresence>
   );
 }
@@ -657,25 +688,6 @@ export default function App() {
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
-  const [showUpcomingHint, setShowUpcomingHint] = useState(true);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setShowUpcomingHint(!entry.isIntersecting);
-      },
-      { threshold: 0.1 }
-    );
-
-    const upcomingSection = document.querySelector('#upcoming-section');
-    if (upcomingSection) {
-      observer.observe(upcomingSection);
-    }
-
-    return () => {
-      if (upcomingSection) observer.unobserve(upcomingSection);
-    };
-  }, []);
 
   const monthEvents = useMemo(() => events.filter((event) => overlapsMonth(event, monthDate)), [events, monthDate]);
   const focusEvents = useMemo(() => events.filter((event) => isInRange(referenceDate, event.date, event.endDate)), [events, referenceDate]);
@@ -792,7 +804,7 @@ export default function App() {
         </footer>
       </main>
 
-      <UpcomingHint isVisible={showUpcomingHint} />
+      <UpcomingButton />
 
       <AnimatePresence>
         {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
