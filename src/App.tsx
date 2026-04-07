@@ -612,10 +612,14 @@ function CalendarView({
                 <div className="calendar-cell-body">
                   {dayEvents.length > 0 ? (
                     <>
-                      <MiniEventRow event={dayEvents[0]} />
+                      <div className={cn("mini-event-row", getCategoryTone(dayEvents[0].category).mini)} title={dayEvents[0].title}>
+                        <span className="mini-event-title">{dayEvents[0].title}</span>
+                      </div>
                       {dayEvents[1] && (
                         <div className="desktop-mini">
-                          <MiniEventRow event={dayEvents[1]} secondary />
+                          <div className={cn("mini-event-row", getCategoryTone(dayEvents[1].category).mini, "mini-event-row-secondary")} title={dayEvents[1].title}>
+                            <span className="mini-event-title">{dayEvents[1].title}</span>
+                          </div>
                         </div>
                       )}
                       {dayEvents.length > 1 && <div className="calendar-more">ほか {dayEvents.length - 1}件</div>}
