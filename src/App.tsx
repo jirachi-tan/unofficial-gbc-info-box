@@ -437,7 +437,7 @@ function UpcomingButton({ view }: { view: ViewKey }) {
   );
 }
 
-function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventItem[]; referenceDate: string; setSelectedEvent: (event: EventItem) => void }) {
+function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: EventItem[]; referenceDate: string; setSelectedEvent: (event: EventItem) => void; view: ViewKey }) {
   const focusEvents = getSortedEvents(events.filter((event) => isInRange(referenceDate, event.date, event.endDate)));
   const upcomingSoon = getSortedEvents(events.filter((event) => event.date >= referenceDate)).slice(0, 5);
 
@@ -509,6 +509,7 @@ function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventI
           </div>
         </section>
       </div>
+      <UpcomingButton view={view} />
     </div>
   );
 }
@@ -519,12 +520,14 @@ function CalendarView({
   setMonthDate,
   referenceDate,
   setSelectedEvent,
+  view,
 }: {
   events: EventItem[];
   monthDate: Date;
   setMonthDate: React.Dispatch<React.SetStateAction<Date>>;
   referenceDate: string;
   setSelectedEvent: (event: EventItem) => void;
+  view: ViewKey;
 }) {
   const cells = useMemo(() => getMonthMatrix(monthDate), [monthDate]);
   const currentMonth = monthDate.getMonth();
@@ -673,6 +676,7 @@ function CalendarView({
           </div>
         </section>
       </aside>
+      <UpcomingButton view={view} />
     </div>
   );
 }
@@ -761,7 +765,7 @@ export default function App() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.22 }}
             >
-              <FocusView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} />
+              <FocusView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} view={view} />
             </motion.div>
           )}
 
@@ -779,6 +783,7 @@ export default function App() {
                 setMonthDate={setMonthDate}
                 referenceDate={referenceDate}
                 setSelectedEvent={setSelectedEvent}
+                view={view}
               />
             </motion.div>
           )}
@@ -791,8 +796,6 @@ export default function App() {
           </div>
         </footer>
       </main>
-
-      <UpcomingButton view={view} />
 
       <AnimatePresence>
         {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
