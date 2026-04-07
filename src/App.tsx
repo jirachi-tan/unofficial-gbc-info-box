@@ -611,35 +611,57 @@ function CalendarView({
         </div>
       </section>
 
-      <aside className="panel">
-        <div className="panel-head compact">
-          <div>
-            <div className="eyebrow pink">selected day</div>
-            <h3 className="panel-title small-title">{formatDisplayDate(selectedDate)} の予定</h3>
-            <div className="muted-text">全 {selectedDayEvents.length} 件</div>
+      <aside className="panel sidebar-stack">
+        <section className="panel">
+          <div className="panel-head compact">
+            <div>
+              <div className="eyebrow pink">selected day</div>
+              <h3 className="panel-title small-title">{formatDisplayDate(selectedDate)} の予定</h3>
+              <div className="muted-text">全 {selectedDayEvents.length} 件</div>
+            </div>
+            {isSameDate(selectedDate, referenceDate) && <span className="date-pill">今日</span>}
           </div>
-          {isSameDate(selectedDate, referenceDate) && <span className="date-pill">今日</span>}
-        </div>
 
-        <div className="selected-note">
-          カレンダーでは代表予定のみ表示し、日付を押すとここにその日の予定をすべて展開します。
-        </div>
+          <div className="selected-note">
+            カレンダーでは代表予定のみ表示し、日付を押すとここにその日の予定をすべて展開します。
+          </div>
 
-        <div className="selected-list">
-          {selectedDayEvents.length === 0 ? (
-            <div className="empty-card">この日に登録されているイベントはありません。</div>
-          ) : (
-            selectedDayEvents.map((event) => (
-              <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
-                <div className="mini-card-date">
-                  {formatTimeRange(event.time, event.endTime)}
+          <div className="selected-list">
+            {selectedDayEvents.length === 0 ? (
+              <div className="empty-card">この日に登録されているイベントはありません。</div>
+            ) : (
+              selectedDayEvents.map((event) => (
+                <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                  <div className="mini-card-date">
+                    {formatTimeRange(event.time, event.endTime)}
+                  </div>
+                  <div className="mini-card-title">{event.title}</div>
+                  <div className="mini-card-place">{event.place ?? "-"}</div>
                 </div>
-                <div className="mini-card-title">{event.title}</div>
-                <div className="mini-card-place">{event.place ?? "-"}</div>
-              </div>
-            ))
-          )}
-        </div>
+              ))
+            )}
+          </div>
+        </section>
+
+        <section className="panel" id="upcoming-section">
+          <div className="panel-subtitle">
+            <CalendarDays className="icon-16 sky-icon" />
+            直近の予定
+          </div>
+          <div className="mini-list">
+            {getSortedEvents(events.filter((event) => event.date >= referenceDate))
+              .slice(0, 5)
+              .map((event) => (
+                <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                  <div className="mini-card-date">
+                    {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
+                  </div>
+                  <div className="mini-card-title">{event.title}</div>
+                  <div className="mini-card-place">{event.place ?? "-"}</div>
+                </div>
+              ))}
+          </div>
+        </section>
       </aside>
     </div>
   );
