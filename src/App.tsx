@@ -387,14 +387,18 @@ function UpcomingButton({ view }: { view: ViewKey }) {
   const handleViewClick = () => {
     const section = document.querySelector('#schedule-switch');
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = (document.querySelector('.header-nav') as HTMLElement | null)?.offsetHeight || 0;
+      const offsetTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20; // 少し余裕を
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   };
 
   const handleUpcomingClick = () => {
     const section = document.querySelector('#upcoming-section');
     if (section) {
-      section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      const headerHeight = (document.querySelector('.header-nav') as HTMLElement | null)?.offsetHeight || 0;
+      const offsetTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20; // 少し余裕を
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
   };
 
