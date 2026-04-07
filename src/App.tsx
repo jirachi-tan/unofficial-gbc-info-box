@@ -354,7 +354,33 @@ function EventCard({ event }: { event: EventItem }) {
   );
 }
 
-function FocusView({ events, referenceDate }: { events: EventItem[]; referenceDate: string }) {
+function EventModal({ event, onClose }: { event: EventItem; onClose: () => void }) {
+  return (
+    <motion.div
+      className="modal-overlay"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="modal-content"
+        initial={{ scale: 0.92, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.92, opacity: 0 }}
+        transition={{ duration: 0.18 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="modal-close" onClick={onClose} aria-label="close">
+          ×
+        </button>
+        <EventCard event={event} />
+      </motion.div>
+    </motion.div>
+  );
+}
+
+function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventItem[]; referenceDate: string; setSelectedEvent: (event: EventItem) => void }) {
   const focusEvents = getSortedEvents(events.filter((event) => isInRange(referenceDate, event.date, event.endDate)));
   const upcomingSoon = getSortedEvents(events.filter((event) => event.date >= referenceDate)).slice(0, 5);
 
@@ -407,7 +433,7 @@ function FocusView({ events, referenceDate }: { events: EventItem[]; referenceDa
           </div>
           <div className="mini-list">
             {upcomingSoon.map((event) => (
-              <div key={event.id} className="mini-card">
+              <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
                 <div className="mini-card-date">
                   {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
                 </div>
@@ -612,6 +638,7 @@ export default function App() {
     const d = parseYmd(referenceDate);
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
+  const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   const monthEvents = useMemo(() => events.filter((event) => overlapsMonth(event, monthDate)), [events, monthDate]);
   const focusEvents = useMemo(() => events.filter((event) => isInRange(referenceDate, event.date, event.endDate)), [events, referenceDate]);
@@ -686,7 +713,7 @@ export default function App() {
               exit={{ opacity: 0, y: -12 }}
               transition={{ duration: 0.22 }}
             >
-              <FocusView events={events} referenceDate={referenceDate} />
+              <FocusView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} />
             </motion.div>
           )}
 
@@ -727,6 +754,10 @@ export default function App() {
           </div>
         </footer>
       </main>
+
+      <AnimatePresence>
+        {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
+      </AnimatePresence>
     </div>
   );
 }
