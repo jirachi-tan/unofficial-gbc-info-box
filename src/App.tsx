@@ -397,7 +397,7 @@ function UpcomingButton({ view }: { view: ViewKey }) {
     return () => {
       if (upcomingSection) observer.unobserve(upcomingSection);
     };
-  }, []);
+  }, [view]);
 
   const handleClick = () => {
     if (showTopButton) {
