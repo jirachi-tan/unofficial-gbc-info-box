@@ -557,7 +557,9 @@ button {
   background: #f8fafc;
 }
 
-.tab-button-active {
+.tab-button:active,
+.tab-button-active,
+.tab-button-active:hover {
   border-color: transparent;
   color: white;
   background: linear-gradient(90deg, #ec4899, #38bdf8);
