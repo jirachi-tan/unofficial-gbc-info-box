@@ -386,7 +386,7 @@ function UpcomingButton({ view }: { view: ViewKey }) {
       ([entry]) => {
         setShowTopButton(entry.isIntersecting);
       },
-      { threshold: 0.1 }
+      { threshold: 0 }
     );
 
     const upcomingSection = document.querySelector('#upcoming-section');
