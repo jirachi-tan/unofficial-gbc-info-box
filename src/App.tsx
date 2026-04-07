@@ -508,11 +508,13 @@ function CalendarView({
   monthDate,
   setMonthDate,
   referenceDate,
+  setSelectedEvent,
 }: {
   events: EventItem[];
   monthDate: Date;
   setMonthDate: React.Dispatch<React.SetStateAction<Date>>;
   referenceDate: string;
+  setSelectedEvent: (event: EventItem) => void;
 }) {
   const cells = useMemo(() => getMonthMatrix(monthDate), [monthDate]);
   const currentMonth = monthDate.getMonth();
@@ -627,7 +629,15 @@ function CalendarView({
           {selectedDayEvents.length === 0 ? (
             <div className="empty-card">この日に登録されているイベントはありません。</div>
           ) : (
-            selectedDayEvents.map((event) => <EventCard key={event.id} event={event} />)
+            selectedDayEvents.map((event) => (
+              <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                <div className="mini-card-date">
+                  {formatTimeRange(event.time, event.endTime)}
+                </div>
+                <div className="mini-card-title">{event.title}</div>
+                <div className="mini-card-place">{event.place ?? "-"}</div>
+              </div>
+            ))
           )}
         </div>
       </aside>
@@ -736,6 +746,7 @@ export default function App() {
                 monthDate={monthDate}
                 setMonthDate={setMonthDate}
                 referenceDate={referenceDate}
+                setSelectedEvent={setSelectedEvent}
               />
             </motion.div>
           )}
