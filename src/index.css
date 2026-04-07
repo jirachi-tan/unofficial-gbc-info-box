@@ -1040,14 +1040,45 @@ code {
   background: #f1f5f9;
 }
 
+.upcoming-hint {
+  display: none;
+}
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 0 16px rgba(236, 72, 153, 0.6), 0 0 32px rgba(56, 189, 248, 0.3);
+  }
+  50% {
+    transform: scale(1.2);
+    box-shadow: 0 0 20px rgba(236, 72, 153, 0.8), 0 0 40px rgba(56, 189, 248, 0.4);
+  }
+}
+
 @media (max-width: 640px) {
   .modal-content {
     max-width: 90vw;
     padding: 16px;
   }
-}
 
-@media (min-width: 900px) {
+  .upcoming-hint {
+    position: fixed;
+    bottom: 28px;
+    right: 20px;
+    z-index: 50;
+    pointer-events: none;
+    display: block;
+  }
+
+  .hint-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 999px;
+    background: linear-gradient(135deg, #ec4899, #38bdf8);
+    box-shadow: 0 0 16px rgba(236, 72, 153, 0.6), 0 0 32px rgba(56, 189, 248, 0.3);
+    animation: pulse-dot 2s infinite;
+  }
+}
   .desktop-only {
     display: inline-flex;
   }

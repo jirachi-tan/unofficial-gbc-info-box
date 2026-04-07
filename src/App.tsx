@@ -1,5 +1,5 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CalendarDays,
@@ -380,6 +380,24 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
   );
 }
 
+function UpcomingHint({ isVisible }: { isVisible: boolean }) {
+  return (
+    <AnimatePresence>
+      {isVisible && (
+        <motion.div
+          className="upcoming-hint"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+          transition={{ duration: 0.22 }}
+        >
+          <div className="hint-dot" />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventItem[]; referenceDate: string; setSelectedEvent: (event: EventItem) => void }) {
   const focusEvents = getSortedEvents(events.filter((event) => isInRange(referenceDate, event.date, event.endDate)));
   const upcomingSoon = getSortedEvents(events.filter((event) => event.date >= referenceDate)).slice(0, 5);
@@ -426,7 +444,7 @@ function FocusView({ events, referenceDate, setSelectedEvent }: { events: EventI
           </div>
         </section>
 
-        <section className="panel">
+        <section className="panel" id="upcoming-section">
           <div className="panel-subtitle">
             <CalendarDays className="icon-16 sky-icon" />
             直近の予定
@@ -639,6 +657,25 @@ export default function App() {
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+  const [showUpcomingHint, setShowUpcomingHint] = useState(true);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowUpcomingHint(!entry.isIntersecting);
+      },
+      { threshold: 0.1 }
+    );
+
+    const upcomingSection = document.querySelector('#upcoming-section');
+    if (upcomingSection) {
+      observer.observe(upcomingSection);
+    }
+
+    return () => {
+      if (upcomingSection) observer.unobserve(upcomingSection);
+    };
+  }, []);
 
   const monthEvents = useMemo(() => events.filter((event) => overlapsMonth(event, monthDate)), [events, monthDate]);
   const focusEvents = useMemo(() => events.filter((event) => isInRange(referenceDate, event.date, event.endDate)), [events, referenceDate]);
@@ -754,6 +791,8 @@ export default function App() {
           </div>
         </footer>
       </main>
+
+      <UpcomingHint isVisible={showUpcomingHint} />
 
       <AnimatePresence>
         {selectedEvent && <EventModal event={selectedEvent} onClose={() => setSelectedEvent(null)} />}
