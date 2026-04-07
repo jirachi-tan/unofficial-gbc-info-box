@@ -156,16 +156,6 @@ function EventBadge({ category }: { category: string }) {
   return <span className={cn("event-badge", tone.badge)}>{category}</span>;
 }
 
-function MiniEventRow({ event, secondary = false }: { event: EventItem; secondary?: boolean }) {
-  const tone = getCategoryTone(event.category);
-  return (
-    <div className={cn("mini-event-row", tone.mini, secondary && "mini-event-row-secondary")} title={event.title}>
-      <span className="mini-event-time">{event.time ?? "終日"}</span>
-      <span className="mini-event-title">{event.title}</span>
-    </div>
-  );
-}
-
 function DecorativeBackground() {
   return (
     <div className="hero-bg">
