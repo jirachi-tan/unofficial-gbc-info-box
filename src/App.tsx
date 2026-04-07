@@ -8,7 +8,6 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
-  ListTree,
   CircleAlert,
   ExternalLink,
   Menu,
