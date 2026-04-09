@@ -360,6 +360,32 @@ button {
   padding: 16px 18px;
 }
 
+/* small note shown in hero area */
+.hero-note {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* footer-specific notice: compact and darker text */
+.footer-card .notice-card {
+  border-color: #e2e8f0;
+  background: linear-gradient(90deg, #fdf2f8, white, #eff6ff);
+  color: #475569;
+  padding: 12px 14px;
+  border-radius: 18px;
+  margin-top: 14px;
+}
+.footer-card .notice-card .notice-title {
+  color: #be185d;
+  font-size: 14px;
+}
+.footer-card .notice-card .notice-body {
+  color: #475569;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .notice-title {
   color: white;
   font-size: 14px;
@@ -1110,6 +1136,18 @@ code {
 @media (max-width: 640px) {
   .upcoming-buttons {
     display: flex;
+  }
+}
+
+/* Reserve space at the bottom on small screens so fixed scroll buttons
+   don't overlap the footer content. */
+@media (max-width: 640px) {
+  .main-stack {
+    padding-bottom: 120px;
+  }
+
+  .footer-card {
+    padding-bottom: 28px;
   }
 }
 

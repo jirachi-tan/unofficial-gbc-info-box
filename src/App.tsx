@@ -368,11 +368,7 @@ function HeroSection({
 
             <h1 className="hero-title">【非公式】ガルクラの箱</h1>
 
-            <p className="hero-lead">
-              ガールズバンドクライ関連の予定・公開情報・メモを、
-              かわいさと視認性の両立を目指して整理するファン向けポータル。
-              GitHub Pages 上で軽快に動作し、今後のページ追加にも耐えられる構成を前提にしたトップデザインです。
-            </p>
+            <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。</p>
           </div>
 
           <div className="stats-grid">
@@ -383,24 +379,7 @@ function HeroSection({
           </div>
         </div>
 
-        <div className="notice-card">
-          <div className="notice-title">
-            <CircleAlert className="icon-16" />
-            ご案内
-          </div>
-          <div className="notice-body">
-            <p>
-              本ページは『ガールズバンドクライ』および関係各社とは一切関係のない、個人による非公式ファンメモです。
-              情報の正確性・最新性は保証できません。本ページの情報に基づいて利用者の方に生じたいかなる損害・トラブルについても、
-              管理人は一切の責任を負いかねます。あらかじめご了承ください。
-            </p>
-            <p>
-              ＜内容＞
-              <br />
-              公式及び公式に準じるところから発信された情報を中心にまとめたものです。
-            </p>
-          </div>
-        </div>
+
       </div>
     </section>
   );
@@ -1139,6 +1118,25 @@ export default function App() {
           <div className="footer-title">今後の実装候補</div>
           <div className="footer-text">
             カテゴリ絞り込み / 検索 / 地域別ページ / 画像付きカード / 締切強調 / 外部リンク集 / アーカイブ整理。
+          </div>
+
+          <div className="notice-card">
+            <div className="notice-title">
+              <CircleAlert className="icon-16" />
+              ご案内
+            </div>
+            <div className="notice-body">
+              <p>
+                本ページは『ガールズバンドクライ』および関係各社とは一切関係のない、個人による非公式ファンメモです。
+                情報の正確性・最新性は保証できません。本ページの情報に基づいて利用者の方に生じたいかなる損害・トラブルについても、
+                管理人は一切の責任を負いかねます。あらかじめご了承ください。
+              </p>
+              <p>
+                ＜内容＞
+                <br />
+                公式及び公式に準じるところから発信された情報を中心にまとめたものです。
+              </p>
+            </div>
           </div>
         </footer>
       </main>
