@@ -625,15 +625,23 @@ button {
 .hero-clock-head {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin-bottom: 6px;
-  opacity: 0.9;
+  gap: 10px;
+  margin-bottom: 8px;
+  opacity: 1;
 }
 
 .hero-clock-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.98);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  -webkit-font-smoothing: antialiased;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .hero-clock-date {
@@ -687,8 +695,8 @@ button {
 .hero-quiz-head {
   display: flex;
   align-items: center;
-  gap: 6px;
-  opacity: 0.9;
+  gap: 10px;
+  opacity: 1;
 }
 
 .hero-quiz-body {
@@ -699,14 +707,68 @@ button {
 }
 
 .hero-quiz-label {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.06em;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.98);
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+  -webkit-font-smoothing: antialiased;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.10), rgba(255,255,255,0.04));
+  border: 1px solid rgba(255,255,255,0.12);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
 }
 
 .hero-quiz-hint-icon {
   margin-left: auto;
   opacity: 0.7;
+}
+
+/* Icon emphasis: circular gradient background and slight enlargement */ 
+.hero-clock-head .icon-16,
+.hero-quiz-head .icon-16 {
+  opacity: 1;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
+  padding: 4px;
+  border-radius: 999px;
+  display: inline-grid;
+  place-items: center;
+  color: white;
+  background: linear-gradient(135deg, rgba(236,72,153,0.95), rgba(56,189,248,0.95));
+  box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+  border: 1px solid rgba(255,255,255,0.14);
+  transform: translateZ(0);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* Subtle hover interaction to draw attention without being distracting */ 
+.hero-clock-tile:hover .hero-clock-label,
+.hero-quiz-tile:hover .hero-quiz-label {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.22);
+}
+
+/* Optional one-time pulse class (use sparingly) */ 
+.hero-label-pulse {
+  animation: pulse 2.2s ease-in-out 1;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 6px 18px rgba(0,0,0,0.18); transform: translateY(0); }
+  50% { box-shadow: 0 12px 28px rgba(0,0,0,0.28); transform: translateY(-2px); }
+  100% { box-shadow: 0 6px 18px rgba(0,0,0,0.18); transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .hero-clock-label,
+  .hero-quiz-label {
+    font-size: 14px;
+  }
 }
 
 .hero-quiz-question {
