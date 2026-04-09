@@ -770,6 +770,7 @@ button {
 .mini-card-date {
   font-size: 12px;
   color: #64748b;
+  line-height: 1.5;
   margin-bottom: 6px;
 }
 

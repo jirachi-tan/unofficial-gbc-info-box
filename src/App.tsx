@@ -64,6 +64,10 @@ function formatTimeRange(time?: string | null, endTime?: string | null) {
   return "終日";
 }
 
+function formatPeriodEndpoint(date: string, time?: string | null) {
+  return time ? `${formatDisplayDate(date)} ${time}` : formatDisplayDate(date);
+}
+
 function getSafeExternalUrl(url?: string | null) {
   if (!url) return null;
 
@@ -153,11 +157,10 @@ function isJapaneseHoliday(date: Date) {
 }
 
 function formatPeriod(event: EventItem) {
-  if (event.periodText) return event.periodText;
   if (event.endDate && event.endDate !== event.date) {
-    return `${formatDisplayDate(event.date)} → ${formatDisplayDate(event.endDate)}`;
+    return `${formatPeriodEndpoint(event.date, event.time)} → ${formatPeriodEndpoint(event.endDate, event.endTime)}`;
   }
-  return event.time ? `${formatDisplayDate(event.date)} ${event.time}` : formatDisplayDate(event.date);
+  return `${formatDisplayDate(event.date)} / ${formatTimeRange(event.time, event.endTime)}`;
 }
 
 function isSameDate(a: string, b: string) {
@@ -720,9 +723,7 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
                   transition={{ delay: index * 0.04 }}
                 >
                   <div className="mini-card" onClick={() => setSelectedEvent(event)}>
-                    <div className="mini-card-date">
-                      {formatTimeRange(event.time, event.endTime)}
-                    </div>
+                    <div className="mini-card-date">{formatPeriod(event)}</div>
                     <div className="mini-card-title">{event.title}</div>
                     <div className="mini-card-place">{event.place ?? "-"}</div>
                   </div>
@@ -754,9 +755,7 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
           <div className="mini-list">
             {upcomingSoon.map((event) => (
               <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
-                <div className="mini-card-date">
-                  {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
-                </div>
+                <div className="mini-card-date">{formatPeriod(event)}</div>
                 <div className="mini-card-title">{event.title}</div>
                 <div className="mini-card-place">{event.place ?? "-"}</div>
               </div>
@@ -943,9 +942,7 @@ function CalendarView({
             ) : (
               selectedDayEvents.map((event) => (
                 <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
-                  <div className="mini-card-date">
-                    {formatTimeRange(event.time, event.endTime)}
-                  </div>
+                  <div className="mini-card-date">{formatPeriod(event)}</div>
                   <div className="mini-card-title">{event.title}</div>
                   <div className="mini-card-place">{event.place ?? "-"}</div>
                 </div>
@@ -964,9 +961,7 @@ function CalendarView({
               .slice(0, 5)
               .map((event) => (
                 <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
-                  <div className="mini-card-date">
-                    {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
-                  </div>
+                  <div className="mini-card-date">{formatPeriod(event)}</div>
                   <div className="mini-card-title">{event.title}</div>
                   <div className="mini-card-place">{event.place ?? "-"}</div>
                 </div>
