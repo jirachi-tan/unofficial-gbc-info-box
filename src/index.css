@@ -605,37 +605,149 @@ button {
   line-height: 1.85;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+.hero-widgets {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* ---------- Real-time clock tile ---------- */
+.hero-clock-tile {
+  border-radius: 20px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(14px);
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.hero-clock-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+  opacity: 0.9;
+}
+
+.hero-clock-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+}
+
+.hero-clock-date {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.3;
+}
+
+.hero-clock-time {
+  font-size: 32px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  line-height: 1.1;
+  text-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ---------- Quiz tile ---------- */
+.hero-quiz-tile {
+  all: unset;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 20px;
+  padding: 16px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.13);
+  backdrop-filter: blur(14px);
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s;
+  text-align: left;
+  width: 100%;
+  min-height: 220px;
+  justify-content: flex-start;
+}
+
+.hero-quiz-tile:hover {
+  background: rgba(255, 255, 255, 0.22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.hero-quiz-tile-revealed {
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.55);
+  cursor: default;
+}
+
+.hero-quiz-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  opacity: 0.9;
+}
+
+.hero-quiz-body {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
   gap: 12px;
 }
 
-.stat-tile {
-  border-radius: 24px;
-  padding: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
-  color: white;
-  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
-}
-
-.stat-head {
-  display: flex;
-  justify-content: space-between;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.stat-label {
+.hero-quiz-label {
   font-size: 12px;
-  opacity: 0.88;
+  font-weight: 600;
+  letter-spacing: 0.06em;
 }
 
-.stat-value {
-  font-size: 28px;
+.hero-quiz-hint-icon {
+  margin-left: auto;
+  opacity: 0.7;
+}
+
+.hero-quiz-question {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.hero-quiz-answer {
+  font-size: 20px;
   font-weight: 900;
+  line-height: 1.45;
+  color: #fef08a;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.hero-quiz-text-compact {
+  font-size: 14px;
+  line-height: 1.72;
+}
+
+.hero-quiz-text-dense {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.hero-quiz-tap {
+  font-size: 12px;
+  opacity: 0.7;
+  font-weight: 500;
+}
+
+.hero-quiz-refresh-hint {
+  font-size: 11px;
+  opacity: 0.55;
+  font-weight: 500;
+  margin-top: 2px;
 }
 
 .notice-card {
@@ -1527,8 +1639,9 @@ code {
     border-radius: 28px;
   }
 
-  .stats-grid {
-    grid-template-columns: 1fr 1fr;
+  .hero-widgets {
+    max-width: 460px;
+    justify-self: end;
   }
 
   .panel-title {

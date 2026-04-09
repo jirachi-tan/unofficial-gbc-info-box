@@ -14,6 +14,8 @@ import {
   ChevronUp,
   GanttChart,
   X,
+  HelpCircle,
+  Eye,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 
@@ -62,6 +64,191 @@ const headerNavItems: HeaderNavItem[] = [
   },
 ];
 const eventsJsonPath = `${import.meta.env.BASE_URL}data/events.json`;
+const quizJsonPath = `${import.meta.env.BASE_URL}data/quiz.json`;
+const dailyQuizStorageKey = "gbc-daily-quiz-progress-v2";
+
+type QuizItem = { id: string; question: string; answer: string };
+type DailyQuizProgress = {
+  currentDate: string;
+  currentId: string | null;
+  remainingIds: string[];
+  catalogIds: string[];
+  revealedDate: string | null;
+  revealedId: string | null;
+};
+
+function isQuizItemArray(value: unknown): value is QuizItem[] {
+  return (
+    Array.isArray(value) &&
+    value.every((item) => {
+      if (!item || typeof item !== "object" || Array.isArray(item)) return false;
+
+      const candidate = item as Record<string, unknown>;
+      return (
+        typeof candidate.id === "string" &&
+        typeof candidate.question === "string" &&
+        typeof candidate.answer === "string"
+      );
+    })
+  );
+}
+
+function parseQuizJson(payload: unknown): QuizItem[] {
+  if (!isQuizItemArray(payload)) {
+    throw new Error("quiz.json must be an array of { id, question, answer } objects");
+  }
+
+  const seenIds = new Set<string>();
+
+  return payload.map((quiz) => {
+    const normalizedQuiz = {
+      id: quiz.id.trim(),
+      question: quiz.question.trim(),
+      answer: quiz.answer.trim(),
+    };
+
+    if (!normalizedQuiz.id || !normalizedQuiz.question || !normalizedQuiz.answer) {
+      throw new Error("quiz.json items require non-empty id, question, and answer");
+    }
+
+    if (seenIds.has(normalizedQuiz.id)) {
+      throw new Error(`quiz.json contains duplicate id: ${normalizedQuiz.id}`);
+    }
+
+    seenIds.add(normalizedQuiz.id);
+    return normalizedQuiz;
+  });
+}
+
+function shuffleItems<T>(items: T[]) {
+  const next = [...items];
+
+  for (let index = next.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [next[index], next[swapIndex]] = [next[swapIndex], next[index]];
+  }
+
+  return next;
+}
+
+function insertIdsRandomly(queue: string[], incomingIds: string[]) {
+  const nextQueue = [...queue];
+
+  for (const quizId of shuffleItems(incomingIds)) {
+    const insertIndex = Math.floor(Math.random() * (nextQueue.length + 1));
+    nextQueue.splice(insertIndex, 0, quizId);
+  }
+
+  return nextQueue;
+}
+
+function getDaysBetween(fromYmd: string, toYmd: string) {
+  const diff = parseYmd(toYmd).getTime() - parseYmd(fromYmd).getTime();
+  return Math.max(0, Math.floor(diff / 86400000));
+}
+
+function readDailyQuizProgress(): DailyQuizProgress | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(dailyQuizStorageKey);
+    if (!raw) return null;
+
+    const parsed = JSON.parse(raw) as Partial<DailyQuizProgress>;
+    if (!parsed || typeof parsed !== "object") return null;
+
+    return {
+      currentDate: typeof parsed.currentDate === "string" ? parsed.currentDate : getTokyoTodayYmd(),
+      currentId: typeof parsed.currentId === "string" ? parsed.currentId : null,
+      remainingIds: Array.isArray(parsed.remainingIds) ? parsed.remainingIds.filter((id): id is string => typeof id === "string") : [],
+      catalogIds: Array.isArray(parsed.catalogIds) ? parsed.catalogIds.filter((id): id is string => typeof id === "string") : [],
+      revealedDate: typeof parsed.revealedDate === "string" ? parsed.revealedDate : null,
+      revealedId: typeof parsed.revealedId === "string" ? parsed.revealedId : null,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function writeDailyQuizProgress(progress: DailyQuizProgress) {
+  if (typeof window === "undefined") return;
+
+  try {
+    window.localStorage.setItem(dailyQuizStorageKey, JSON.stringify(progress));
+  } catch {
+    // ignore storage write failures and keep the in-memory state only
+  }
+}
+
+function pickNextDailyQuiz(allIds: string[], remainingIds: string[]) {
+  if (allIds.length === 0) {
+    return {
+      currentId: null,
+      remainingIds: [],
+    };
+  }
+
+  if (remainingIds.length === 0) {
+    const reshuffled = shuffleItems(allIds);
+    return {
+      currentId: reshuffled[0] ?? null,
+      remainingIds: reshuffled.slice(1),
+    };
+  }
+
+  return {
+    currentId: remainingIds[0] ?? null,
+    remainingIds: remainingIds.slice(1),
+  };
+}
+
+function resolveDailyQuizProgress(quizItems: QuizItem[], todayYmd: string) {
+  if (quizItems.length === 0) return null;
+
+  const allIds = quizItems.map((quiz) => quiz.id);
+  const availableIds = new Set(allIds);
+  const stored = readDailyQuizProgress();
+  const knownIds = new Set(stored?.catalogIds.length ? stored.catalogIds : allIds);
+
+  let remainingIds = (stored?.remainingIds ?? []).filter((quizId) => availableIds.has(quizId));
+  let currentId = stored?.currentId && availableIds.has(stored.currentId) ? stored.currentId : null;
+
+  const referencedIds = new Set(remainingIds);
+  if (currentId) {
+    referencedIds.add(currentId);
+  }
+
+  const incomingIds = allIds.filter((quizId) => !knownIds.has(quizId) && !referencedIds.has(quizId));
+  if (incomingIds.length > 0) {
+    remainingIds = insertIdsRandomly(remainingIds, incomingIds);
+  }
+
+  if (!currentId) {
+    const initialSelection = pickNextDailyQuiz(allIds, remainingIds);
+    currentId = initialSelection.currentId;
+    remainingIds = initialSelection.remainingIds;
+  }
+
+  const daysElapsed = stored ? getDaysBetween(stored.currentDate, todayYmd) : 0;
+  for (let step = 0; step < daysElapsed; step += 1) {
+    const nextSelection = pickNextDailyQuiz(allIds, remainingIds);
+    currentId = nextSelection.currentId;
+    remainingIds = nextSelection.remainingIds;
+  }
+
+  const isRevealStateReusable = stored?.revealedDate === todayYmd && stored?.revealedId === currentId;
+  const nextProgress: DailyQuizProgress = {
+    currentDate: todayYmd,
+    currentId,
+    remainingIds,
+    catalogIds: allIds,
+    revealedDate: isRevealStateReusable ? todayYmd : null,
+    revealedId: isRevealStateReusable ? currentId : null,
+  };
+
+  writeDailyQuizProgress(nextProgress);
+  return nextProgress;
+}
 
 function cn(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
@@ -219,13 +406,6 @@ function isSameDate(a: string, b: string) {
 function isInRange(target: string, start: string, end?: string | null) {
   if (!end) return target === start;
   return target >= start && target <= end;
-}
-
-function overlapsMonth(event: EventItem, monthDate: Date) {
-  const monthStart = formatYmd(new Date(monthDate.getFullYear(), monthDate.getMonth(), 1));
-  const monthEnd = formatYmd(new Date(monthDate.getFullYear(), monthDate.getMonth() + 1, 0));
-  const eventEnd = event.endDate ?? event.date;
-  return event.date <= monthEnd && eventEnd >= monthStart;
 }
 
 function getMonthMatrix(baseDate: Date) {
@@ -511,36 +691,127 @@ function HeaderNav() {
   );
 }
 
-function StatTile({
-  icon: Icon,
-  label,
-  value,
-}: {
-  icon: React.ComponentType<{ className?: string }>;
-  label: string;
-  value: string;
-}) {
+function RealtimeClock() {
+  const [now, setNow] = useState(() => new Date());
+
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const weekday = ["日", "月", "火", "水", "木", "金", "土"][now.getDay()];
+  const dateStr = `${now.getFullYear()}/${String(now.getMonth() + 1).padStart(2, "0")}/${String(now.getDate()).padStart(2, "0")}(${weekday})`;
+  const timeStr = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}:${String(now.getSeconds()).padStart(2, "0")}`;
+
   return (
-    <div className="stat-tile">
-      <div className="stat-head">
-        <span className="stat-label">{label}</span>
-        <Icon className="icon-16" />
+    <div className="hero-clock-tile">
+      <div className="hero-clock-head">
+        <Clock3 className="icon-16" />
+        <span className="hero-clock-label">現在日時</span>
       </div>
-      <div className="stat-value">{value}</div>
+      <div className="hero-clock-date">{dateStr}</div>
+      <div className="hero-clock-time">{timeStr}</div>
     </div>
   );
 }
 
+function getQuizTextDensityClass(text: string) {
+  if (text.length >= 180) return "hero-quiz-text-dense";
+  if (text.length >= 110) return "hero-quiz-text-compact";
+  return undefined;
+}
+
+function DailyQuiz({ quizItems }: { quizItems: QuizItem[] }) {
+  const [todayYmd, setTodayYmd] = useState(() => getTokyoTodayYmd());
+  const [progress, setProgress] = useState<DailyQuizProgress | null>(null);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      const nextTodayYmd = getTokyoTodayYmd();
+      setTodayYmd((current) => (current === nextTodayYmd ? current : nextTodayYmd));
+    }, 1000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
+
+  useEffect(() => {
+    setProgress(resolveDailyQuizProgress(quizItems, todayYmd));
+  }, [quizItems, todayYmd]);
+
+  const quiz = useMemo(() => {
+    if (!progress?.currentId) return null;
+    return quizItems.find((item) => item.id === progress.currentId) ?? null;
+  }, [progress?.currentId, quizItems]);
+
+  const revealed = Boolean(progress && progress.revealedDate === todayYmd && progress.revealedId === progress.currentId);
+
+  const handleClick = () => {
+    if (!progress || !progress.currentId || revealed) return;
+
+    const nextProgress: DailyQuizProgress = {
+      ...progress,
+      revealedDate: todayYmd,
+      revealedId: progress.currentId,
+    };
+
+    setProgress(nextProgress);
+    writeDailyQuizProgress(nextProgress);
+  };
+
+  if (!quiz) return null;
+
+  const questionDensityClass = getQuizTextDensityClass(quiz.question);
+  const answerDensityClass = getQuizTextDensityClass(quiz.answer);
+
+  return (
+    <motion.button
+      type="button"
+      className={cn("hero-quiz-tile", revealed && "hero-quiz-tile-revealed")}
+      onClick={handleClick}
+      whileTap={revealed ? undefined : { scale: 0.97 }}
+    >
+      <div className="hero-quiz-head">
+        <HelpCircle className="icon-16" />
+        <span className="hero-quiz-label">今日の一問</span>
+        {revealed && <Eye className="icon-14 hero-quiz-hint-icon" />}
+      </div>
+      <div className="hero-quiz-body">
+        <div className={cn("hero-quiz-question", questionDensityClass)}>{quiz.question}</div>
+        <AnimatePresence mode="wait">
+          {revealed ? (
+            <motion.div
+              key="answer"
+              className={cn("hero-quiz-answer", answerDensityClass)}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 0.2 }}
+            >
+              A. {quiz.answer}
+            </motion.div>
+          ) : (
+            <motion.div
+              key="prompt"
+              className="hero-quiz-tap"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              タップで答えを見る
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+      <div className="hero-quiz-refresh-hint">次の出題は 0:00 に切り替わります</div>
+    </motion.button>
+  );
+}
+
 function HeroSection({
-  referenceDate,
-  monthCount,
-  focusCount,
-  categoryCount,
+  quizItems,
 }: {
-  referenceDate: string;
-  monthCount: number;
-  focusCount: number;
-  categoryCount: number;
+  quizItems: QuizItem[];
 }) {
   return (
     <section className="hero-card">
@@ -558,15 +829,11 @@ function HeroSection({
             <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。</p>
           </div>
 
-          <div className="stats-grid">
-            <StatTile icon={CalendarDays} label="今月の予定" value={String(monthCount)} />
-            <StatTile icon={Clock3} label="今日の件数" value={String(focusCount)} />
-            <StatTile icon={Music4} label="カテゴリ数" value={String(categoryCount)} />
-            <StatTile icon={Sparkles} label="基準日" value={formatDisplayDate(referenceDate)} />
+          <div className="hero-widgets">
+            <RealtimeClock />
+            <DailyQuiz quizItems={quizItems} />
           </div>
         </div>
-
-
       </div>
     </section>
   );
@@ -1140,6 +1407,7 @@ function CalendarView({
 
 export default function App() {
   const [events, setEvents] = useState<EventItem[]>([]);
+  const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
   const systemDate = getTokyoTodayYmd();
   const referenceDate = useMemo(() => chooseReferenceDate(events, systemDate), [events, systemDate]);
   const [view, setView] = useState<ViewKey>("focus");
@@ -1180,6 +1448,22 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    let cancelled = false;
+    async function loadQuiz() {
+      try {
+        const res = await fetch(quizJsonPath, { cache: "no-store" });
+        if (!res.ok) throw new Error(`quiz.json request failed: ${res.status}`);
+        const payload = await res.json();
+        if (!cancelled) setQuizItems(parseQuizJson(payload));
+      } catch (err) {
+        console.error("Failed to load public/data/quiz.json.", err);
+      }
+    }
+    void loadQuiz();
+    return () => { cancelled = true; };
+  }, []);
+
+  useEffect(() => {
     const d = parseYmd(referenceDate);
     setMonthDate((prev) => {
       if (prev.getFullYear() === d.getFullYear() && prev.getMonth() === d.getMonth()) {
@@ -1189,20 +1473,13 @@ export default function App() {
     });
   }, [referenceDate]);
 
-  const monthEvents = useMemo(() => events.filter((event) => overlapsMonth(event, monthDate)), [events, monthDate]);
-  const focusEvents = useMemo(() => events.filter((event) => isInRange(referenceDate, event.date, event.endDate)), [events, referenceDate]);
-  const categoryCount = useMemo(() => new Set(events.map((event) => event.category)).size, [events]);
-
   return (
     <div className="page-shell">
       <HeaderNav />
 
       <main className="shell main-stack">
         <HeroSection
-          referenceDate={referenceDate}
-          monthCount={monthEvents.length}
-          focusCount={focusEvents.length}
-          categoryCount={categoryCount}
+          quizItems={quizItems}
         />
 
         <section className="panel" id="schedule-switch">
