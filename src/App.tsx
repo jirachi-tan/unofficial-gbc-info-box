@@ -11,6 +11,7 @@ import {
   CircleAlert,
   Menu,
   Link as LinkIcon,
+  ExternalLink as ExternalLinkIcon,
   ChevronUp,
   GanttChart,
   X,
@@ -604,6 +605,16 @@ function HeaderNav() {
         </nav>
 
         <div className="header-actions">
+          <a
+            className="header-old-version-link"
+            href="https://www.notion.so/2a52575eb8cb80e2a285f1afa5f83715?v=2a92575eb8cb80afb48a000ca5aa28a5"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="旧バージョンはこちら"
+          >
+            <span className="header-old-version-label">旧バージョンはこちら</span>
+            <ExternalLinkIcon className="icon-14 header-old-version-icon" />
+          </a>
           <button
             className="button icon-button mobile-only header-menu-button"
             type="button"
@@ -681,7 +692,7 @@ function HeaderNav() {
                   ))}
                 </div>
 
-                {/* 公式サイトリンクはヘッダーから削除済み */}
+                {/* removed duplicate mobile link (旧バージョンはこちら) per design request */}
               </div>
             </motion.div>
           </>
