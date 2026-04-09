@@ -6,7 +6,7 @@
 ## 置き換えるファイル
 - `src/App.tsx`
 - `src/index.css`
-- `src/data/events.ts`
+- `public/data/events.json`
 - `vite.config.ts`
 
 ## 依存関係

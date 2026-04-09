@@ -14,8 +14,7 @@ import {
   Link as LinkIcon,
   ChevronUp,
 } from "lucide-react";
-import { eventsData, type EventItem } from "./data/events";
-import { getTokyoTodayYmd, parseCsvRows, type RawCsvRow } from "./lib/parseEvents";
+import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 
 type ViewKey = "focus" | "calendar";
 
@@ -817,13 +816,12 @@ function CalendarView({
 }
 
 export default function App() {
-  const initialEvents = useMemo(() => getSortedEvents(eventsData), []);
-  const [events, setEvents] = useState<EventItem[]>(initialEvents);
+  const [events, setEvents] = useState<EventItem[]>([]);
   const systemDate = getTokyoTodayYmd();
   const referenceDate = useMemo(() => chooseReferenceDate(events, systemDate), [events, systemDate]);
   const [view, setView] = useState<ViewKey>("focus");
   const [monthDate, setMonthDate] = useState(() => {
-    const d = parseYmd(chooseReferenceDate(initialEvents, systemDate));
+    const d = parseYmd(systemDate);
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
@@ -847,7 +845,7 @@ export default function App() {
           setEvents(getSortedEvents(parseCsvRows(payload)));
         }
       } catch (error) {
-        console.warn("Failed to load public/data/events.json. Using bundled fallback events instead.", error);
+        console.error("Failed to load public/data/events.json.", error);
       }
     }
 
@@ -926,7 +924,7 @@ export default function App() {
               </p>
               <p className="paragraph">
                 そのため、<code>src/App.tsx</code> だけではなく <code>src/index.css</code> と
-                <code> src/data/events.ts</code> もセットで入れる前提になっています。
+                <code> public/data/events.json</code> もセットで入れる前提になっています。
               </p>
             </div>
           </div>
