@@ -376,10 +376,12 @@ button {
   border-radius: 18px;
   margin-top: 14px;
 }
+
 .footer-card .notice-card .notice-title {
   color: #be185d;
   font-size: 14px;
 }
+
 .footer-card .notice-card .notice-body {
   color: #475569;
   font-size: 13px;

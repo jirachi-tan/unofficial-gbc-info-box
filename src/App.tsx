@@ -388,14 +388,7 @@ function HeroSection({
   );
 }
 
-function InfoCard({ title, text }: { title: string; text: string }) {
-  return (
-    <div className="info-card">
-      <div className="info-title">{title}</div>
-      <p className="info-text">{text}</p>
-    </div>
-  );
-}
+// InfoCard は現在使用していないため削除しました。
 
 function EventCard({ event }: { event: EventItem }) {
   const safeOfficialLink = getSafeExternalUrl(event.officialLink);
@@ -735,17 +728,6 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
       </section>
 
       <div className="sidebar-stack">
-        <section className="panel">
-          <div className="panel-subtitle">
-            <Sparkles className="icon-16 pink-icon" />
-            このページで見せたいこと
-          </div>
-          <div className="stack-gap small-gap">
-            <InfoCard title="CSVベース反映" text="今回の Notion CSV から反映したデータをもとに表示しています。" />
-            <InfoCard title="今後の拡張" text="カテゴリ絞り込み、画像、地域別まとめ、締切強調などを追加しやすい構成です。" />
-            <InfoCard title="表示方針" text="カレンダーは一覧性優先、詳細は右側パネルで深掘りする作りです。" />
-          </div>
-        </section>
 
         <section className="panel" id="upcoming-section">
           <div className="panel-subtitle">
