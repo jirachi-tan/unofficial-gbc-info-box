@@ -1067,50 +1067,25 @@ export default function App() {
           categoryCount={categoryCount}
         />
 
-        <section className="intro-grid">
-          <div className="panel" id="schedule-switch">
-            <div className="panel-head">
-              <div>
-                <div className="eyebrow muted">schedule hub</div>
-                <h2 className="panel-title">スケジュール表示切替</h2>
-              </div>
-
-              <div className="tab-row">
-                {viewTabs.map(({ key, label, icon: Icon }) => (
-                  <button
-                    key={key}
-                    type="button"
-                    className={cn("tab-button", view === key && "tab-button-active")}
-                    onClick={() => setView(key)}
-                  >
-                    <Icon className="icon-16" />
-                    {label}
-                  </button>
-                ))}
-              </div>
+        <section className="panel" id="schedule-switch">
+          <div className="panel-head">
+            <div>
+              <div className="eyebrow muted">schedule hub</div>
+              <h2 className="panel-title">スケジュール表示切替</h2>
             </div>
 
-            <div className="info-grid">
-              <InfoCard title="今日" text="今日に重なっているイベントを一覧化して把握しやすく表示。" />
-              <InfoCard title="タイムライン" text="今日以降の予定を時系列で追いやすい一覧に整理。" />
-              <InfoCard title="カレンダー" text="1か月単位で俯瞰しつつ、クリックでその日の全件を確認。" />
-            </div>
-          </div>
-
-          <div className="panel gradient-panel">
-            <div className="panel-subtitle">
-              <Music4 className="icon-16 pink-icon" />
-              今回のセットについて
-            </div>
-            <div className="stack-gap small-gap">
-              <p className="paragraph">
-                これは Vite 初期状態のままでは動かない Tailwind / shadcn 前提モックを、
-                <strong> 素の Vite React プロジェクトでもそのまま使える形</strong> に組み直したセットです。
-              </p>
-              <p className="paragraph">
-                そのため、<code>src/App.tsx</code> だけではなく <code>src/index.css</code> と
-                <code> public/data/events.json</code> もセットで入れる前提になっています。
-              </p>
+            <div className="tab-row">
+              {viewTabs.map(({ key, label, icon: Icon }) => (
+                <button
+                  key={key}
+                  type="button"
+                  className={cn("tab-button", view === key && "tab-button-active")}
+                  onClick={() => setView(key)}
+                >
+                  <Icon className="icon-16" />
+                  {label}
+                </button>
+              ))}
             </div>
           </div>
         </section>
