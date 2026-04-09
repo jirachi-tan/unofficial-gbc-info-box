@@ -1,4 +1,5 @@
 export type RawCsvRow = {
+  id?: string;
   名前?: string;
   カテゴリ?: string;
   メモ?: string;
@@ -103,6 +104,7 @@ function parsePeriod(periodTextRaw: string): Pick<EventItem, "date" | "time" | "
 export function parseCsvRows(rows: RawCsvRow[]): EventItem[] {
   return rows
     .map((row, index) => {
+      const sourceId = normalizeText(row.id);
       const title = normalizeText(row["名前"]);
       const category = normalizeText(row["カテゴリ"]) || "その他";
       const note = normalizeText(row["メモ"]) || null;
@@ -112,7 +114,7 @@ export function parseCsvRows(rows: RawCsvRow[]): EventItem[] {
       const period = parsePeriod(normalizeText(row["開催期間"]));
 
       return {
-        id: `csv-${index + 1}`,
+        id: sourceId || `csv-${index + 1}`,
         title,
         category,
         place,

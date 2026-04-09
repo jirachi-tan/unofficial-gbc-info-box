@@ -15,7 +15,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { eventsData, type EventItem } from "./data/events";
-import { getTokyoTodayYmd } from "./lib/parseEvents";
+import { getTokyoTodayYmd, parseCsvRows, type RawCsvRow } from "./lib/parseEvents";
 
 type ViewKey = "focus" | "calendar";
 
@@ -25,9 +25,14 @@ const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{
 ];
 
 const topMenu = ["TOP", "スケジュール", "ライブ", "配信/メディア", "リリース", "アーカイブ", "データ", "リンク"];
+const eventsJsonPath = `${import.meta.env.BASE_URL}data/events.json`;
 
 function cn(...classes: Array<string | false | undefined | null>) {
   return classes.filter(Boolean).join(" ");
+}
+
+function isRawCsvRowArray(value: unknown): value is RawCsvRow[] {
+  return Array.isArray(value) && value.every((item) => item !== null && typeof item === "object" && !Array.isArray(item));
 }
 
 function parseYmd(input: string) {
@@ -651,6 +656,10 @@ function CalendarView({
   }, [events, selectedDate]);
 
   useEffect(() => {
+    setSelectedDate(referenceDate);
+  }, [referenceDate]);
+
+  useEffect(() => {
     if (window.innerWidth < 768) {
       const element = document.querySelector('#selected-day-section');
       if (element) {
@@ -808,15 +817,56 @@ function CalendarView({
 }
 
 export default function App() {
-  const events = useMemo(() => getSortedEvents(eventsData), []);
+  const initialEvents = useMemo(() => getSortedEvents(eventsData), []);
+  const [events, setEvents] = useState<EventItem[]>(initialEvents);
   const systemDate = getTokyoTodayYmd();
   const referenceDate = useMemo(() => chooseReferenceDate(events, systemDate), [events, systemDate]);
   const [view, setView] = useState<ViewKey>("focus");
   const [monthDate, setMonthDate] = useState(() => {
-    const d = parseYmd(referenceDate);
+    const d = parseYmd(chooseReferenceDate(initialEvents, systemDate));
     return new Date(d.getFullYear(), d.getMonth(), 1);
   });
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadEventsFromJson() {
+      try {
+        const response = await fetch(eventsJsonPath, { cache: "no-store" });
+        if (!response.ok) {
+          throw new Error(`events.json request failed: ${response.status}`);
+        }
+
+        const payload = await response.json();
+        if (!isRawCsvRowArray(payload)) {
+          throw new Error("events.json must be an array of row objects");
+        }
+
+        if (!cancelled) {
+          setEvents(getSortedEvents(parseCsvRows(payload)));
+        }
+      } catch (error) {
+        console.warn("Failed to load public/data/events.json. Using bundled fallback events instead.", error);
+      }
+    }
+
+    void loadEventsFromJson();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const d = parseYmd(referenceDate);
+    setMonthDate((prev) => {
+      if (prev.getFullYear() === d.getFullYear() && prev.getMonth() === d.getMonth()) {
+        return prev;
+      }
+      return new Date(d.getFullYear(), d.getMonth(), 1);
+    });
+  }, [referenceDate]);
 
   const monthEvents = useMemo(() => events.filter((event) => overlapsMonth(event, monthDate)), [events, monthDate]);
   const focusEvents = useMemo(() => events.filter((event) => isInRange(referenceDate, event.date, event.endDate)), [events, referenceDate]);
