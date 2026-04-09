@@ -13,13 +13,15 @@ import {
   Menu,
   Link as LinkIcon,
   ChevronUp,
+  GanttChart,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 
-type ViewKey = "focus" | "calendar";
+type ViewKey = "focus" | "timeline" | "calendar";
 
 const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{ className?: string }> }> = [
   { key: "focus", label: "今日", icon: Clock3 },
+  { key: "timeline", label: "タイムライン", icon: GanttChart },
   { key: "calendar", label: "カレンダー", icon: CalendarDays },
 ];
 
@@ -509,8 +511,8 @@ function UpcomingButton({ view }: { view: ViewKey }) {
         transition={{ duration: 0.22, delay: 0.1 }}
         aria-label="scroll to schedule switch"
       >
-        {view === "focus" ? <Clock3 className="icon-16" /> : <CalendarDays className="icon-16" />}
-        <span>{view === "focus" ? "今日" : "カレンダー"}</span>
+        {view === "focus" ? <Clock3 className="icon-16" /> : view === "timeline" ? <GanttChart className="icon-16" /> : <CalendarDays className="icon-16" />}
+        <span>{view === "focus" ? "今日" : view === "timeline" ? "タイムライン" : "カレンダー"}</span>
       </motion.button>
 
       <motion.button
@@ -524,6 +526,189 @@ function UpcomingButton({ view }: { view: ViewKey }) {
         <CalendarDays className="icon-16" />
         <span>直近</span>
       </motion.button>
+    </div>
+  );
+}
+
+/* ─── Timeline helpers ─── */
+
+function getWeekRange(baseDate: string) {
+  const d = parseYmd(baseDate);
+  const dayOfWeek = d.getDay();
+  const monday = new Date(d);
+  monday.setDate(d.getDate() - ((dayOfWeek + 6) % 7));
+  const days: Date[] = [];
+  for (let i = 0; i < 7; i++) {
+    const day = new Date(monday);
+    day.setDate(monday.getDate() + i);
+    days.push(day);
+  }
+  return days;
+}
+
+function getTimelineBarColor(category: string) {
+  if (["ライブ", "舞台挨拶", "トークイベント"].includes(category)) return { strong: "#ec4899", light: "#fbcfe8" };
+  if (["配信", "先行配信", "ラジオ"].includes(category)) return { strong: "#0ea5e9", light: "#bae6fd" };
+  if (["リリース", "物販", "ポップアップストア"].includes(category)) return { strong: "#10b981", light: "#a7f3d0" };
+  if (["コラボ", "スタンプラリー"].includes(category)) return { strong: "#8b5cf6", light: "#ddd6fe" };
+  if (["申込", "当落発表", "記念日", "映画"].includes(category)) return { strong: "#f97316", light: "#fed7aa" };
+  return { strong: "#64748b", light: "#e2e8f0" };
+}
+
+function buildTimelineBarStyle(
+  event: EventItem,
+  weekDays: Date[],
+): { startCol: number; span: number; gradient: string } | null {
+  const weekStart = formatYmd(weekDays[0]);
+  const weekEnd = formatYmd(weekDays[6]);
+  const eventEnd = event.endDate ?? event.date;
+
+  if (event.date > weekEnd || eventEnd < weekStart) return null;
+
+  const clampedStart = event.date < weekStart ? weekStart : event.date;
+  const clampedEnd = eventEnd > weekEnd ? weekEnd : eventEnd;
+
+  const startCol = weekDays.findIndex((d) => formatYmd(d) === clampedStart);
+  const endIdx = weekDays.findIndex((d) => formatYmd(d) === clampedEnd);
+  if (startCol === -1 || endIdx === -1) return null;
+  const span = endIdx - startCol + 1;
+
+  const { strong, light } = getTimelineBarColor(event.category);
+
+  const isEventStart = event.date >= weekStart;
+  const isEventEnd = eventEnd <= weekEnd;
+
+  let gradient: string;
+  if (span === 1) {
+    gradient = strong;
+  } else if (isEventStart && isEventEnd) {
+    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 30%, ${light} 70%, ${strong} 100%)`;
+  } else if (isEventStart) {
+    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 40%, ${light} 100%)`;
+  } else if (isEventEnd) {
+    gradient = `linear-gradient(90deg, ${light} 0%, ${light} 60%, ${strong} 100%)`;
+  } else {
+    gradient = light;
+  }
+
+  return { startCol, span, gradient };
+}
+
+function TimelineView({
+  events,
+  referenceDate,
+  setSelectedEvent,
+  view,
+}: {
+  events: EventItem[];
+  referenceDate: string;
+  setSelectedEvent: (event: EventItem) => void;
+  view: ViewKey;
+}) {
+  const [weekOffset, setWeekOffset] = useState(0);
+
+  const anchorDate = useMemo(() => {
+    const d = parseYmd(referenceDate);
+    d.setDate(d.getDate() + weekOffset * 7);
+    return formatYmd(d);
+  }, [referenceDate, weekOffset]);
+
+  const weekDays = useMemo(() => getWeekRange(anchorDate), [anchorDate]);
+
+  const weekEvents = useMemo(() => {
+    const weekStart = formatYmd(weekDays[0]);
+    const weekEnd = formatYmd(weekDays[6]);
+    return getSortedEvents(
+      events.filter((event) => {
+        const eventEnd = event.endDate ?? event.date;
+        return event.date <= weekEnd && eventEnd >= weekStart;
+      }),
+    );
+  }, [events, weekDays]);
+
+  const goToToday = () => setWeekOffset(0);
+
+  const weekLabel = (() => {
+    const s = weekDays[0];
+    const e = weekDays[6];
+    return `${s.getMonth() + 1}/${s.getDate()} – ${e.getMonth() + 1}/${e.getDate()}`;
+  })();
+
+  return (
+    <div className="timeline-layout">
+      <section className="panel" id="timeline-section">
+        <div className="panel-head">
+          <div>
+            <div className="eyebrow teal">weekly timeline</div>
+            <h2 className="panel-title">タイムライン表示</h2>
+          </div>
+          <div className="month-toolbar">
+            <button className="button icon-button" type="button" onClick={() => setWeekOffset((p) => p - 1)} aria-label="前の週">
+              <ChevronLeft className="icon-18" />
+            </button>
+            <div className="month-label">{weekLabel}</div>
+            <button className="button icon-button" type="button" onClick={() => setWeekOffset((p) => p + 1)} aria-label="次の週">
+              <ChevronRight className="icon-18" />
+            </button>
+            <button className="button pink-soft-button" type="button" onClick={goToToday}>
+              今週へ戻る
+            </button>
+          </div>
+        </div>
+
+        {/* Day header row */}
+        <div className="timeline-day-header">
+          {weekDays.map((day) => {
+            const ymd = formatYmd(day);
+            const isToday = ymd === referenceDate;
+            const dow = ["日", "月", "火", "水", "木", "金", "土"][day.getDay()];
+            const isHoliday = isJapaneseHoliday(day);
+            return (
+              <div
+                key={ymd}
+                className={cn(
+                  "timeline-day-cell",
+                  isToday && "timeline-day-today",
+                  day.getDay() === 6 && "timeline-day-sat",
+                  (day.getDay() === 0 || isHoliday) && "timeline-day-sun",
+                )}
+              >
+                <span className="timeline-dow">{dow}</span>
+                <span className="timeline-date-num">{day.getDate()}</span>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Event bars */}
+        <div className="timeline-body">
+          {weekEvents.length === 0 ? (
+            <div className="empty-card">この週に重なるイベントはありません。</div>
+          ) : (
+            weekEvents.map((event) => {
+              const bar = buildTimelineBarStyle(event, weekDays);
+              if (!bar) return null;
+              return (
+                <div key={event.id} className="timeline-row" style={{ gridTemplateColumns: "repeat(7, 1fr)" }}>
+                  {bar.startCol > 0 && <div style={{ gridColumn: `1 / ${bar.startCol + 1}` }} />}
+                  <div
+                    className="timeline-bar"
+                    style={{
+                      gridColumn: `${bar.startCol + 1} / span ${bar.span}`,
+                      background: bar.gradient,
+                    }}
+                    onClick={() => setSelectedEvent(event)}
+                    title={event.title}
+                  >
+                    <span className="timeline-bar-label">{event.title}</span>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+      </section>
+      <UpcomingButton view={view} />
     </div>
   );
 }
@@ -940,6 +1125,18 @@ export default function App() {
               transition={{ duration: 0.22 }}
             >
               <FocusView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} view={view} />
+            </motion.div>
+          )}
+
+          {view === "timeline" && (
+            <motion.div
+              key="timeline"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.22 }}
+            >
+              <TimelineView events={events} referenceDate={referenceDate} setSelectedEvent={setSelectedEvent} view={view} />
             </motion.div>
           )}
 
