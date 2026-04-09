@@ -9,15 +9,23 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleAlert,
-  ExternalLink,
   Menu,
   Link as LinkIcon,
   ChevronUp,
   GanttChart,
+  X,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 
 type ViewKey = "focus" | "timeline" | "calendar";
+type HeaderNavItem = {
+  key: string;
+  label: string;
+  description: string;
+  target?: string;
+  status: "available" | "coming-soon";
+  emphasis?: "primary" | "secondary";
+};
 
 const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{ className?: string }> }> = [
   { key: "focus", label: "今日", icon: Clock3 },
@@ -25,7 +33,34 @@ const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{
   { key: "calendar", label: "カレンダー", icon: CalendarDays },
 ];
 
-const topMenu = ["TOP", "スケジュール", "ライブ", "配信/メディア", "リリース", "アーカイブ", "データ", "リンク"];
+const headerNavItems: HeaderNavItem[] = [
+  {
+    key: "top",
+    label: "TOP",
+    description: "ページの先頭へ戻ります。",
+    target: "top",
+    status: "available",
+    emphasis: "primary",
+  },
+  {
+    key: "anniversary",
+    label: "記念日一覧",
+    description: "誕生日や周年の情報をまとめるページを追加予定です。",
+    status: "coming-soon",
+  },
+  {
+    key: "official-links",
+    label: "公式リンク一覧",
+    description: "公式サイトや配信先への導線を整理したページを追加予定です。",
+    status: "coming-soon",
+  },
+  {
+    key: "quiz",
+    label: "クイズに挑戦",
+    description: "作品や楽曲に関するクイズ企画を追加予定です。",
+    status: "coming-soon",
+  },
+];
 const eventsJsonPath = `${import.meta.env.BASE_URL}data/events.json`;
 
 function cn(...classes: Array<string | false | undefined | null>) {
@@ -163,6 +198,20 @@ function formatPeriod(event: EventItem) {
   return `${formatDisplayDate(event.date)} / ${formatTimeRange(event.time, event.endTime)}`;
 }
 
+function scrollToHeaderTarget(target: string) {
+  if (target === "top") {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
+  const section = document.querySelector(target);
+  if (!section) return;
+
+  const headerHeight = (document.querySelector(".header-nav") as HTMLElement | null)?.offsetHeight || 0;
+  const offsetTop = section.getBoundingClientRect().top + window.pageYOffset - headerHeight - 20;
+  window.scrollTo({ top: Math.max(offsetTop, 0), behavior: "smooth" });
+}
+
 function isSameDate(a: string, b: string) {
   return a === b;
 }
@@ -292,37 +341,172 @@ function DecorativeBackground() {
 }
 
 function HeaderNav() {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const plannedCount = headerNavItems.filter((item) => item.status === "coming-soon").length;
+  const availableCount = headerNavItems.filter((item) => item.status === "available").length;
+
+  useEffect(() => {
+    if (!isMobileMenuOpen) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [isMobileMenuOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 1080) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
+
+  const [activeNavKey, setActiveNavKey] = useState<string>(() => headerNavItems.find((i) => i.emphasis === "primary")?.key ?? headerNavItems[0].key);
+
+  const handleNavClick = (item: HeaderNavItem) => {
+    if (item.status !== "available" || !item.target) return;
+    setIsMobileMenuOpen(false);
+    setActiveNavKey(item.key);
+    scrollToHeaderTarget(item.target);
+  };
+
   return (
     <header className="header-nav">
       <div className="shell header-inner">
-        <div className="brand">
+        <button className="brand brand-button" type="button" onClick={() => handleNavClick(headerNavItems[0])} aria-label="ページ先頭へ戻る">
           <div className="brand-icon">
             <Music4 className="icon-20" />
           </div>
-          <div>
+          <div className="brand-copy">
             <div className="brand-title">ガルクラの箱</div>
-            <div className="brand-subtitle">Girls Band Cry Fan Memo</div>
+            <div className="brand-route">
+              <span className="brand-chip brand-chip-current">TOP</span>
+            </div>
           </div>
-        </div>
+        </button>
 
-        <nav className="menu-desktop">
-          {topMenu.map((item) => (
-            <button key={item} className="menu-pill">
-              {item}
+        <nav className="menu-desktop" aria-label="サイト内メニュー">
+          {headerNavItems.map((item) => (
+            <button
+              key={item.key}
+              type="button"
+              className={cn(
+                "menu-pill",
+                activeNavKey === item.key && "menu-pill-active",
+                item.status === "coming-soon" && "menu-pill-planned",
+              )}
+              onClick={() => handleNavClick(item)}
+              disabled={item.status === "coming-soon"}
+              aria-disabled={item.status === "coming-soon"}
+            >
+              <span className="menu-pill-label">{item.label}</span>
+              {item.status === "coming-soon" ? (
+                <span className="menu-pill-badge">準備中</span>
+              ) : activeNavKey === item.key ? (
+                <span className="menu-pill-badge menu-pill-badge-current">現在地</span>
+              ) : null}
             </button>
           ))}
         </nav>
 
         <div className="header-actions">
-          <a className="button ghost-button desktop-only" href="https://girls-band-cry.com/" target="_blank" rel="noreferrer">
-            公式サイト
-            <ExternalLink className="icon-16" />
-          </a>
-          <button className="button icon-button mobile-only" type="button" aria-label="menu">
-            <Menu className="icon-18" />
+          <button
+            className="button icon-button mobile-only header-menu-button"
+            type="button"
+            aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="mobile-site-menu"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            {isMobileMenuOpen ? <X className="icon-18" /> : <Menu className="icon-18" />}
           </button>
         </div>
       </div>
+
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            <motion.button
+              className="mobile-nav-backdrop"
+              type="button"
+              aria-label="メニューを閉じる"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+            />
+
+            <motion.div
+              id="mobile-site-menu"
+              className="shell mobile-nav-shell"
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.18 }}
+            >
+              <div className="mobile-nav-sheet">
+                <div className="mobile-nav-head">
+                  <div className="eyebrow pink">top / schedule hub</div>
+                  <h2 className="mobile-nav-title">今はスケジュール中心のトップページ</h2>
+                  <p className="mobile-nav-copy">
+                    記念日一覧、公式リンク一覧、クイズに挑戦は順次追加予定です。まずは今の予定と直近の動きを見やすく整理します。
+                  </p>
+                  <div className="mobile-nav-summary">
+                    <span className="mobile-nav-summary-pill">公開中 {availableCount} 導線</span>
+                    <span className="mobile-nav-summary-pill mobile-nav-summary-pill-muted">準備中 {plannedCount} ページ</span>
+                  </div>
+                </div>
+
+                <div className="mobile-nav-list">
+                  {headerNavItems.map((item) => (
+                    <button
+                      key={item.key}
+                      type="button"
+                      className={cn(
+                        "mobile-nav-item",
+                        activeNavKey === item.key && "mobile-nav-item-current",
+                        item.status === "coming-soon" && "mobile-nav-item-planned",
+                      )}
+                      onClick={() => handleNavClick(item)}
+                      disabled={item.status === "coming-soon"}
+                      aria-disabled={item.status === "coming-soon"}
+                    >
+                      <span className="mobile-nav-item-row">
+                        <span className="mobile-nav-item-label">{item.label}</span>
+                        <span
+                          className={cn(
+                            "mobile-nav-item-badge",
+                            item.status === "coming-soon" && "mobile-nav-item-badge-muted",
+                          )}
+                        >
+                          {item.status === "coming-soon" ? "準備中" : activeNavKey === item.key ? "表示中" : "移動"}
+                        </span>
+                      </span>
+                      <span className="mobile-nav-item-description">{item.description}</span>
+                    </button>
+                  ))}
+                </div>
+
+                {/* 公式サイトリンクはヘッダーから削除済み */}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
@@ -387,8 +571,6 @@ function HeroSection({
     </section>
   );
 }
-
-// InfoCard は現在使用していないため削除しました。
 
 function EventCard({ event }: { event: EventItem }) {
   const safeOfficialLink = getSafeExternalUrl(event.officialLink);
