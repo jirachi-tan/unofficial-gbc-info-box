@@ -15,6 +15,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { eventsData, type EventItem } from "./data/events";
+import { getTokyoTodayYmd } from "./lib/parseEvents";
 
 type ViewKey = "focus" | "calendar";
 
@@ -55,6 +56,17 @@ function formatTimeRange(time?: string | null, endTime?: string | null) {
   if (time && endTime) return `${time} - ${endTime}`;
   if (time) return time;
   return "終日";
+}
+
+function getSafeExternalUrl(url?: string | null) {
+  if (!url) return null;
+
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === "http:" || parsed.protocol === "https:" ? parsed.toString() : null;
+  } catch {
+    return null;
+  }
 }
 
 function nthWeekdayOfMonth(year: number, month: number, weekday: number, nth: number) {
@@ -398,6 +410,8 @@ function InfoCard({ title, text }: { title: string; text: string }) {
 }
 
 function EventCard({ event }: { event: EventItem }) {
+  const safeOfficialLink = getSafeExternalUrl(event.officialLink);
+
   return (
     <article className="event-card">
       <div className="event-meta-row">
@@ -410,8 +424,8 @@ function EventCard({ event }: { event: EventItem }) {
         <div>場所：{event.place ?? "-"}</div>
       </div>
       {event.note && <p className="event-note">{event.note}</p>}
-      {event.officialLink && (
-        <a className="event-link" href={event.officialLink} target="_blank" rel="noreferrer">
+      {safeOfficialLink && (
+        <a className="event-link" href={safeOfficialLink} target="_blank" rel="noopener noreferrer">
           <LinkIcon className="icon-14" />
           公式リンクを開く
         </a>
@@ -606,6 +620,32 @@ function CalendarView({
   const currentMonth = monthDate.getMonth();
   const [selectedDate, setSelectedDate] = useState(referenceDate);
 
+  const dayEventCountMap = useMemo(() => {
+    const counts = new Map<string, number>();
+    const visibleStart = cells[0];
+    const visibleEnd = cells[cells.length - 1];
+
+    if (!visibleStart || !visibleEnd) return counts;
+
+    const visibleStartKey = formatYmd(visibleStart);
+    const visibleEndKey = formatYmd(visibleEnd);
+
+    for (const event of events) {
+      const eventEnd = event.endDate ?? event.date;
+      if (event.date > visibleEndKey || eventEnd < visibleStartKey) continue;
+
+      const rangeStart = parseYmd(event.date < visibleStartKey ? visibleStartKey : event.date);
+      const rangeEnd = parseYmd(eventEnd > visibleEndKey ? visibleEndKey : eventEnd);
+
+      for (const current = new Date(rangeStart); current <= rangeEnd; current.setDate(current.getDate() + 1)) {
+        const key = formatYmd(current);
+        counts.set(key, (counts.get(key) ?? 0) + 1);
+      }
+    }
+
+    return counts;
+  }, [cells, events]);
+
   const selectedDayEvents = useMemo(() => {
     return getSortedEvents(events.filter((event) => isInRange(selectedDate, event.date, event.endDate)));
   }, [events, selectedDate]);
@@ -665,7 +705,7 @@ function CalendarView({
         <div className="calendar-grid">
           {cells.map((day) => {
             const ymd = formatYmd(day);
-            const dayEvents = getSortedEvents(events.filter((event) => isInRange(ymd, event.date, event.endDate)));
+            const dayEventCount = dayEventCountMap.get(ymd) ?? 0;
             const isCurrentMonth = day.getMonth() === currentMonth;
             const isReference = isSameDate(ymd, referenceDate);
             const isSelected = isSameDate(ymd, selectedDate);
@@ -692,10 +732,10 @@ function CalendarView({
                 </div>
 
                 <div className="calendar-cell-body">
-                  {dayEvents.length > 0 ? (
+                  {dayEventCount > 0 ? (
                     <div className="calendar-event-summary">
                       <div className="calendar-event-count">
-                        <span>{dayEvents.length}</span>
+                        <span>{dayEventCount}</span>
                         <small>件</small>
                       </div>
                       <div className="calendar-event-label">予定</div>
@@ -769,7 +809,7 @@ function CalendarView({
 
 export default function App() {
   const events = useMemo(() => getSortedEvents(eventsData), []);
-  const systemDate = formatYmd(new Date());
+  const systemDate = getTokyoTodayYmd();
   const referenceDate = useMemo(() => chooseReferenceDate(events, systemDate), [events, systemDate]);
   const [view, setView] = useState<ViewKey>("focus");
   const [monthDate, setMonthDate] = useState(() => {
