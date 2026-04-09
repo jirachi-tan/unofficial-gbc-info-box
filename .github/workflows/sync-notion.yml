@@ -3,7 +3,8 @@ name: Sync Notion Data
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 0 * * *"
+    # GitHub Actions cron is UTC. To run at Japan time 06:00 (JST), use UTC 21:00 previous day.
+    - cron: "0 21 * * *"
 
 permissions:
   contents: write
