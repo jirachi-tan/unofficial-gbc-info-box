@@ -865,6 +865,24 @@ button {
   line-height: 1.6;
 }
 
+.footer-attribution {
+  margin: 16px 0 0;
+  color: #475569;
+  font-size: 11px;
+  line-height: 1.7;
+  text-align: center;
+}
+
+.footer-attribution a {
+  color: #475569;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-attribution a:hover {
+  color: #0f172a;
+}
+
 .notice-title {
   color: white;
   font-size: 14px;
@@ -1617,7 +1635,7 @@ code {
 
 .upcoming-buttons {
   position: fixed;
-  bottom: 20px;
+  bottom: calc(20px + env(safe-area-inset-bottom));
   left: 20px;
   right: 20px;
   z-index: 50;
@@ -1625,6 +1643,15 @@ code {
   justify-content: space-between;
   gap: 10px;
   display: none;
+  transition: transform 0.18s ease, opacity 0.18s ease;
+}
+
+.upcoming-buttons.upcoming-buttons-top {
+  bottom: auto;
+  top: calc(var(--upcoming-top, 20px) + env(safe-area-inset-top));
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .upcoming-button {
@@ -1664,7 +1691,7 @@ code {
    don't overlap the footer content. */
 @media (max-width: 640px) {
   .main-stack {
-    padding-bottom: 120px;
+    padding-bottom: calc(120px + env(safe-area-inset-bottom));
   }
 
   .footer-card {

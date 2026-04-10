@@ -902,6 +902,35 @@ function EventModal({ event, onClose }: { event: EventItem; onClose: () => void 
 }
 
 function UpcomingButton({ view }: { view: ViewKey }) {
+  const [isFooterVisible, setIsFooterVisible] = useState(false);
+
+  useEffect(() => {
+    const footer = document.querySelector('.footer-card');
+    if (!footer) return;
+
+    const buttons = document.querySelector('.upcoming-buttons') as HTMLElement | null;
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (entry.isIntersecting) {
+          // compute header height and set CSS var so buttons appear below header
+          const header = document.querySelector('.header-nav') as HTMLElement | null;
+          const headerHeight = header ? header.offsetHeight : 0;
+          if (buttons) {
+            buttons.style.setProperty('--upcoming-top', `${headerHeight + 12}px`);
+          }
+          setIsFooterVisible(true);
+        } else {
+          if (buttons) buttons.style.removeProperty('--upcoming-top');
+          setIsFooterVisible(false);
+        }
+      },
+      { root: null, threshold: 0.02 },
+    );
+
+    observer.observe(footer);
+    return () => observer.disconnect();
+  }, []);
   const handleTopClick = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -925,7 +954,7 @@ function UpcomingButton({ view }: { view: ViewKey }) {
   };
 
   return (
-    <div className="upcoming-buttons">
+    <div className={cn('upcoming-buttons', isFooterVisible && 'upcoming-buttons-top')}>
       <motion.button
         className="upcoming-button"
         onClick={handleTopClick}
@@ -1585,6 +1614,11 @@ export default function App() {
               </p>
             </div>
           </div>
+
+          <p className="footer-attribution">
+            このサイトは個人により運営されている『ガールズバンドクライ』の非公式ファンサイトです。
+            運営・制作：<a href="https://x.com/jirachi_tan" target="_blank" rel="noopener noreferrer">@jirachi_tan</a>
+          </p>
         </footer>
       </main>
 
