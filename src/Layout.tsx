@@ -45,7 +45,7 @@ const headerNavItems: HeaderNavItem[] = [
     },
     {
         key: "quiz",
-        label: "クイズに挑戦",
+        label: "クイズに挑戦！",
         shortLabel: "クイズ",
         description: "作品や楽曲に関するクイズ企画ページです。",
         path: "/quiz",
