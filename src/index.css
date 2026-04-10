@@ -2209,3 +2209,350 @@ code {
   color: #64748b;
   font-weight: 700;
 }
+
+/* ─── Links Page ─── */
+
+.links-section {
+  margin-top: 28px;
+}
+
+.links-section-header {
+  margin-bottom: 14px;
+}
+
+.links-section-title {
+  margin: 6px 0 0;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+/* ── Jump navigation ── */
+
+.links-jump {
+  margin-bottom: 8px;
+}
+
+.links-jump-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.92);
+  color: #334155;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.links-jump-toggle:hover {
+  background: white;
+  border-color: #fbcfe8;
+}
+
+.links-jump-chevron-open {
+  transform: rotate(180deg);
+  transition: transform 0.2s ease;
+}
+
+.links-jump-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.links-jump-item {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.88);
+  color: #475569;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.links-jump-item:hover {
+  border-color: #fbcfe8;
+  background: #fdf2f8;
+  color: #be185d;
+  transform: translateY(-1px);
+}
+
+/* ── Official link cards ── */
+
+.links-official-grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .links-official-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1080px) {
+  .links-official-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.links-official-card {
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links-official-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+.links-official-card-name {
+  font-size: 16px;
+  font-weight: 900;
+  line-height: 1.4;
+  white-space: pre-line;
+}
+
+.links-official-card-desc {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ── SNS buttons ── */
+
+.links-sns-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.links-sns-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid;
+  font-size: 12px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.links-sns-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.1);
+}
+
+.links-sns-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.links-sns-label {
+  white-space: nowrap;
+}
+
+/* SNS color variants */
+.links-sns-x {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.links-sns-x:hover {
+  background: #f1f5f9;
+}
+
+.links-sns-instagram {
+  background: linear-gradient(135deg, #fdf2f8, #fce7f3);
+  border-color: #fbcfe8;
+  color: #be185d;
+}
+
+.links-sns-instagram:hover {
+  background: linear-gradient(135deg, #fce7f3, #fbcfe8);
+}
+
+.links-sns-tiktok {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #0f172a;
+}
+
+.links-sns-tiktok:hover {
+  background: #f1f5f9;
+}
+
+.links-sns-youtube {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+.links-sns-youtube:hover {
+  background: #fee2e2;
+}
+
+.links-sns-official {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
+.links-sns-official:hover {
+  background: #dbeafe;
+}
+
+.links-sns-store {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #7c3aed;
+}
+
+.links-sns-store:hover {
+  background: #ede9fe;
+}
+
+/* ── Band sections ── */
+
+.links-band-section {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.links-band-section:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.links-band-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.links-band-name {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 900;
+  line-height: 1.2;
+}
+
+.links-band-official {
+  margin-bottom: 16px;
+}
+
+.links-sub-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 800;
+  color: #64748b;
+  margin-bottom: 10px;
+}
+
+/* ── Member cards ── */
+
+.links-members-grid {
+  display: grid;
+  gap: 14px;
+}
+
+@media (min-width: 640px) {
+  .links-members-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1080px) {
+  .links-members-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.links-member-card {
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 24px;
+  padding: 18px;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.links-member-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(15, 23, 42, 0.08);
+}
+
+.links-member-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.links-member-name {
+  font-size: 17px;
+  font-weight: 900;
+  line-height: 1.3;
+}
+
+.links-member-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.links-member-role {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #fdf2f8;
+  border: 1px solid #fbcfe8;
+  color: #be185d;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.links-member-part {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f5f3ff;
+  border: 1px solid #ddd6fe;
+  color: #7c3aed;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.links-member-no-sns {
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  padding: 6px 0;
+}
