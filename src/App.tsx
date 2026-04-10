@@ -22,8 +22,8 @@ const viewTabs: Array<{ key: ViewKey; label: string; icon: React.ComponentType<{
   { key: "timeline", label: "タイムライン", icon: GanttChart },
   { key: "calendar", label: "カレンダー", icon: CalendarDays },
 ];
-const eventsJsonPath = `${import.meta.env.BASE_URL}data/events.json`;
-const quizJsonPath = `${import.meta.env.BASE_URL}data/quiz.json`;
+const eventsJsonPath = `${import.meta.env.BASE_URL}data/events.json?v=${__BUILD_TIMESTAMP__}`;
+const quizJsonPath = `${import.meta.env.BASE_URL}data/quiz.json?v=${__BUILD_TIMESTAMP__}`;
 const dailyQuizStorageKey = "gbc-daily-quiz-progress-v2";
 
 type QuizItem = { id: string; question: string; answer: string };

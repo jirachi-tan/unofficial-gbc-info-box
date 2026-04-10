@@ -48,7 +48,7 @@ export default function QuizPage() {
         async function load() {
             try {
                 const res = await fetch(
-                    `${import.meta.env.BASE_URL}data/quiz.json`,
+                    `${import.meta.env.BASE_URL}data/quiz.json?v=${__BUILD_TIMESTAMP__}`,
                     { cache: "no-store" }
                 );
                 if (!res.ok) throw new Error(`quiz.json: ${res.status}`);

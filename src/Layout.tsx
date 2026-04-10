@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -7,6 +7,7 @@ import {
     ExternalLink as ExternalLinkIcon,
     X,
     CircleAlert,
+    RefreshCw,
 } from "lucide-react";
 
 function cn(...classes: Array<string | false | undefined | null>) {
@@ -235,7 +236,76 @@ function HeaderNav() {
     );
 }
 
+const BUILD_META_PATH = `${import.meta.env.BASE_URL}build-meta.json`;
+const UPDATE_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+function useUpdateChecker() {
+    const [hasUpdate, setHasUpdate] = useState(false);
+
+    useEffect(() => {
+        let timer: ReturnType<typeof setInterval>;
+
+        async function check() {
+            try {
+                // Random query param to bypass CDN cache
+                const res = await fetch(`${BUILD_META_PATH}?_=${Date.now()}`, {
+                    cache: "no-store",
+                });
+                if (!res.ok) return;
+                const meta: unknown = await res.json();
+                if (
+                    meta &&
+                    typeof meta === "object" &&
+                    "buildTime" in meta &&
+                    typeof (meta as { buildTime: unknown }).buildTime === "string" &&
+                    (meta as { buildTime: string }).buildTime !== __BUILD_TIMESTAMP__
+                ) {
+                    setHasUpdate(true);
+                }
+            } catch {
+                // ignore network errors
+            }
+        }
+
+        // First check after a short delay, then every 5 minutes
+        const initialTimer = setTimeout(() => {
+            void check();
+            timer = setInterval(() => void check(), UPDATE_CHECK_INTERVAL);
+        }, 30_000);
+
+        return () => {
+            clearTimeout(initialTimer);
+            clearInterval(timer);
+        };
+    }, []);
+
+    const reload = useCallback(() => {
+        window.location.reload();
+    }, []);
+
+    return { hasUpdate, reload };
+}
+
+function UpdateBanner({ onReload }: { onReload: () => void }) {
+    return (
+        <motion.div
+            className="update-banner"
+            initial={{ y: 60, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 260, damping: 24 }}
+        >
+            <span className="update-banner-text">新しいバージョンがあります</span>
+            <button className="update-banner-btn" type="button" onClick={onReload}>
+                <RefreshCw className="icon-14" />
+                更新する
+            </button>
+        </motion.div>
+    );
+}
+
 export default function Layout() {
+    const { hasUpdate, reload } = useUpdateChecker();
+
     return (
         <div className="page-shell">
             <HeaderNav />
@@ -275,6 +345,10 @@ export default function Layout() {
                     </p>
                 </div>
             </footer>
+
+            <AnimatePresence>
+                {hasUpdate && <UpdateBanner onReload={reload} />}
+            </AnimatePresence>
         </div>
     );
 }
