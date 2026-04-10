@@ -1,0 +1,96 @@
+[
+    {
+        "id": "ebizuka_tomo_birthday",
+        "title": "海老塚智",
+        "type": "birthday",
+        "category": "character",
+        "month": 3,
+        "day": 22
+    },
+    {
+        "id": "awa_subaru_birthday",
+        "title": "安和すばる",
+        "type": "birthday",
+        "category": "character",
+        "month": 4,
+        "day": 27
+    },
+    {
+        "id": "rupa_birthday",
+        "title": "ルパ",
+        "type": "birthday",
+        "category": "character",
+        "month": 6,
+        "day": 28
+    },
+    {
+        "id": "iseri_nina_birthday",
+        "title": "井芹仁菜",
+        "type": "birthday",
+        "category": "character",
+        "month": 10,
+        "day": 24
+    },
+    {
+        "id": "kawaragi_momoka_birthday",
+        "title": "河原木桃香",
+        "type": "birthday",
+        "category": "character",
+        "month": 12,
+        "day": 9
+    },
+    {
+        "id": "natsu_birthday",
+        "title": "凪都さん",
+        "type": "birthday",
+        "category": "cast",
+        "month": 8,
+        "day": 23
+    },
+    {
+        "id": "yuri_birthday",
+        "title": "夕莉さん",
+        "type": "birthday",
+        "category": "cast",
+        "month": 9,
+        "day": 26
+    },
+    {
+        "id": "mirei_birthday",
+        "title": "美怜さん",
+        "type": "birthday",
+        "category": "cast",
+        "month": 11,
+        "day": 7
+    },
+    {
+        "id": "rina_birthday",
+        "title": "理名さん",
+        "type": "birthday",
+        "category": "cast",
+        "month": 11,
+        "day": 13
+    },
+    {
+        "id": "shuri_birthday",
+        "title": "朱李さん",
+        "type": "birthday",
+        "category": "cast",
+        "month": 12,
+        "day": 22
+    },
+    {
+        "id": "anime_broadcast_start",
+        "title": "TVアニメ『ガールズバンドクライ』放送開始",
+        "type": "anniversary",
+        "category": "other",
+        "startDate": "2024-04-06"
+    },
+    {
+        "id": "togenashi_formation",
+        "title": "トゲナシトゲアリ結成",
+        "type": "anniversary",
+        "category": "other",
+        "startDate": "2023-02-28"
+    }
+]
