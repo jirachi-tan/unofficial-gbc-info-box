@@ -157,7 +157,7 @@ function HeaderNav() {
                         <ExternalLinkIcon className="icon-14 header-old-version-icon" />
                     </a>
                     <button
-                        className="button icon-button mobile-only header-menu-button"
+                        className="button mobile-only header-menu-button"
                         type="button"
                         aria-label={isMobileMenuOpen ? "メニューを閉じる" : "メニューを開く"}
                         aria-expanded={isMobileMenuOpen}
@@ -165,6 +165,9 @@ function HeaderNav() {
                         onClick={() => setIsMobileMenuOpen((prev) => !prev)}
                     >
                         {isMobileMenuOpen ? <X className="icon-18" /> : <Menu className="icon-18" />}
+                        <span className="header-menu-label">
+                            {isMobileMenuOpen ? "閉じる" : "メニュー"}
+                        </span>
                     </button>
                 </div>
             </div>

@@ -297,10 +297,20 @@ button {
   background: linear-gradient(180deg, #fffdfd, #fdf2f8);
   color: #be185d;
   box-shadow: 0 10px 24px rgba(236, 72, 153, 0.12);
+  padding: 8px 14px;
+  gap: 6px;
+  height: 40px;
 }
 
 .header-menu-button:hover {
   background: linear-gradient(180deg, #fff, #fce7f3);
+}
+
+.header-menu-label {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 .mobile-nav-backdrop {
