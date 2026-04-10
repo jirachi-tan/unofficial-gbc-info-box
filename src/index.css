@@ -50,6 +50,8 @@ button {
 
 .page-shell {
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .shell {
@@ -60,6 +62,7 @@ button {
 .main-stack {
   display: flex;
   flex-direction: column;
+  flex: 1 0 auto;
   gap: 32px;
   padding: 24px 0 36px;
 }
@@ -468,8 +471,7 @@ button {
 }
 
 .hero-card,
-.panel,
-.footer-card {
+.panel {
   position: relative;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.72);
@@ -845,28 +847,37 @@ button {
 }
 
 /* footer-specific notice: compact and darker text */
-.footer-card .notice-card {
+.footer-notice .notice-card {
   border-color: #e2e8f0;
   background: linear-gradient(90deg, #fdf2f8, white, #eff6ff);
   color: #475569;
   padding: 12px 14px;
   border-radius: 18px;
-  margin-top: 14px;
+  margin-top: 0;
 }
 
-.footer-card .notice-card .notice-title {
+.footer-notice .notice-card .notice-title {
   color: #be185d;
   font-size: 14px;
 }
 
-.footer-card .notice-card .notice-body {
+.footer-notice .notice-card .notice-body {
   color: #475569;
-  font-size: 13px;
+  font-size: 11px;
   line-height: 1.6;
 }
 
+.site-footer {
+  padding: 14px 0 28px;
+}
+
+.site-footer-inner {
+  display: flex;
+  justify-content: center;
+}
+
 .footer-attribution {
-  margin: 16px 0 0;
+  margin: 0;
   color: #475569;
   font-size: 11px;
   line-height: 1.7;
@@ -1542,19 +1553,8 @@ button {
   padding-right: 4px;
 }
 
-.footer-card {
-  padding: 20px 22px;
-}
-
-.footer-title {
-  font-weight: 800;
-  margin-bottom: 8px;
-}
-
-.footer-text {
-  color: #475569;
-  font-size: 14px;
-  line-height: 1.8;
+.footer-notice {
+  padding: 0;
 }
 
 .icon-14 {
@@ -1687,15 +1687,9 @@ code {
   }
 }
 
-/* Reserve space at the bottom on small screens so fixed scroll buttons
-   don't overlap the footer content. */
 @media (max-width: 640px) {
-  .main-stack {
-    padding-bottom: calc(120px + env(safe-area-inset-bottom));
-  }
-
-  .footer-card {
-    padding-bottom: 28px;
+  .site-footer {
+    padding-bottom: calc(24px + env(safe-area-inset-bottom));
   }
 }
 
@@ -1777,8 +1771,7 @@ code {
     padding: 22px 18px 24px;
   }
 
-  .panel,
-  .footer-card {
+  .panel {
     padding: 18px;
     border-radius: 24px;
   }

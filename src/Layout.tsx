@@ -240,12 +240,7 @@ export default function Layout() {
             <main className="shell main-stack">
                 <Outlet />
 
-                <footer className="footer-card">
-                    <div className="footer-title">今後の実装候補</div>
-                    <div className="footer-text">
-                        カテゴリ絞り込み / 検索 / 地域別ページ / 画像付きカード / 締切強調 / 外部リンク集 / アーカイブ整理。
-                    </div>
-
+                <section className="footer-notice" aria-label="ご案内">
                     <div className="notice-card">
                         <div className="notice-title">
                             <CircleAlert className="icon-16" />
@@ -254,23 +249,29 @@ export default function Layout() {
                         <div className="notice-body">
                             <p>
                                 本ページは『ガールズバンドクライ』および関係各社とは一切関係のない、個人による非公式ファンメモです。
-                                情報の正確性・最新性は保証できません。本ページの情報に基づいて利用者の方に生じたいかなる損害・トラブルについても、
+                                情報の正確性・最新性は保証できません。
+                                <br />
+                                本ページの情報に基づいて利用者の方に生じたいかなる損害・トラブルについても、
                                 管理人は一切の責任を負いかねます。あらかじめご了承ください。
                             </p>
                             <p>
-                                ＜内容＞
+                                ＜お願い＞
                                 <br />
-                                公式及び公式に準じるところから発信された情報を中心にまとめたものです。
+                                情報に間違いがある、もしくは新しい情報がある場合は優しく教えてください。また、本サイトに掲載してよいファンアートなどが万が一あれば、ぜひお知らせください。
                             </p>
                         </div>
                     </div>
+                </section>
+            </main>
 
+            <footer className="site-footer">
+                <div className="shell site-footer-inner">
                     <p className="footer-attribution">
                         このサイトは個人により運営されている『ガールズバンドクライ』の非公式ファンサイトです。
                         運営・制作：<a href="https://x.com/jirachi_tan" target="_blank" rel="noopener noreferrer">@jirachi_tan</a>
                     </p>
-                </footer>
-            </main>
+                </div>
+            </footer>
         </div>
     );
 }

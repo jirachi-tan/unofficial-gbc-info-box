@@ -668,8 +668,8 @@ function UpcomingButton({ view }: { view: ViewKey }) {
   const [isFooterVisible, setIsFooterVisible] = useState(false);
 
   useEffect(() => {
-    const footer = document.querySelector('.footer-card');
-    if (!footer) return;
+    const footerNotice = document.querySelector('.footer-notice') ?? document.querySelector('.site-footer');
+    if (!footerNotice) return;
 
     const buttons = document.querySelector('.upcoming-buttons') as HTMLElement | null;
     const observer = new IntersectionObserver(
@@ -691,7 +691,7 @@ function UpcomingButton({ view }: { view: ViewKey }) {
       { root: null, threshold: 0.02 },
     );
 
-    observer.observe(footer);
+    observer.observe(footerNotice);
     return () => observer.disconnect();
   }, []);
   const handleTopClick = () => {
