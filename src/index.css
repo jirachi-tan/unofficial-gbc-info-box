@@ -1080,11 +1080,13 @@ button {
 
 .tab-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 8px;
 }
 
 .tab-button {
+  flex: 1 1 0;
+  justify-content: center;
   border-radius: 999px;
   padding: 11px 16px;
   border: 1px solid #e2e8f0;
@@ -1095,6 +1097,8 @@ button {
   gap: 8px;
   cursor: pointer;
   transition: 0.2s ease;
+  white-space: nowrap;
+  font-size: 14px;
 }
 
 .tab-button:hover {
@@ -1403,6 +1407,9 @@ button {
   text-align: left;
   transition: 0.2s ease;
   cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .calendar-cell-current {
@@ -1478,6 +1485,7 @@ button {
 }
 
 .calendar-cell-body {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 8px;
@@ -1485,17 +1493,19 @@ button {
 }
 
 .calendar-event-summary {
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
-  border-radius: 18px;
+  gap: 2px;
+  border-radius: 14px 14px 10px 10px;
   border: 1px solid #f5d0fe;
   background: linear-gradient(180deg, #fdf2f8 0%, #ffffff 55%, #eff6ff 100%);
-  padding: 10px 10px 8px;
+  padding: 8px 4px 10px;
   text-align: center;
-  width: 100%;
+  margin: 0 -8px -8px;
+  width: calc(100% + 16px);
 }
 
 .calendar-event-count {
@@ -1507,7 +1517,7 @@ button {
 }
 
 .calendar-event-count span {
-  font-size: 20px;
+  font-size: 17px;
   line-height: 1;
 }
 
@@ -1522,6 +1532,71 @@ button {
   color: #9d174d;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+@media (max-width: 640px) {
+  .tab-button {
+    padding: 10px 10px;
+    gap: 5px;
+    font-size: 13px;
+  }
+
+  .tab-button .icon-16 {
+    width: 14px;
+    height: 14px;
+  }
+
+  .weekdays,
+  .calendar-grid {
+    gap: 4px;
+  }
+
+  .calendar-cell {
+    min-height: 100px;
+    padding: 6px 4px;
+    border-radius: 14px;
+  }
+
+  .calendar-cell-head {
+    margin-bottom: 4px;
+  }
+
+  .calendar-day-number {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .calendar-event-summary {
+    padding: 4px 2px 6px;
+    border-radius: 10px 10px 6px 6px;
+    gap: 1px;
+    margin: 0 -2px -2px;
+    width: calc(100% + 4px);
+  }
+
+  .calendar-event-count span {
+    font-size: 13px;
+  }
+
+  .calendar-event-count small {
+    font-size: 10px;
+  }
+
+  .calendar-event-label {
+    font-size: 9px;
+  }
+
+  .calendar-empty {
+    font-size: 9px;
+    padding: 6px 4px;
+    border-radius: 10px;
+  }
+
+  .calendar-cell-body {
+    gap: 4px;
+    min-height: 36px;
+  }
 }
 
 .calendar-more {

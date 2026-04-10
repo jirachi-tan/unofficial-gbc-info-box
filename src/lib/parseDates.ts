@@ -114,11 +114,18 @@ export function countdownTo(targetYmd: string): { days: number; hours: number; m
     if (targetMs <= todayMs) return null;
 
     const diffDays = Math.floor((targetMs - todayMs) / 86400000);
-    // Remaining time within the current day (JST = UTC+9)
-    const dayMs = 86400000;
-    const nowMs = Date.now();
-    const passedToday = ((nowMs % dayMs) + 9 * 3600000) % dayMs;
-    const remaining = dayMs - passedToday;
+
+    // Remaining time within the current Tokyo day using Intl for accurate JST
+    const tokyoTimeStr = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "Asia/Tokyo",
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit",
+        hour12: false,
+    }).format(new Date());
+    const [hh, mm, ss] = tokyoTimeStr.split(":").map(Number);
+    const passedToday = (hh * 3600 + mm * 60 + ss) * 1000;
+    const remaining = 86400000 - passedToday;
 
     const totalSec = Math.max(0, (diffDays - 1) * 86400 + Math.floor(remaining / 1000));
     const days = Math.floor(totalSec / 86400);
