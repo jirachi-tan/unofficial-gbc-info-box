@@ -151,9 +151,9 @@ function HeaderNav() {
                         href="https://www.notion.so/2a52575eb8cb80e2a285f1afa5f83715?v=2a92575eb8cb80afb48a000ca5aa28a5"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="旧バージョンはこちら"
+                        aria-label="旧ver.はこちら"
                     >
-                        <span className="header-old-version-label">旧バージョンはこちら</span>
+                        <span className="header-old-version-label">旧ver.はこちら</span>
                         <ExternalLinkIcon className="icon-14 header-old-version-icon" />
                     </a>
                     <button
