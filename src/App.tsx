@@ -598,7 +598,7 @@ function HeroSection({
               fan made GBC portal
             </div>
 
-            <h1 className="hero-title">【非公式】ガルクラの箱</h1>
+            <h1 className="hero-title">【非公式】ガルクラの箱<span className="hero-title-version">ver.2.0</span></h1>
 
             <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。</p>
           </div>

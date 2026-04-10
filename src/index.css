@@ -616,6 +616,18 @@ button {
   text-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
+.hero-title-version {
+  display: inline-block;
+  margin-left: 8px;
+  font-size: 0.38em;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: rgba(255, 255, 255, 0.65);
+  vertical-align: middle;
+  position: relative;
+  top: -0.1em;
+}
+
 .hero-lead {
   margin: 16px 0 0;
   color: rgba(255, 255, 255, 0.92);
