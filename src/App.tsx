@@ -386,46 +386,43 @@ function chooseReferenceDate(events: EventItem[], systemDate: string) {
   return getSortedEvents(events).slice(-1)[0]?.date ?? systemDate;
 }
 
-function getCategoryTone(category: string) {
-  if (["ライブ", "舞台挨拶", "トークイベント"].includes(category)) {
-    return {
-      badge: "tone-live-badge",
-      mini: "tone-live-mini",
-    };
-  }
-  if (["配信", "先行配信", "ラジオ"].includes(category)) {
-    return {
-      badge: "tone-stream-badge",
-      mini: "tone-stream-mini",
-    };
-  }
-  if (["リリース", "物販", "ポップアップストア"].includes(category)) {
-    return {
-      badge: "tone-release-badge",
-      mini: "tone-release-mini",
-    };
-  }
-  if (["コラボ", "スタンプラリー"].includes(category)) {
-    return {
-      badge: "tone-collab-badge",
-      mini: "tone-collab-mini",
-    };
-  }
-  if (["申込", "当落発表", "記念日", "映画"].includes(category)) {
-    return {
-      badge: "tone-special-badge",
-      mini: "tone-special-mini",
-    };
-  }
-  return {
-    badge: "tone-other-badge",
-    mini: "tone-other-mini",
+function getCategoryTone(category: string): { badge: string; mini: string } {
+  const map: Record<string, { badge: string; mini: string }> = {
+    "ライブ":             { badge: "tone-live-badge",        mini: "tone-live-mini" },
+    "舞台挨拶":           { badge: "tone-stage-badge",       mini: "tone-stage-mini" },
+    "トークイベント":     { badge: "tone-talk-badge",        mini: "tone-talk-mini" },
+    "配信":               { badge: "tone-stream-badge",      mini: "tone-stream-mini" },
+    "先行配信":           { badge: "tone-earlystream-badge", mini: "tone-earlystream-mini" },
+    "ラジオ":             { badge: "tone-radio-badge",       mini: "tone-radio-mini" },
+    "リリース":           { badge: "tone-release-badge",     mini: "tone-release-mini" },
+    "物販":               { badge: "tone-merch-badge",       mini: "tone-merch-mini" },
+    "ポップアップストア": { badge: "tone-popup-badge",       mini: "tone-popup-mini" },
+    "ノベルティ":         { badge: "tone-novelty-badge",     mini: "tone-novelty-mini" },
+    "プライズ":           { badge: "tone-prize-badge",       mini: "tone-prize-mini" },
+    "コラボ":             { badge: "tone-collab-badge",      mini: "tone-collab-mini" },
+    "スタンプラリー":     { badge: "tone-stamp-badge",       mini: "tone-stamp-mini" },
+    "出展":               { badge: "tone-exhibit-badge",     mini: "tone-exhibit-mini" },
+    "申込":               { badge: "tone-apply-badge",       mini: "tone-apply-mini" },
+    "当落発表":           { badge: "tone-lottery-badge",     mini: "tone-lottery-mini" },
+    "映画":               { badge: "tone-movie-badge",       mini: "tone-movie-mini" },
+    "記念日":             { badge: "tone-anniversary-badge", mini: "tone-anniversary-mini" },
   };
+  return map[category] ?? { badge: "tone-other-badge", mini: "tone-other-mini" };
 }
 
 function EventBadge({ category }: { category: string }) {
   const tone = getCategoryTone(category);
   return <span className={cn("event-badge", tone.badge)}>{category}</span>;
+}
+
+function stripCategoryPrefix(title: string, category: string) {
+  const prefixes = [`${category}：`, `${category}:`];
+  for (const prefix of prefixes) {
+    if (title.startsWith(prefix)) {
+      return title.slice(prefix.length).trimStart();
+    }
+  }
+  return title;
 }
 
 function DecorativeBackground() {
@@ -616,19 +613,32 @@ function HeroSection({
   );
 }
 
+function PlaceBadges({ place }: { place?: string | null }) {
+  if (!place) return <span className="muted-text">-</span>;
+  const places = place.split(",").map((p) => p.trim()).filter(Boolean);
+  if (places.length === 0) return <span className="muted-text">-</span>;
+  return (
+    <div className="place-badges">
+      {places.map((p, i) => (
+        <span key={i} className="place-badge">{p}</span>
+      ))}
+    </div>
+  );
+}
+
 function EventCard({ event }: { event: EventItem }) {
   const safeOfficialLink = getSafeExternalUrl(event.officialLink);
 
   return (
     <article className="event-card">
-      <div className="event-meta-row">
+      <h3 className="event-title">
         <EventBadge category={event.category} />
-        <span className="muted-text">{formatPeriod(event)}</span>
-      </div>
-      <h3 className="event-title">{event.title}</h3>
+        {stripCategoryPrefix(event.title, event.category)}
+      </h3>
+      <PlaceBadges place={event.place} />
       <div className="event-detail-grid">
+        <div>期間：{formatPeriod(event)}</div>
         <div>時間：{formatTimeRange(event.time, event.endTime)}</div>
-        <div>場所：{event.place ?? "-"}</div>
       </div>
       {event.note && <p className="event-note">{event.note}</p>}
       {safeOfficialLink && (
@@ -777,12 +787,27 @@ function getWeekRange(baseDate: string) {
 }
 
 function getTimelineBarColor(category: string) {
-  if (["ライブ", "舞台挨拶", "トークイベント"].includes(category)) return { strong: "#ec4899", light: "#fbcfe8" };
-  if (["配信", "先行配信", "ラジオ"].includes(category)) return { strong: "#0ea5e9", light: "#bae6fd" };
-  if (["リリース", "物販", "ポップアップストア"].includes(category)) return { strong: "#10b981", light: "#a7f3d0" };
-  if (["コラボ", "スタンプラリー"].includes(category)) return { strong: "#8b5cf6", light: "#ddd6fe" };
-  if (["申込", "当落発表", "記念日", "映画"].includes(category)) return { strong: "#f97316", light: "#fed7aa" };
-  return { strong: "#64748b", light: "#e2e8f0" };
+  const map: Record<string, { strong: string; light: string }> = {
+    "ライブ":             { strong: "#e11d48", light: "#fecdd3" },
+    "舞台挨拶":           { strong: "#a21caf", light: "#f5d0fe" },
+    "トークイベント":     { strong: "#5b21b6", light: "#ddd6fe" },
+    "配信":               { strong: "#0369a1", light: "#bae6fd" },
+    "先行配信":           { strong: "#0e7490", light: "#a5f3fc" },
+    "ラジオ":             { strong: "#0f766e", light: "#99f6e4" },
+    "リリース":           { strong: "#047857", light: "#a7f3d0" },
+    "物販":               { strong: "#15803d", light: "#bbf7d0" },
+    "ポップアップストア": { strong: "#4d7c0f", light: "#d9f99d" },
+    "ノベルティ":         { strong: "#a16207", light: "#fef08a" },
+    "プライズ":           { strong: "#b45309", light: "#fde68a" },
+    "コラボ":             { strong: "#7c3aed", light: "#e9d5ff" },
+    "スタンプラリー":     { strong: "#4338ca", light: "#c7d2fe" },
+    "出展":               { strong: "#1d4ed8", light: "#bfdbfe" },
+    "申込":               { strong: "#c2410c", light: "#fed7aa" },
+    "当落発表":           { strong: "#dc2626", light: "#fecaca" },
+    "映画":               { strong: "#334155", light: "#cbd5e1" },
+    "記念日":             { strong: "#be185d", light: "#fbcfe8" },
+  };
+  return map[category] ?? { strong: "#64748b", light: "#e2e8f0" };
 }
 
 function buildTimelineBarStyle(
@@ -810,13 +835,13 @@ function buildTimelineBarStyle(
 
   let gradient: string;
   if (span === 1) {
-    gradient = strong;
+    gradient = light;
   } else if (isEventStart && isEventEnd) {
-    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 30%, ${light} 70%, ${strong} 100%)`;
+    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 7%, ${light} 93%, ${strong} 100%)`;
   } else if (isEventStart) {
-    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 40%, ${light} 100%)`;
+    gradient = `linear-gradient(90deg, ${strong} 0%, ${light} 7%, ${light} 100%)`;
   } else if (isEventEnd) {
-    gradient = `linear-gradient(90deg, ${light} 0%, ${light} 60%, ${strong} 100%)`;
+    gradient = `linear-gradient(90deg, ${light} 0%, ${light} 93%, ${strong} 100%)`;
   } else {
     gradient = light;
   }
@@ -971,9 +996,12 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
                   transition={{ delay: index * 0.04 }}
                 >
                   <div className="mini-card" onClick={() => setSelectedEvent(event)}>
+                    <div className="mini-card-title">
+                      <EventBadge category={event.category} />
+                      {stripCategoryPrefix(event.title, event.category)}
+                    </div>
+                    <PlaceBadges place={event.place} />
                     <div className="mini-card-date">{formatPeriod(event)}</div>
-                    <div className="mini-card-title">{event.title}</div>
-                    <div className="mini-card-place">{event.place ?? "-"}</div>
                   </div>
                 </motion.div>
               ))}
@@ -992,9 +1020,12 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
           <div className="mini-list">
             {upcomingSoon.map((event) => (
               <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                <div className="mini-card-title">
+                  <EventBadge category={event.category} />
+                  {stripCategoryPrefix(event.title, event.category)}
+                </div>
+                <PlaceBadges place={event.place} />
                 <div className="mini-card-date">{formatPeriod(event)}</div>
-                <div className="mini-card-title">{event.title}</div>
-                <div className="mini-card-place">{event.place ?? "-"}</div>
               </div>
             ))}
           </div>
@@ -1179,9 +1210,12 @@ function CalendarView({
             ) : (
               selectedDayEvents.map((event) => (
                 <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                  <div className="mini-card-title">
+                    <EventBadge category={event.category} />
+                    {stripCategoryPrefix(event.title, event.category)}
+                  </div>
+                  <PlaceBadges place={event.place} />
                   <div className="mini-card-date">{formatPeriod(event)}</div>
-                  <div className="mini-card-title">{event.title}</div>
-                  <div className="mini-card-place">{event.place ?? "-"}</div>
                 </div>
               ))
             )}
@@ -1198,9 +1232,12 @@ function CalendarView({
               .slice(0, 5)
               .map((event) => (
                 <div key={event.id} className="mini-card" onClick={() => setSelectedEvent(event)}>
+                  <div className="mini-card-title">
+                    <EventBadge category={event.category} />
+                    {stripCategoryPrefix(event.title, event.category)}
+                  </div>
+                  <PlaceBadges place={event.place} />
                   <div className="mini-card-date">{formatPeriod(event)}</div>
-                  <div className="mini-card-title">{event.title}</div>
-                  <div className="mini-card-place">{event.place ?? "-"}</div>
                 </div>
               ))}
           </div>
