@@ -1158,43 +1158,137 @@ button {
 }
 
 /* ライブ – rose */
-.tone-live-badge    { background: #fff1f2; border-color: #fecdd3; color: #e11d48; }
+.tone-live-badge {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #e11d48;
+}
+
 /* 舞台挨拶 – fuchsia */
-.tone-stage-badge   { background: #fdf4ff; border-color: #f5d0fe; color: #a21caf; }
+.tone-stage-badge {
+  background: #fdf4ff;
+  border-color: #f5d0fe;
+  color: #a21caf;
+}
+
 /* トークイベント – violet */
-.tone-talk-badge    { background: #f5f3ff; border-color: #ddd6fe; color: #5b21b6; }
+.tone-talk-badge {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #5b21b6;
+}
+
 /* 配信 – sky */
-.tone-stream-badge  { background: #f0f9ff; border-color: #bae6fd; color: #0369a1; }
+.tone-stream-badge {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #0369a1;
+}
+
 /* 先行配信 – cyan */
-.tone-earlystream-badge { background: #ecfeff; border-color: #a5f3fc; color: #0e7490; }
+.tone-earlystream-badge {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #0e7490;
+}
+
 /* ラジオ – teal */
-.tone-radio-badge   { background: #f0fdfa; border-color: #99f6e4; color: #0f766e; }
+.tone-radio-badge {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #0f766e;
+}
+
 /* リリース – emerald */
-.tone-release-badge { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
+.tone-release-badge {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
 /* 物販 – green */
-.tone-merch-badge   { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+.tone-merch-badge {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #15803d;
+}
+
 /* ポップアップストア – lime */
-.tone-popup-badge   { background: #f7fee7; border-color: #d9f99d; color: #4d7c0f; }
+.tone-popup-badge {
+  background: #f7fee7;
+  border-color: #d9f99d;
+  color: #4d7c0f;
+}
+
 /* ノベルティ – yellow */
-.tone-novelty-badge { background: #fefce8; border-color: #fef08a; color: #a16207; }
+.tone-novelty-badge {
+  background: #fefce8;
+  border-color: #fef08a;
+  color: #a16207;
+}
+
 /* プライズ – amber */
-.tone-prize-badge   { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+.tone-prize-badge {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
 /* コラボ – purple */
-.tone-collab-badge  { background: #faf5ff; border-color: #e9d5ff; color: #7c3aed; }
+.tone-collab-badge {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+  color: #7c3aed;
+}
+
 /* スタンプラリー – indigo */
-.tone-stamp-badge   { background: #eef2ff; border-color: #c7d2fe; color: #4338ca; }
+.tone-stamp-badge {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #4338ca;
+}
+
 /* 出展 – blue */
-.tone-exhibit-badge { background: #eff6ff; border-color: #bfdbfe; color: #1d4ed8; }
+.tone-exhibit-badge {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+}
+
 /* 申込 – orange */
-.tone-apply-badge   { background: #fff7ed; border-color: #fed7aa; color: #c2410c; }
+.tone-apply-badge {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #c2410c;
+}
+
 /* 当落発表 – red */
-.tone-lottery-badge { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+.tone-lottery-badge {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
 /* 映画 – slate */
-.tone-movie-badge   { background: #f8fafc; border-color: #cbd5e1; color: #334155; }
+.tone-movie-badge {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+  color: #334155;
+}
+
 /* 記念日 – pink */
-.tone-anniversary-badge { background: #fdf2f8; border-color: #fbcfe8; color: #be185d; }
+.tone-anniversary-badge {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #be185d;
+}
+
 /* その他 – gray */
-.tone-other-badge   { background: #f8fafc; border-color: #e2e8f0; color: #475569; }
+.tone-other-badge {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #475569;
+}
 
 .mini-event-row {
   display: flex;
@@ -1225,25 +1319,119 @@ button {
   font-weight: 600;
 }
 
-.tone-live-mini         { background: #fff1f2; border-color: #fecdd3; color: #be123c; }
-.tone-stage-mini        { background: #fdf4ff; border-color: #f5d0fe; color: #86198f; }
-.tone-talk-mini         { background: #f5f3ff; border-color: #ddd6fe; color: #4c1d95; }
-.tone-stream-mini       { background: #f0f9ff; border-color: #bae6fd; color: #075985; }
-.tone-earlystream-mini  { background: #ecfeff; border-color: #a5f3fc; color: #164e63; }
-.tone-radio-mini        { background: #f0fdfa; border-color: #99f6e4; color: #115e59; }
-.tone-release-mini      { background: #ecfdf5; border-color: #a7f3d0; color: #065f46; }
-.tone-merch-mini        { background: #f0fdf4; border-color: #bbf7d0; color: #14532d; }
-.tone-popup-mini        { background: #f7fee7; border-color: #d9f99d; color: #365314; }
-.tone-novelty-mini      { background: #fefce8; border-color: #fef08a; color: #854d0e; }
-.tone-prize-mini        { background: #fffbeb; border-color: #fde68a; color: #92400e; }
-.tone-collab-mini       { background: #faf5ff; border-color: #e9d5ff; color: #6d28d9; }
-.tone-stamp-mini        { background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
-.tone-exhibit-mini      { background: #eff6ff; border-color: #bfdbfe; color: #1e40af; }
-.tone-apply-mini        { background: #fff7ed; border-color: #fed7aa; color: #9a3412; }
-.tone-lottery-mini      { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
-.tone-movie-mini        { background: #f1f5f9; border-color: #cbd5e1; color: #1e293b; }
-.tone-anniversary-mini  { background: #fdf2f8; border-color: #fbcfe8; color: #9d174d; }
-.tone-other-mini        { background: #f8fafc; border-color: #e2e8f0; color: #475569; }
+.tone-live-mini {
+  background: #fff1f2;
+  border-color: #fecdd3;
+  color: #be123c;
+}
+
+.tone-stage-mini {
+  background: #fdf4ff;
+  border-color: #f5d0fe;
+  color: #86198f;
+}
+
+.tone-talk-mini {
+  background: #f5f3ff;
+  border-color: #ddd6fe;
+  color: #4c1d95;
+}
+
+.tone-stream-mini {
+  background: #f0f9ff;
+  border-color: #bae6fd;
+  color: #075985;
+}
+
+.tone-earlystream-mini {
+  background: #ecfeff;
+  border-color: #a5f3fc;
+  color: #164e63;
+}
+
+.tone-radio-mini {
+  background: #f0fdfa;
+  border-color: #99f6e4;
+  color: #115e59;
+}
+
+.tone-release-mini {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #065f46;
+}
+
+.tone-merch-mini {
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  color: #14532d;
+}
+
+.tone-popup-mini {
+  background: #f7fee7;
+  border-color: #d9f99d;
+  color: #365314;
+}
+
+.tone-novelty-mini {
+  background: #fefce8;
+  border-color: #fef08a;
+  color: #854d0e;
+}
+
+.tone-prize-mini {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #92400e;
+}
+
+.tone-collab-mini {
+  background: #faf5ff;
+  border-color: #e9d5ff;
+  color: #6d28d9;
+}
+
+.tone-stamp-mini {
+  background: #eef2ff;
+  border-color: #c7d2fe;
+  color: #3730a3;
+}
+
+.tone-exhibit-mini {
+  background: #eff6ff;
+  border-color: #bfdbfe;
+  color: #1e40af;
+}
+
+.tone-apply-mini {
+  background: #fff7ed;
+  border-color: #fed7aa;
+  color: #9a3412;
+}
+
+.tone-lottery-mini {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.tone-movie-mini {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  color: #1e293b;
+}
+
+.tone-anniversary-mini {
+  background: #fdf2f8;
+  border-color: #fbcfe8;
+  color: #9d174d;
+}
+
+.tone-other-mini {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+  color: #475569;
+}
 
 .event-title {
   margin: 0;
@@ -3355,6 +3543,12 @@ code {
     0 16px 48px rgba(15, 23, 42, 0.14),
     0 4px 12px rgba(236, 72, 153, 0.08);
   white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .update-banner {
+    bottom: calc(90px + env(safe-area-inset-bottom));
+  }
 }
 
 .update-banner-text {
