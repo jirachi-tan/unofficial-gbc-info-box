@@ -288,18 +288,20 @@ function useUpdateChecker() {
 
 function UpdateBanner({ onReload }: { onReload: () => void }) {
     return (
-        <motion.div
-            className="update-banner"
-            initial={{ y: 60, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 260, damping: 24 }}
-        >
-            <span className="update-banner-text">新しいバージョンがあります</span>
-            <button className="update-banner-btn" type="button" onClick={onReload}>
-                <RefreshCw className="icon-14" />
-                更新する
-            </button>
-        </motion.div>
+        <div className="update-banner-wrapper">
+            <motion.div
+                className="update-banner"
+                initial={{ y: 60, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ type: "spring", stiffness: 260, damping: 24 }}
+            >
+                <span className="update-banner-text">新しいバージョンがあります</span>
+                <button className="update-banner-btn" type="button" onClick={onReload}>
+                    <RefreshCw className="icon-14" />
+                    更新する
+                </button>
+            </motion.div>
+        </div>
     );
 }
 
