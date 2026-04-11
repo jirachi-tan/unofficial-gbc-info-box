@@ -889,6 +889,11 @@ button {
   line-height: 1.6;
 }
 
+.footer-notice .notice-card .notice-body strong {
+  color: #0f172a;
+  font-weight: 900;
+}
+
 .site-footer {
   padding: 14px 0 28px;
 }

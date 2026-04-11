@@ -600,7 +600,10 @@ function HeroSection({
 
             <h1 className="hero-title">【非公式】ガルクラの箱<span className="hero-title-version">ver.2.0</span></h1>
 
-            <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。</p>
+            <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。
+              <br />
+              画面上部のメニュー(スマホは右上のアイコン)から、記念日カウントダウンやクイズ挑戦など他の機能にアクセスできますので試してみてください。
+            </p>
           </div>
 
           <div className="hero-widgets">
