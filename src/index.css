@@ -3547,7 +3547,9 @@ code {
 
 @media (max-width: 640px) {
   .update-banner {
-    bottom: calc(90px + env(safe-area-inset-bottom));
+    bottom: auto;
+    top: 50%;
+    transform: translate(-50%, -50%);
   }
 }
 
