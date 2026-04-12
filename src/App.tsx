@@ -337,11 +337,47 @@ function isJapaneseHoliday(date: Date) {
   return holidayCache.get(year)!.has(formatYmd(date));
 }
 
-function formatPeriod(event: EventItem) {
-  if (event.endDate && event.endDate !== event.date) {
-    return `${formatPeriodEndpoint(event.date, event.time)} → ${formatPeriodEndpoint(event.endDate, event.endTime)}`;
+function daysDiff(a: string, b: string) {
+  return Math.round((parseYmd(a).getTime() - parseYmd(b).getTime()) / 86400000);
+}
+
+type DateUnderline = "exact" | "near" | null;
+
+function getDateUnderline(targetDate: string, today: string, isEndDate: boolean): DateUnderline {
+  const diff = daysDiff(targetDate, today); // positive = target is in the future
+  if (diff === 0) return "exact";
+  if (isEndDate) {
+    // 終了日: 終了が近づく1〜3日前のみ水色（終了後は対応不要）
+    return diff >= 1 && diff <= 3 ? "near" : null;
   }
-  return `${formatDisplayDate(event.date)} / ${formatTimeRange(event.time, event.endTime)}`;
+  // 開始日: 前後3日
+  return Math.abs(diff) <= 3 ? "near" : null;
+}
+
+function underlineClass(ul: DateUnderline): string {
+  if (ul === "exact") return "date-ul-exact";
+  if (ul === "near") return "date-ul-near";
+  return "";
+}
+
+function PeriodDisplay({ event, today }: { event: EventItem; today: string }) {
+  if (event.endDate && event.endDate !== event.date) {
+    const startUl = getDateUnderline(event.date, today, false);
+    const endUl = getDateUnderline(event.endDate, today, true);
+    return (
+      <>
+        <span className={underlineClass(startUl)}>{formatPeriodEndpoint(event.date, event.time)}</span>
+        {" → "}
+        <span className={underlineClass(endUl)}>{formatPeriodEndpoint(event.endDate, event.endTime)}</span>
+      </>
+    );
+  }
+  const ul = getDateUnderline(event.date, today, false);
+  return (
+    <span className={underlineClass(ul)}>
+      {formatDisplayDate(event.date)} / {formatTimeRange(event.time, event.endTime)}
+    </span>
+  );
 }
 
 function isSameDate(a: string, b: string) {
@@ -628,6 +664,7 @@ function PlaceBadges({ place }: { place?: string | null }) {
 
 function EventCard({ event }: { event: EventItem }) {
   const safeOfficialLink = getSafeExternalUrl(event.officialLink);
+  const today = getTokyoTodayYmd();
 
   return (
     <article className="event-card">
@@ -637,8 +674,7 @@ function EventCard({ event }: { event: EventItem }) {
       </h3>
       <PlaceBadges place={event.place} />
       <div className="event-detail-grid">
-        <div>期間：{formatPeriod(event)}</div>
-        <div>時間：{formatTimeRange(event.time, event.endTime)}</div>
+        <div>期間：<PeriodDisplay event={event} today={today} /></div>
       </div>
       {event.note && <p className="event-note">{event.note}</p>}
       {safeOfficialLink && (
@@ -983,6 +1019,11 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
           <div className="date-pill">{formatDisplayDate(referenceDate)}</div>
         </div>
 
+        <div className="date-ul-legend">
+          <span className="date-ul-legend-item"><span className="date-ul-legend-swatch date-ul-legend-exact" />開始日・終了日が当日</span>
+          <span className="date-ul-legend-item"><span className="date-ul-legend-swatch date-ul-legend-near" />開始・終了が近い日付</span>
+        </div>
+
         <div className="stack-gap">
           {focusEvents.length === 0 ? (
             <div className="empty-card">この日に重なる掲載イベントはありません。</div>
@@ -1001,7 +1042,7 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
                       {stripCategoryPrefix(event.title, event.category)}
                     </div>
                     <PlaceBadges place={event.place} />
-                    <div className="mini-card-date">{formatPeriod(event)}</div>
+                    <div className="mini-card-date"><PeriodDisplay event={event} today={referenceDate} /></div>
                   </div>
                 </motion.div>
               ))}
@@ -1025,7 +1066,7 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
                   {stripCategoryPrefix(event.title, event.category)}
                 </div>
                 <PlaceBadges place={event.place} />
-                <div className="mini-card-date">{formatPeriod(event)}</div>
+                <div className="mini-card-date"><PeriodDisplay event={event} today={referenceDate} /></div>
               </div>
             ))}
           </div>
@@ -1204,6 +1245,11 @@ function CalendarView({
             カレンダーではその日の予定件数のみを表示します。日付を押すとここにその日の詳細を展開し、右側で確認できます。
           </div>
 
+          <div className="date-ul-legend">
+            <span className="date-ul-legend-item"><span className="date-ul-legend-swatch date-ul-legend-exact" />開始日・終了日が当日</span>
+            <span className="date-ul-legend-item"><span className="date-ul-legend-swatch date-ul-legend-near" />開始・終了が近い日付</span>
+          </div>
+
           <div className="selected-list">
             {selectedDayEvents.length === 0 ? (
               <div className="empty-card">この日に登録されているイベントはありません。</div>
@@ -1215,7 +1261,7 @@ function CalendarView({
                     {stripCategoryPrefix(event.title, event.category)}
                   </div>
                   <PlaceBadges place={event.place} />
-                  <div className="mini-card-date">{formatPeriod(event)}</div>
+                  <div className="mini-card-date"><PeriodDisplay event={event} today={referenceDate} /></div>
                 </div>
               ))
             )}
@@ -1237,7 +1283,7 @@ function CalendarView({
                     {stripCategoryPrefix(event.title, event.category)}
                   </div>
                   <PlaceBadges place={event.place} />
-                  <div className="mini-card-date">{formatPeriod(event)}</div>
+                  <div className="mini-card-date"><PeriodDisplay event={event} today={referenceDate} /></div>
                 </div>
               ))}
           </div>
