@@ -11,17 +11,17 @@ const GA_MEASUREMENT_ID = "G-SEPSCRC1H6";
 type GtagFn = (...args: any[]) => void;
 
 declare global {
-  interface Window {
-    gtag?: GtagFn;
-  }
+    interface Window {
+        gtag?: GtagFn;
+    }
 }
 
 /* ---------- 低レベル ---------- */
 
 function gtag(...args: Parameters<GtagFn>) {
-  if (typeof window.gtag === "function") {
-    window.gtag(...args);
-  }
+    if (typeof window.gtag === "function") {
+        window.gtag(...args);
+    }
 }
 
 /* ---------- ページビュー ---------- */
@@ -32,60 +32,60 @@ function gtag(...args: Parameters<GtagFn>) {
  * React Router の location 変更時にこれを呼んで各ページの PV を計測する。
  */
 export function trackPageView(path: string, title?: string) {
-  gtag("config", GA_MEASUREMENT_ID, {
-    page_path: path,
-    ...(title ? { page_title: title } : {}),
-  });
+    gtag("config", GA_MEASUREMENT_ID, {
+        page_path: path,
+        ...(title ? { page_title: title } : {}),
+    });
 }
 
 /* ---------- カスタムイベント ---------- */
 
 export function trackEvent(
-  action: string,
-  params?: Record<string, string | number | boolean>,
+    action: string,
+    params?: Record<string, string | number | boolean>,
 ) {
-  gtag("event", action, params);
+    gtag("event", action, params);
 }
 
 /* ── クイズ関連 ── */
 
 export function trackQuizStart() {
-  trackEvent("quiz_start");
+    trackEvent("quiz_start");
 }
 
 export function trackQuizAnswer(questionId: string, isCorrect: boolean) {
-  trackEvent("quiz_answer", {
-    question_id: questionId,
-    result: isCorrect ? "correct" : "wrong",
-  });
+    trackEvent("quiz_answer", {
+        question_id: questionId,
+        result: isCorrect ? "correct" : "wrong",
+    });
 }
 
 export function trackQuizComplete(
-  correctCount: number,
-  totalCount: number,
-  scorePercent: number,
+    correctCount: number,
+    totalCount: number,
+    scorePercent: number,
 ) {
-  trackEvent("quiz_complete", {
-    correct_count: correctCount,
-    total_count: totalCount,
-    score_percent: scorePercent,
-  });
+    trackEvent("quiz_complete", {
+        correct_count: correctCount,
+        total_count: totalCount,
+        score_percent: scorePercent,
+    });
 }
 
 /* ── 外部リンククリック ── */
 
 export function trackOutboundLink(url: string, label?: string) {
-  trackEvent("click", {
-    event_category: "outbound",
-    event_label: label ?? url,
-    link_url: url,
-  });
+    trackEvent("click", {
+        event_category: "outbound",
+        event_label: label ?? url,
+        link_url: url,
+    });
 }
 
 /* ── 記念日ページ フィルター変更 ── */
 
 export function trackDatesFilter(filter: string) {
-  trackEvent("dates_filter", {
-    filter_value: filter,
-  });
+    trackEvent("dates_filter", {
+        filter_value: filter,
+    });
 }
