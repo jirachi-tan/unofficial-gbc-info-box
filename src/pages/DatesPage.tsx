@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { trackDatesFilter } from "../lib/gtag";
 import { CalendarDays, Cake, Award, Sparkles, Clock3 } from "lucide-react";
 import {
     type DateEntry,
@@ -146,7 +147,7 @@ export default function DatesPage() {
                                 key={tab.key}
                                 type="button"
                                 className={`tab-button ${filter === tab.key ? "tab-button-active" : ""}`}
-                                onClick={() => setFilter(tab.key)}
+                                onClick={() => { setFilter(tab.key); trackDatesFilter(tab.key); }}
                             >
                                 <span style={{ fontSize: 13, fontWeight: 800 }}>{tab.label}</span>
                             </button>

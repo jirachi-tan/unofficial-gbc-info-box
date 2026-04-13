@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { trackQuizStart, trackQuizAnswer, trackQuizComplete } from "../lib/gtag";
 import {
     HelpCircle,
     Sparkles,
@@ -83,6 +84,7 @@ export default function QuizPage() {
         setFlipped(false);
         setJudgments([]);
         setPhase("playing");
+        trackQuizStart();
     }, [allQuizItems]);
 
     const handleFlip = () => {
@@ -90,8 +92,17 @@ export default function QuizPage() {
     };
 
     const handleJudge = (judge: SelfJudge) => {
+        const isCorrect = judge === "correct";
+        if (currentQuiz) {
+            trackQuizAnswer(currentQuiz.id, isCorrect);
+        }
+        const nextJudgments = [...judgments, judge];
         setJudgments((prev) => [...prev, judge]);
         if (currentIndex + 1 >= questions.length) {
+            const finalCorrect = nextJudgments.filter((j) => j === "correct").length;
+            const finalTotal = nextJudgments.length;
+            const finalPercent = Math.round((finalCorrect / finalTotal) * 100);
+            trackQuizComplete(finalCorrect, finalTotal, finalPercent);
             setExitDirection("left");
             setPhase("result");
         } else {

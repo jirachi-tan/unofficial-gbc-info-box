@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { trackPageView } from "./lib/gtag";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Music4,
@@ -305,8 +306,23 @@ function UpdateBanner({ onReload }: { onReload: () => void }) {
     );
 }
 
+const pageTitles: Record<string, string> = {
+    "/": "TOP",
+    "/dates": "記念日一覧",
+    "/links": "公式リンク一覧",
+    "/quiz": "クイズに挑戦！",
+};
+
 export default function Layout() {
     const { hasUpdate, reload } = useUpdateChecker();
+    const location = useLocation();
+
+    useEffect(() => {
+        const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+        const path = location.pathname.replace(basePath, "") || "/";
+        const title = pageTitles[path];
+        trackPageView(path, title);
+    }, [location.pathname]);
 
     return (
         <div className="page-shell">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { trackOutboundLink } from "../lib/gtag";
 import {
     ExternalLink,
     Music4,
@@ -85,6 +86,7 @@ function SnsButton({ link }: { link: SnsLink }) {
             target="_blank"
             rel="noopener noreferrer"
             aria-label={getSnsLabel(link.type, link.label)}
+            onClick={() => trackOutboundLink(link.url, getSnsLabel(link.type, link.label))}
         >
             <SnsIcon type={link.type} className="links-sns-icon" />
             <span className="links-sns-label">{getSnsLabel(link.type, link.label)}</span>
