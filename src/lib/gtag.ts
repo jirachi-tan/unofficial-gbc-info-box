@@ -82,6 +82,14 @@ export function trackOutboundLink(url: string, label?: string) {
     });
 }
 
+/* ── スケジュール表示切替 ── */
+
+export function trackScheduleView(viewName: string) {
+    trackEvent("schedule_view_switch", {
+        view_name: viewName,
+    });
+}
+
 /* ── 記念日ページ フィルター変更 ── */
 
 export function trackDatesFilter(filter: string) {

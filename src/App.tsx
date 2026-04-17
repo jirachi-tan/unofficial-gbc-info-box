@@ -14,6 +14,7 @@ import {
   Eye,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
+import { trackScheduleView } from "./lib/gtag";
 
 type ViewKey = "focus" | "timeline" | "calendar";
 
@@ -1381,7 +1382,7 @@ export default function App() {
                 key={key}
                 type="button"
                 className={cn("tab-button", view === key && "tab-button-active")}
-                onClick={() => setView(key)}
+                onClick={() => { setView(key); trackScheduleView(key); }}
               >
                 <Icon className="icon-16" />
                 {label}
