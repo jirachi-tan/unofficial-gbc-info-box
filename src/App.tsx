@@ -1301,6 +1301,9 @@ export default function App() {
   const systemDate = getTokyoTodayYmd();
   const referenceDate = useMemo(() => chooseReferenceDate(events, systemDate), [events, systemDate]);
   const [view, setView] = useState<ViewKey>("focus");
+  useEffect(() => {
+    trackScheduleView(view);
+  }, [view]);
   const [monthDate, setMonthDate] = useState(() => {
     const d = parseYmd(systemDate);
     return new Date(d.getFullYear(), d.getMonth(), 1);
@@ -1382,7 +1385,7 @@ export default function App() {
                 key={key}
                 type="button"
                 className={cn("tab-button", view === key && "tab-button-active")}
-                onClick={() => { setView(key); trackScheduleView(key); }}
+                onClick={() => setView(key)}
               >
                 <Icon className="icon-16" />
                 {label}
