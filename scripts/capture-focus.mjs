@@ -8,6 +8,7 @@
  */
 
 import { chromium } from "playwright";
+import { spawn } from "child_process";
 import { createServer } from "vite";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -18,7 +19,66 @@ const PORT = 4201;
 const DPR = 3; // 高解像度 (3倍)
 const VIEWPORT_WIDTH = 700; // モバイル幅でフォーカスセクションをフルワイドに
 
+function runCommand(command, args, options = {}) {
+    return new Promise((resolvePromise, reject) => {
+        const proc = spawn(command, args, {
+            cwd: ROOT,
+            stdio: ["ignore", "pipe", "pipe"],
+            ...options,
+        });
+
+        let stdout = "";
+        let stderr = "";
+
+        proc.stdout.on("data", (chunk) => {
+            stdout += chunk.toString();
+        });
+
+        proc.stderr.on("data", (chunk) => {
+            stderr += chunk.toString();
+        });
+
+        proc.on("error", reject);
+        proc.on("close", (code) => {
+            if (code === 0) {
+                resolvePromise({ stdout, stderr });
+                return;
+            }
+
+            const message = [stdout.trim(), stderr.trim()].filter(Boolean).join("\n");
+            reject(new Error(message || `${command} exited with code ${code}`));
+        });
+    });
+}
+
+async function updateFromOriginMain() {
+    console.log("🔄 origin/main の最新状態を確認中...");
+
+    const branch = (await runCommand("git", ["rev-parse", "--abbrev-ref", "HEAD"]))
+        .stdout
+        .trim();
+    if (branch !== "main") {
+        throw new Error(`現在のブランチが main ではありません: ${branch}`);
+    }
+
+    const trackedChanges = (await runCommand("git", ["status", "--porcelain", "--untracked-files=no"]))
+        .stdout
+        .trim();
+    if (trackedChanges) {
+        throw new Error("ローカル変更があるため自動更新を中止しました。コミット・退避後に再実行してください。");
+    }
+
+    const pullResult = await runCommand("git", ["pull", "--ff-only", "origin", "main"]);
+    const pullLog = [pullResult.stdout.trim(), pullResult.stderr.trim()].filter(Boolean).join("\n");
+
+    if (pullLog) {
+        console.log(pullLog);
+    }
+}
+
 async function main() {
+    await updateFromOriginMain();
+
     console.log("🚀 Vite dev server を起動中...");
     const server = await createServer({
         root: ROOT,
