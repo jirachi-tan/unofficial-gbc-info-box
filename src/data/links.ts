@@ -122,43 +122,6 @@ export const bands: BandInfo[] = [
         ],
     },
     {
-        name: "ダイヤモンドダスト",
-        members: [
-            {
-                name: "近藤 玲奈さん",
-                role: "ヒナ",
-                part: "Vo.",
-                links: [
-                    { type: "x", url: "https://x.com/reina_kondo" },
-                ],
-            },
-            {
-                name: "漆山 ゆうきさん",
-                role: "リン",
-                part: "Gt.",
-                links: [
-                    { type: "x", url: "https://x.com/urushiyamayuuki" },
-                ],
-            },
-            {
-                name: "松岡 美里さん",
-                role: "ナナ",
-                part: "Ba.",
-                links: [
-                    { type: "x", url: "https://x.com/Matsuoka_Misato" },
-                ],
-            },
-            {
-                name: "宮白 桃子さん",
-                role: "アイ",
-                part: "Dr.",
-                links: [
-                    { type: "x", url: "https://x.com/miyamo_0509" },
-                ],
-            },
-        ],
-    },
-    {
         name: "Canna Lily",
         officialLinks: [
             { type: "x", url: "https://x.com/CannaLily_GBC" },
@@ -202,6 +165,91 @@ export const bands: BandInfo[] = [
                 part: "Dr.",
                 links: [
                     { type: "x", url: "https://x.com/AruneCannaLily" },
+                ],
+            },
+        ],
+    },
+    {
+        name: "F-272",
+        officialLinks: [
+            { type: "x", url: "https://x.com/F_272_GBC" },
+        ],
+        members: [
+            {
+                name: "LUCAさん",
+                role: "加藤嗄生",
+                part: "Vo.",
+                links: [
+                    { type: "x", url: "https://x.com/luca_F272" },
+                ],
+            },
+            {
+                name: "TOWAさん",
+                role: "宇田川琴",
+                part: "Gt.",
+                links: [
+                    { type: "x", url: "https://x.com/towa_F272" },
+                ],
+            },
+            {
+                name: "MIYUさん",
+                role: "黒宮八月",
+                part: "Gt.",
+                links: [
+                    { type: "x", url: "https://x.com/miyu_F272" },
+                ],
+            },
+            {
+                name: "HINANOさん",
+                role: "浅井萌々乃",
+                part: "Ba.",
+                links: [
+                    { type: "x", url: "https://x.com/hinano_F272" },
+                ],
+            },
+            {
+                name: "YOSHIさん",
+                role: "中村有",
+                part: "Dr.",
+                links: [
+                    { type: "x", url: "https://x.com/yoshi_F272" },
+                ],
+            },
+        ],
+    },
+    {
+        name: "ダイヤモンドダスト",
+        members: [
+            {
+                name: "近藤 玲奈さん",
+                role: "ヒナ",
+                part: "Vo.",
+                links: [
+                    { type: "x", url: "https://x.com/reina_kondo" },
+                ],
+            },
+            {
+                name: "漆山 ゆうきさん",
+                role: "リン",
+                part: "Gt.",
+                links: [
+                    { type: "x", url: "https://x.com/urushiyamayuuki" },
+                ],
+            },
+            {
+                name: "松岡 美里さん",
+                role: "ナナ",
+                part: "Ba.",
+                links: [
+                    { type: "x", url: "https://x.com/Matsuoka_Misato" },
+                ],
+            },
+            {
+                name: "宮白 桃子さん",
+                role: "アイ",
+                part: "Dr.",
+                links: [
+                    { type: "x", url: "https://x.com/miyamo_0509" },
                 ],
             },
         ],
