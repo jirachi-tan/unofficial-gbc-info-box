@@ -54,6 +54,176 @@ button {
   flex-direction: column;
 }
 
+.page-shell-anniversary {
+  --anniv-r: 236;
+  --anniv-g: 72;
+  --anniv-b: 153;
+  background:
+    radial-gradient(circle at top left, rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.34) 0%, transparent 28%),
+    radial-gradient(circle at top right, rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.24) 0%, transparent 30%),
+    linear-gradient(180deg,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.18) 0%,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.12) 38%,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.08) 72%,
+      rgba(245, 240, 250, 1) 100%
+    );
+}
+
+.page-shell-anniversary .hero-card,
+.page-shell-anniversary .panel {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.14);
+  border: 1px solid rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.32);
+}
+
+.page-shell-anniversary .hero-card {
+  box-shadow: 0 24px 80px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.18);
+}
+
+.page-shell-anniversary .panel {
+  box-shadow: 0 14px 40px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.12);
+}
+
+.page-shell-anniversary .panel-title {
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b));
+}
+
+.page-shell-anniversary .eyebrow {
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b));
+}
+
+.page-shell-anniversary .pink-icon,
+.page-shell-anniversary .sky-icon,
+.page-shell-anniversary .violet-icon {
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b));
+}
+
+.page-shell-anniversary .hero-chip {
+  border-color: rgba(255, 255, 255, 0.48);
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.22);
+}
+
+.page-shell-anniversary .hero-anniversary-pill {
+  border-color: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.48);
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.18);
+}
+
+.page-shell-anniversary .hero-title {
+  color: white;
+}
+
+.page-shell-anniversary .hero-note {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.page-shell-anniversary .hero-clock-tile,
+.page-shell-anniversary .hero-quiz-tile {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.16);
+  border-color: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.32);
+}
+
+.page-shell-anniversary .hero-clock-label,
+.page-shell-anniversary .hero-quiz-label {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.page-shell-anniversary .hero-clock-date,
+.page-shell-anniversary .hero-clock-time,
+.page-shell-anniversary .hero-quiz-question {
+  color: white;
+}
+
+.page-shell-anniversary .hero-quiz-tile-revealed {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.14);
+}
+
+.page-shell-anniversary .hero-bg-layer {
+  background:
+    radial-gradient(circle at top left, rgba(255, 255, 255, 0.32), transparent 24%),
+    radial-gradient(circle at top right, rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.22), transparent 24%),
+    radial-gradient(circle at bottom left, rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.18), transparent 24%),
+    linear-gradient(135deg,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.82) 0%,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.72) 44%,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.62) 100%
+    );
+}
+
+.page-shell-anniversary .button {
+  background: linear-gradient(135deg,
+    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)) 0%,
+    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8) 100%
+  ) !important;
+  color: #fff !important;
+  border-color: transparent !important;
+  box-shadow: 0 10px 24px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.26) !important;
+}
+
+.page-shell-anniversary .button:hover {
+  box-shadow: 0 14px 32px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.32) !important;
+}
+
+.page-shell-anniversary .button.modal-close {
+  background: transparent !important;
+  color: #64748b !important;
+  box-shadow: none !important;
+}
+
+.page-shell-anniversary .button.modal-close:hover {
+  color: #1e293b !important;
+}
+
+.page-shell-anniversary .button.icon-button {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.16) !important;
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)) !important;
+  border-color: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.24) !important;
+  box-shadow: none !important;
+}
+
+.page-shell-anniversary .button.icon-button:hover {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.22) !important;
+}
+
+.page-shell-anniversary .tab-button {
+  border-color: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.14);
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b));
+}
+
+.page-shell-anniversary .tab-button-active,
+.page-shell-anniversary .menu-pill-active {
+  background: linear-gradient(90deg,
+    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
+    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.88)
+  ) !important;
+  border-color: transparent !important;
+  box-shadow: 0 12px 28px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.28) !important;
+  color: white !important;
+}
+
+.page-shell-anniversary .button.pink-soft-button {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.16) !important;
+  color: rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)) !important;
+  border-color: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.28) !important;
+  box-shadow: none !important;
+}
+
+.page-shell-anniversary .button.pink-soft-button:hover {
+  background: rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.22) !important;
+}
+
+.page-shell-anniversary .upcoming-button {
+  background: linear-gradient(90deg, 
+    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
+    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8)
+  ) !important;
+  box-shadow: 0 4px 12px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.3) !important;
+}
+
+.page-shell-anniversary .upcoming-button:hover {
+  box-shadow: 0 6px 16px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.4) !important;
+}
+
+
+
 .shell {
   width: min(1280px, calc(100% - 32px));
   margin: 0 auto;
@@ -605,6 +775,21 @@ button {
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.38);
   background: rgba(255, 255, 255, 0.16);
+}
+
+.hero-anniversary-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.48);
+  background: rgba(15, 23, 42, 0.22);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
 }
 
 .hero-title {
@@ -3559,6 +3744,120 @@ code {
   .quiz-judge-buttons .quiz-btn {
     flex: 1;
     justify-content: center;
+  }
+}
+
+/* ─── Anniversary Popup ─── */
+
+.anniversary-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(15, 23, 42, 0.42);
+  backdrop-filter: blur(6px);
+}
+
+.anniversary-popup {
+  width: min(560px, calc(100vw - 24px));
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.54);
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 24px 64px rgba(15, 23, 42, 0.2);
+  padding: 20px;
+  position: relative;
+}
+
+.anniversary-popup-close-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 24px;
+  font-weight: 300;
+  line-height: 1;
+  cursor: pointer;
+  transition: color 0.2s ease, transform 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.anniversary-popup-close-button:hover {
+  color: #1e293b;
+  transform: scale(1.1);
+}
+
+.anniversary-popup-close-button:active {
+  transform: scale(0.95);
+}
+
+.anniversary-popup-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 28px;
+  padding: 0 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #be185d;
+  background: #fdf2f8;
+  border: 1px solid #fbcfe8;
+}
+
+.anniversary-popup-title {
+  margin: 12px 0 0;
+  padding-right: 36px;
+  font-size: clamp(22px, 4.6vw, 32px);
+  line-height: 1.25;
+  color: #1e293b;
+}
+
+.anniversary-popup-subtitle {
+  margin: 10px 0 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+.anniversary-popup-actions {
+  margin-top: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.anniversary-popup-button {
+  border-color: transparent;
+  color: #fff;
+  background: linear-gradient(135deg, #ec4899, #38bdf8);
+  box-shadow: 0 10px 24px rgba(236, 72, 153, 0.24);
+}
+
+@media (max-width: 640px) {
+  .anniversary-popup {
+    padding: 18px 14px;
+    border-radius: 20px;
+  }
+
+  .anniversary-popup-actions {
+    justify-content: stretch;
+  }
+
+  .anniversary-popup-button {
+    width: 100%;
   }
 }
 

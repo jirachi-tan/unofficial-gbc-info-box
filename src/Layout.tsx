@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, type CSSProperties } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { trackPageView } from "./lib/gtag";
 import { AnimatePresence, motion } from "framer-motion";
@@ -9,7 +9,10 @@ import {
     X,
     CircleAlert,
     RefreshCw,
+    Sparkles,
 } from "lucide-react";
+import { isDateEntryArray, type DateEntryRaw } from "./lib/parseDates";
+import { hexToRgb, resolveTodayAnniversaryTheme, type TodayAnniversaryTheme } from "./lib/anniversaryTheme";
 
 function cn(...classes: Array<string | false | undefined | null>) {
     return classes.filter(Boolean).join(" ");
@@ -306,6 +309,13 @@ function UpdateBanner({ onReload }: { onReload: () => void }) {
     );
 }
 
+const datesJsonPath = `${import.meta.env.BASE_URL}data/dates.json?v=${__BUILD_TIMESTAMP__}`;
+const anniversaryDismissPrefix = "gbc-anniversary-popup-dismissed";
+
+export type LayoutOutletContext = {
+    todayAnniversary: TodayAnniversaryTheme | null;
+};
+
 const pageTitles: Record<string, string> = {
     "/": "TOP",
     "/dates": "記念日一覧",
@@ -313,23 +323,151 @@ const pageTitles: Record<string, string> = {
     "/quiz": "クイズに挑戦！",
 };
 
+function AnniversaryPopup({
+    anniversary,
+    onClose,
+    onOpenDates,
+}: {
+    anniversary: TodayAnniversaryTheme;
+    onClose: () => void;
+    onOpenDates: () => void;
+}) {
+    return (
+        <motion.div
+            className="anniversary-popup-backdrop"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+        >
+            <motion.section
+                className="anniversary-popup"
+                initial={{ opacity: 0, y: 18, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 12, scale: 0.97 }}
+                transition={{ duration: 0.22 }}
+                onClick={(event) => event.stopPropagation()}
+                aria-label="本日の記念日"
+            >
+                <button className="anniversary-popup-close-button" onClick={onClose} aria-label="close">
+                    ×
+                </button>
+                <div className="anniversary-popup-chip">
+                    <Sparkles className="icon-14" />
+                    TODAY ANNIVERSARY
+                </div>
+                <h2 className="anniversary-popup-title">{anniversary.message}</h2>
+                <p className="anniversary-popup-subtitle">本日限定で、サイト全体を記念日カラーでお祝い中です。</p>
+                <div className="anniversary-popup-actions">
+                    <button type="button" className="button anniversary-popup-button" onClick={onOpenDates}>
+                        記念日一覧を見る
+                    </button>
+                </div>
+            </motion.section>
+        </motion.div>
+    );
+}
+
 export default function Layout() {
     const { hasUpdate, reload } = useUpdateChecker();
     const location = useLocation();
+    const navigate = useNavigate();
+    const [todayAnniversary, setTodayAnniversary] = useState<TodayAnniversaryTheme | null>(null);
+    const [dismissedPopupDate, setDismissedPopupDate] = useState<string | null>(null);
+
+    const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+    const currentPath = location.pathname.replace(basePath, "") || "/";
+    const isTopPage = currentPath === "/";
 
     useEffect(() => {
-        const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
-        const path = location.pathname.replace(basePath, "") || "/";
-        const title = pageTitles[path];
-        trackPageView(path, title);
-    }, [location.pathname]);
+        const title = pageTitles[currentPath];
+        trackPageView(currentPath, title);
+    }, [currentPath]);
+
+    useEffect(() => {
+        let cancelled = false;
+
+        async function loadTodayAnniversary() {
+            try {
+                const response = await fetch(datesJsonPath, { cache: "no-store" });
+                if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+                const payload: unknown = await response.json();
+                if (!isDateEntryArray(payload)) throw new Error("Invalid dates.json format");
+
+                if (!cancelled) {
+                    setTodayAnniversary(resolveTodayAnniversaryTheme(payload as DateEntryRaw[]));
+                }
+            } catch {
+                if (!cancelled) setTodayAnniversary(null);
+            }
+        }
+
+        void loadTodayAnniversary();
+
+        return () => {
+            cancelled = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!todayAnniversary) {
+            setDismissedPopupDate(null);
+            return;
+        }
+
+        try {
+            const key = `${anniversaryDismissPrefix}-${todayAnniversary.todayYmd}`;
+            const isDismissed = window.localStorage.getItem(key) === "1";
+            setDismissedPopupDate(isDismissed ? todayAnniversary.todayYmd : null);
+        } catch {
+            setDismissedPopupDate(null);
+        }
+    }, [todayAnniversary]);
+
+    const dismissAnniversaryPopup = useCallback(() => {
+        if (!todayAnniversary) return;
+        try {
+            const key = `${anniversaryDismissPrefix}-${todayAnniversary.todayYmd}`;
+            window.localStorage.setItem(key, "1");
+        } catch {
+            // keep in-memory state only when storage is not available
+        }
+        setDismissedPopupDate(todayAnniversary.todayYmd);
+    }, [todayAnniversary]);
+
+    const handleOpenDatesFromPopup = useCallback(() => {
+        dismissAnniversaryPopup();
+        navigate("/dates");
+    }, [dismissAnniversaryPopup, navigate]);
+
+    const showAnniversaryPopup = Boolean(
+        isTopPage &&
+        todayAnniversary &&
+        dismissedPopupDate !== todayAnniversary.todayYmd,
+    );
+
+    const anniversaryShellStyle: CSSProperties | undefined = (() => {
+        if (!todayAnniversary) return undefined;
+        const rgb = hexToRgb(todayAnniversary.colorHex);
+        if (!rgb) return undefined;
+
+        return {
+            "--anniv-r": String(rgb.r),
+            "--anniv-g": String(rgb.g),
+            "--anniv-b": String(rgb.b),
+        } as CSSProperties;
+    })();
 
     return (
-        <div className="page-shell">
+        <div
+            className={cn("page-shell", todayAnniversary && "page-shell-anniversary")}
+            style={anniversaryShellStyle}
+        >
             <HeaderNav />
 
             <main className="shell main-stack">
-                <Outlet />
+                <Outlet context={{ todayAnniversary } satisfies LayoutOutletContext} />
 
                 <section className="footer-notice" aria-label="ご案内">
                     <div className="notice-card">
@@ -366,6 +504,13 @@ export default function Layout() {
             </footer>
 
             <AnimatePresence>
+                {showAnniversaryPopup && todayAnniversary && (
+                    <AnniversaryPopup
+                        anniversary={todayAnniversary}
+                        onClose={dismissAnniversaryPopup}
+                        onOpenDates={handleOpenDatesFromPopup}
+                    />
+                )}
                 {hasUpdate && <UpdateBanner onReload={reload} />}
             </AnimatePresence>
         </div>

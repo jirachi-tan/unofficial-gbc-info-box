@@ -1,5 +1,6 @@
 
 import React, { useMemo, useState, useEffect } from "react";
+import { useOutletContext } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CalendarDays,
@@ -15,6 +16,8 @@ import {
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 import { trackScheduleView } from "./lib/gtag";
+import type { TodayAnniversaryTheme } from "./lib/anniversaryTheme";
+import type { LayoutOutletContext } from "./Layout";
 
 type ViewKey = "focus" | "timeline" | "calendar";
 
@@ -618,8 +621,10 @@ function DailyQuiz({ quizItems }: { quizItems: QuizItem[] }) {
 
 function HeroSection({
   quizItems,
+  todayAnniversary,
 }: {
   quizItems: QuizItem[];
+  todayAnniversary: TodayAnniversaryTheme | null;
 }) {
   return (
     <section className="hero-card">
@@ -631,6 +636,13 @@ function HeroSection({
               <Sparkles className="icon-14" />
               fan made GBC portal
             </div>
+
+            {todayAnniversary && (
+              <div className="hero-anniversary-pill" role="status" aria-live="polite">
+                <Sparkles className="icon-14" />
+                {todayAnniversary.message}
+              </div>
+            )}
 
             <h1 className="hero-title">【非公式】ガルクラの箱<span className="hero-title-version">ver.2.0</span></h1>
 
@@ -1296,6 +1308,7 @@ function CalendarView({
 }
 
 export default function App() {
+  const { todayAnniversary } = useOutletContext<LayoutOutletContext>();
   const [events, setEvents] = useState<EventItem[]>([]);
   const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
   const systemDate = getTokyoTodayYmd();
@@ -1370,6 +1383,7 @@ export default function App() {
     <>
       <HeroSection
         quizItems={quizItems}
+        todayAnniversary={todayAnniversary}
       />
 
       <section className="panel" id="schedule-switch">
