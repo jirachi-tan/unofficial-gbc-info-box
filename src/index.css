@@ -65,8 +65,7 @@ button {
       rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.18) 0%,
       rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.12) 38%,
       rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.08) 72%,
-      rgba(245, 240, 250, 1) 100%
-    );
+      rgba(245, 240, 250, 1) 100%);
 }
 
 .page-shell-anniversary .hero-card,
@@ -144,15 +143,13 @@ button {
     linear-gradient(135deg,
       rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.82) 0%,
       rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.72) 44%,
-      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.62) 100%
-    );
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.62) 100%);
 }
 
 .page-shell-anniversary .button {
   background: linear-gradient(135deg,
-    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)) 0%,
-    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8) 100%
-  ) !important;
+      rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)) 0%,
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8) 100%) !important;
   color: #fff !important;
   border-color: transparent !important;
   box-shadow: 0 10px 24px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.26) !important;
@@ -191,9 +188,8 @@ button {
 .page-shell-anniversary .tab-button-active,
 .page-shell-anniversary .menu-pill-active {
   background: linear-gradient(90deg,
-    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
-    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.88)
-  ) !important;
+      rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.88)) !important;
   border-color: transparent !important;
   box-shadow: 0 12px 28px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.28) !important;
   color: white !important;
@@ -211,10 +207,9 @@ button {
 }
 
 .page-shell-anniversary .upcoming-button {
-  background: linear-gradient(90deg, 
-    rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
-    rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8)
-  ) !important;
+  background: linear-gradient(90deg,
+      rgb(var(--anniv-r), var(--anniv-g), var(--anniv-b)),
+      rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.8)) !important;
   box-shadow: 0 4px 12px rgba(var(--anniv-r), var(--anniv-g), var(--anniv-b), 0.3) !important;
 }
 
