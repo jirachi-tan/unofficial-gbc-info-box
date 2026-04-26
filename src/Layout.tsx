@@ -378,6 +378,7 @@ export default function Layout() {
     const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
     const currentPath = location.pathname.replace(basePath, "") || "/";
     const isTopPage = currentPath === "/";
+    const suppressAnniversaryPopup = new URLSearchParams(location.search).get("capture") === "1";
 
     useEffect(() => {
         const title = pageTitles[currentPath];
@@ -443,6 +444,7 @@ export default function Layout() {
 
     const showAnniversaryPopup = Boolean(
         isTopPage &&
+        !suppressAnniversaryPopup &&
         todayAnniversary &&
         dismissedPopupDate !== todayAnniversary.todayYmd,
     );

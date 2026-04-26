@@ -96,8 +96,9 @@ async function main() {
         });
         const page = await context.newPage();
 
+        const captureUrl = `${addr}?capture=1`;
         console.log("📄 ページを読込中...");
-        await page.goto(addr, { waitUntil: "networkidle" });
+        await page.goto(captureUrl, { waitUntil: "networkidle" });
 
         // アニメーション完了待ち
         await page.waitForTimeout(1500);
