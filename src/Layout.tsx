@@ -10,6 +10,7 @@ import {
     CircleAlert,
     RefreshCw,
     Sparkles,
+    Wrench,
 } from "lucide-react";
 import { isDateEntryArray, type DateEntryRaw } from "./lib/parseDates";
 import { hexToRgb, resolveTodayAnniversaryTheme, type TodayAnniversaryTheme } from "./lib/anniversaryTheme";
@@ -55,7 +56,19 @@ const headerNavItems: HeaderNavItem[] = [
         description: "作品や楽曲に関するクイズ企画ページです。",
         path: "/quiz",
     },
+    {
+        key: "tools",
+        label: "便利ツール",
+        shortLabel: "ツール",
+        description: "スタンプラリーまとめなど、探しやすさ重視の補助ページです。",
+        path: "/tools",
+    },
 ];
+
+function isActiveNavPath(itemPath: string, currentPath: string) {
+    if (itemPath === "/") return currentPath === "/";
+    return currentPath === itemPath || currentPath.startsWith(`${itemPath}/`);
+}
 
 function HeaderNav() {
     const navigate = useNavigate();
@@ -66,7 +79,7 @@ function HeaderNav() {
     const currentPath = location.pathname.replace(basePath, "") || "/";
 
     const activeNavKey =
-        headerNavItems.find((item) => item.path === currentPath)?.key ??
+        headerNavItems.find((item) => isActiveNavPath(item.path, currentPath))?.key ??
         headerNavItems[0].key;
 
     const currentItem = headerNavItems.find((item) => item.key === activeNavKey) ?? headerNavItems[0];
@@ -203,10 +216,14 @@ function HeaderNav() {
                                     <div className="eyebrow pink">site navigation</div>
                                     <h2 className="mobile-nav-title">ページ一覧</h2>
                                     <p className="mobile-nav-copy">
-                                        スケジュール、記念日一覧、公式リンク一覧、クイズに挑戦の各ページへ移動できます。
+                                        スケジュール、記念日、リンク、クイズ、便利ツールの各ページへ移動できます。
                                     </p>
                                     <div className="mobile-nav-summary">
                                         <span className="mobile-nav-summary-pill">全 {headerNavItems.length} ページ</span>
+                                        <span className="mobile-nav-summary-pill">
+                                            <Wrench className="icon-14" />
+                                            補助ページ追加中
+                                        </span>
                                     </div>
                                 </div>
 
@@ -321,6 +338,8 @@ const pageTitles: Record<string, string> = {
     "/dates": "記念日一覧",
     "/links": "公式リンク一覧",
     "/quiz": "クイズに挑戦！",
+    "/tools": "便利ツール",
+    "/tools/stamp-tour": "ガルクラスタンプラリー",
 };
 
 function AnniversaryPopup({

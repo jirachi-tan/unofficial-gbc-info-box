@@ -7,6 +7,8 @@ import App from './App.tsx'
 import DatesPage from './pages/DatesPage.tsx'
 import LinksPage from './pages/LinksPage.tsx'
 import QuizPage from './pages/QuizPage.tsx'
+import ToolsPage from './pages/ToolsPage.tsx'
+import StampTourPage from './pages/StampTourPage.tsx'
 
 const router = createBrowserRouter(
   [
@@ -18,6 +20,8 @@ const router = createBrowserRouter(
         { path: 'dates', element: <DatesPage /> },
         { path: 'links', element: <LinksPage /> },
         { path: 'quiz', element: <QuizPage /> },
+        { path: 'tools', element: <ToolsPage /> },
+        { path: 'tools/stamp-tour', element: <StampTourPage /> },
       ],
     },
   ],

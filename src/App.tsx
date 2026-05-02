@@ -1,11 +1,12 @@
 
 import React, { useMemo, useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import { Link as RouterLink, useOutletContext } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   CalendarDays,
   Clock3,
   Sparkles,
+  ArrowRight,
   ChevronLeft,
   ChevronRight,
   Link as LinkIcon,
@@ -13,6 +14,7 @@ import {
   GanttChart,
   HelpCircle,
   Eye,
+  Route,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
 import { trackScheduleView } from "./lib/gtag";
@@ -648,7 +650,7 @@ function HeroSection({
 
             <p className="hero-note">本サイトについては画面最下部に記載しています。ご確認ください。
               <br />
-              画面上部のメニュー(スマホは右上のアイコン)から、記念日カウントダウンやクイズ挑戦など他の機能にアクセスできますので試してみてください。
+              画面上部のメニュー(スマホは右上のアイコン)から、記念日カウントダウン、クイズ、便利ツールなど各機能へアクセスできます。
             </p>
           </div>
 
@@ -656,6 +658,34 @@ function HeroSection({
             <RealtimeClock />
             <DailyQuiz quizItems={quizItems} />
           </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function FeaturedToolsCard() {
+  return (
+    <section className="panel tools-home-panel">
+      <div className="tools-home-layout">
+        <div className="tools-home-copy">
+          <div className="eyebrow sky">helpful tools</div>
+          <h2 className="panel-title small-title">便利ツールを追加しました</h2>
+          <p className="tools-home-text">
+            ガールズバンドクライスタンプツアーの簡易まとめページを追加しました。
+            あくまで公式への補助導線として、ご利用ください。
+          </p>
+        </div>
+
+        <div className="tools-home-actions">
+          <RouterLink className="tools-action-button tools-action-button-secondary" to="/tools">
+            便利ツール一覧へ
+            <ArrowRight className="icon-16" />
+          </RouterLink>
+          <RouterLink className="tools-action-button tools-action-button-primary" to="/tools/stamp-tour">
+            <Route className="icon-16" />
+            ガルクラスタンプラリーを見る
+          </RouterLink>
         </div>
       </div>
     </section>
@@ -1385,6 +1415,8 @@ export default function App() {
         quizItems={quizItems}
         todayAnniversary={todayAnniversary}
       />
+
+      <FeaturedToolsCard />
 
       <section className="panel" id="schedule-switch">
         <div className="panel-head">
