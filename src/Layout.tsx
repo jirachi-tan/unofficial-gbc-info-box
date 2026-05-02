@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { isDateEntryArray, type DateEntryRaw } from "./lib/parseDates";
 import { hexToRgb, resolveTodayAnniversaryTheme, type TodayAnniversaryTheme } from "./lib/anniversaryTheme";
+import { applyRouteMetadata } from "./lib/applyRouteMetadata";
+import { getRouteMetadata } from "./lib/siteMetadata";
 
 function cn(...classes: Array<string | false | undefined | null>) {
     return classes.filter(Boolean).join(" ");
@@ -333,15 +335,6 @@ export type LayoutOutletContext = {
     todayAnniversary: TodayAnniversaryTheme | null;
 };
 
-const pageTitles: Record<string, string> = {
-    "/": "TOP",
-    "/dates": "記念日一覧",
-    "/links": "公式リンク一覧",
-    "/quiz": "クイズに挑戦！",
-    "/tools": "便利ツール",
-    "/tools/stamp-tour": "ガルクラスタンプラリー",
-};
-
 function AnniversaryPopup({
     anniversary,
     onClose,
@@ -398,10 +391,11 @@ export default function Layout() {
     const currentPath = location.pathname.replace(basePath, "") || "/";
     const isTopPage = currentPath === "/";
     const suppressAnniversaryPopup = new URLSearchParams(location.search).get("capture") === "1";
+    const currentMetadata = getRouteMetadata(currentPath);
 
     useEffect(() => {
-        const title = pageTitles[currentPath];
-        trackPageView(currentPath, title);
+        applyRouteMetadata(currentPath);
+        trackPageView(currentPath, currentMetadata.pageViewTitle);
 
         if (currentPath === "/tools") {
             trackToolsLandingVisit();
@@ -410,7 +404,7 @@ export default function Layout() {
         if (currentPath === "/tools/stamp-tour") {
             trackStampTourListVisit();
         }
-    }, [currentPath]);
+    }, [currentMetadata.pageViewTitle, currentPath]);
 
     useEffect(() => {
         let cancelled = false;
