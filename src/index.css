@@ -4445,6 +4445,7 @@ code {
 }
 
 @media (min-width: 960px) {
+
   .tools-home-layout,
   .stamp-tour-footer-layout {
     grid-template-columns: 1.1fr 0.9fr;

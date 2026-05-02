@@ -665,6 +665,10 @@ function HeroSection({
 }
 
 function FeaturedToolsCard() {
+  const handleToolLinkClick = () => {
+    window.scrollTo({ top: 0 });
+  };
+
   return (
     <section className="panel tools-home-panel">
       <div className="tools-home-layout">
@@ -678,11 +682,19 @@ function FeaturedToolsCard() {
         </div>
 
         <div className="tools-home-actions">
-          <RouterLink className="tools-action-button tools-action-button-secondary" to="/tools">
+          <RouterLink
+            className="tools-action-button tools-action-button-secondary"
+            to="/tools"
+            onClick={handleToolLinkClick}
+          >
             便利ツール一覧へ
             <ArrowRight className="icon-16" />
           </RouterLink>
-          <RouterLink className="tools-action-button tools-action-button-primary" to="/tools/stamp-tour">
+          <RouterLink
+            className="tools-action-button tools-action-button-primary"
+            to="/tools/stamp-tour"
+            onClick={handleToolLinkClick}
+          >
             <Route className="icon-16" />
             ガルクラスタンプラリーを見る
           </RouterLink>
