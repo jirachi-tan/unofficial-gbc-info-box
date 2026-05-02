@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, type CSSProperties } from "react";
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
-import { trackPageView } from "./lib/gtag";
+import { trackPageView, trackStampTourListVisit, trackToolsLandingVisit } from "./lib/gtag";
 import { AnimatePresence, motion } from "framer-motion";
 import {
     Music4,
@@ -402,6 +402,14 @@ export default function Layout() {
     useEffect(() => {
         const title = pageTitles[currentPath];
         trackPageView(currentPath, title);
+
+        if (currentPath === "/tools") {
+            trackToolsLandingVisit();
+        }
+
+        if (currentPath === "/tools/stamp-tour") {
+            trackStampTourListVisit();
+        }
     }, [currentPath]);
 
     useEffect(() => {

@@ -38,6 +38,20 @@ export function trackPageView(path: string, title?: string) {
     });
 }
 
+export function trackToolsLandingVisit() {
+    trackEvent("view_tools_landing", {
+        page_path: "/tools",
+        page_title: "便利ツール",
+    });
+}
+
+export function trackStampTourListVisit() {
+    trackEvent("view_stamp_tour_list", {
+        page_path: "/tools/stamp-tour",
+        page_title: "ガルクラスタンプラリー",
+    });
+}
+
 /* ---------- カスタムイベント ---------- */
 
 export function trackEvent(
