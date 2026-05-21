@@ -18,6 +18,10 @@ const ROOT = resolve(__dirname, "..");
 const PORT = 4201;
 const DPR = 3; // 高解像度 (3倍)
 const VIEWPORT_WIDTH = 700; // モバイル幅でフォーカスセクションをフルワイドに
+const INITIAL_VIEWPORT_HEIGHT = 3000;
+const VIEWPORT_PADDING = 120;
+const MAX_VIEWPORT_HEIGHT = 12000;
+const SKIP_UPDATE = process.env.CAPTURE_SKIP_UPDATE === "1";
 
 function runCommand(command, args, options = {}) {
     return new Promise((resolvePromise, reject) => {
@@ -77,7 +81,11 @@ async function updateFromOriginMain() {
 }
 
 async function main() {
-    await updateFromOriginMain();
+    if (SKIP_UPDATE) {
+        console.log("⏭️ CAPTURE_SKIP_UPDATE=1 のため git pull をスキップします。");
+    } else {
+        await updateFromOriginMain();
+    }
 
     console.log("🚀 Vite dev server を起動中...");
     const server = await createServer({
@@ -91,7 +99,7 @@ async function main() {
     try {
         const browser = await chromium.launch();
         const context = await browser.newContext({
-            viewport: { width: VIEWPORT_WIDTH, height: 3000 },
+            viewport: { width: VIEWPORT_WIDTH, height: INITIAL_VIEWPORT_HEIGHT },
             deviceScaleFactor: DPR,
         });
         const page = await context.newPage();
@@ -99,6 +107,25 @@ async function main() {
         const captureUrl = `${addr}?capture=1`;
         console.log("📄 ページを読込中...");
         await page.goto(captureUrl, { waitUntil: "networkidle" });
+
+        // キャプチャ時はアニメーション/トランジションを止めて寸法を安定化
+        await page.addStyleTag({
+            content: `
+                *, *::before, *::after {
+                    animation: none !important;
+                    transition: none !important;
+                }
+            `,
+        });
+
+        // Webフォントとレイアウト反映完了を待ってから座標を計測
+        await page.evaluate(async () => {
+            if (document.fonts && document.fonts.ready) {
+                await document.fonts.ready;
+            }
+            await new Promise((resolvePromise) => requestAnimationFrame(() => resolvePromise()));
+            await new Promise((resolvePromise) => requestAnimationFrame(() => resolvePromise()));
+        });
 
         // アニメーション完了待ち
         await page.waitForTimeout(1500);
@@ -110,30 +137,50 @@ async function main() {
         }
 
         // カード一覧と分割点を計算
-        const layout = await page.evaluate(() => {
-            const sec = document.querySelector("#focus-section");
-            if (!sec) return null;
+        const readLayout = async () =>
+            page.evaluate(() => {
+                const sec = document.querySelector("#focus-section");
+                if (!sec) return null;
 
-            const secRect = sec.getBoundingClientRect();
-            const cards = Array.from(sec.querySelectorAll(".mini-card"));
+                const secRect = sec.getBoundingClientRect();
+                const cards = Array.from(sec.querySelectorAll(".mini-card"));
 
-            // カードごとの矩形を取得（motion.divラッパーがあればそちらの矩形を使う）
-            const cardRects = cards.map((card) => {
-                const wrapper = card.closest("[style]") ?? card;
-                const r = wrapper.getBoundingClientRect();
-                return { top: r.top, bottom: r.bottom };
+                // カードごとの矩形を取得（直近ラッパー優先で分割基準を安定化）
+                const cardRects = cards.map((card) => {
+                    const wrapper = card.parentElement ?? card;
+                    const r = wrapper.getBoundingClientRect();
+                    return { top: r.top, bottom: r.bottom };
+                });
+
+                return {
+                    sectionTop: secRect.top,
+                    sectionBottom: secRect.bottom,
+                    sectionLeft: secRect.left,
+                    sectionWidth: secRect.width,
+                    sectionHeight: secRect.height,
+                    cardCount: cards.length,
+                    cardRects,
+                };
             });
 
-            return {
-                sectionTop: secRect.top,
-                sectionBottom: secRect.bottom,
-                sectionLeft: secRect.left,
-                sectionWidth: secRect.width,
-                sectionHeight: secRect.height,
-                cardCount: cards.length,
-                cardRects,
-            };
-        });
+        let layout = await readLayout();
+
+        if (layout) {
+            const currentViewport = page.viewportSize();
+            const requiredHeight = Math.min(
+                MAX_VIEWPORT_HEIGHT,
+                Math.ceil(layout.sectionBottom + VIEWPORT_PADDING),
+            );
+
+            if (currentViewport && requiredHeight > currentViewport.height) {
+                await page.setViewportSize({
+                    width: currentViewport.width,
+                    height: requiredHeight,
+                });
+                // viewport変更後に再計測
+                layout = await readLayout();
+            }
+        }
 
         if (!layout || layout.cardCount === 0) {
             console.log("⚠️ 今日のイベントがありません。セクション全体を 1 枚でキャプチャします。");
@@ -148,20 +195,27 @@ async function main() {
             const nextTop = layout.cardRects[splitIndex]?.top ?? layout.sectionBottom;
             const splitY = (prevBottom + nextTop) / 2;
 
+            // クリップ座標は整数化して境界の端切れを防ぐ
+            const sectionLeft = Math.floor(layout.sectionLeft);
+            const sectionTop = Math.floor(layout.sectionTop);
+            const sectionRight = Math.ceil(layout.sectionLeft + layout.sectionWidth);
+            const sectionBottom = Math.ceil(layout.sectionBottom);
+            const splitLine = Math.ceil(splitY);
+
             // -- パート 1: ヘッダー〜前半カード --
             const clip1 = {
-                x: layout.sectionLeft,
-                y: layout.sectionTop,
-                width: layout.sectionWidth,
-                height: splitY - layout.sectionTop,
+                x: sectionLeft,
+                y: sectionTop,
+                width: sectionRight - sectionLeft,
+                height: splitLine - sectionTop,
             };
 
             // -- パート 2: 後半カード〜セクション末尾 --
             const clip2 = {
-                x: layout.sectionLeft,
-                y: splitY,
-                width: layout.sectionWidth,
-                height: layout.sectionBottom - splitY,
+                x: sectionLeft,
+                y: splitLine,
+                width: sectionRight - sectionLeft,
+                height: sectionBottom - splitLine,
             };
 
             await page.screenshot({
