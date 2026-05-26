@@ -12,6 +12,7 @@ dist
 dist-ssr
 *.local
 focus-*.png
+docs/private/
 
 # Editor directories and files
 .vscode/*
