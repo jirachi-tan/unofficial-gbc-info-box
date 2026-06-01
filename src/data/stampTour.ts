@@ -239,6 +239,10 @@ export const stampTourSpots: StampTourSpot[] = [
         badgeSalePlace: "ヒルバレーラチッタデッラ川崎店",
         businessHours: "11:00〜20:00",
         regularHoliday: "毎月不定期。詳細はヒルバレーHPで確認。",
+        notes: [
+            "閉店に伴い、ヒルバレーでの缶バッジ取扱は2026年6月14日(日)までです。",
+            "缶バッジ販売は2026年6月19日(金)からチネチッタでの取扱に変更予定です。",
+        ],
         officialUrl: "https://www.hillvalley.jp/",
         officialLinks: [
             { label: "店舗HP", url: "https://www.hillvalley.jp/" },
@@ -259,7 +263,10 @@ export const stampTourSpots: StampTourSpot[] = [
         badgeSalePlace: "チネチッタグッズショップ",
         businessHours: "8:30〜21:00",
         regularHoliday: "なし",
-        notes: ["上映開始・終了時間により営業時間が変更になる場合があります。"],
+        notes: [
+            "上映開始・終了時間により営業時間が変更になる場合があります。",
+            "缶バッジ販売は2026年6月19日(金)からチネチッタグッズショップでの取扱に変更予定です。",
+        ],
         officialUrl: "https://cinecitta.co.jp/",
         officialLinks: [{ label: "施設HP", url: "https://cinecitta.co.jp/" }],
         mapQuery: "チネチッタ",
