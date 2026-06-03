@@ -467,6 +467,25 @@ export const stampTourSpots: StampTourSpot[] = [
         mapQuery: "MeRvism 川崎アゼリア",
         sourceUrl: defaultSourceUrl,
     },
+    {
+        id: "bookoff-super-bazaar-kawasaki-moores",
+        lineupNo: 23,
+        name: "BOOKOFF SUPER BAZAAR 川崎モアーズ店6F",
+        character: "ルパ",
+        spotType: "store",
+        area: "川崎駅東口",
+        address: "〒210-0007 神奈川県川崎市川崎区駅前本町7 川崎モアーズ",
+        stampPlace: "BOOKOFF SUPER BAZAAR 川崎モアーズ店6F",
+        badgeSalePlace: "BOOKOFF SUPER BAZAAR 川崎モアーズ店6F",
+        businessHours: "[3F] 10:00〜22:00 / [6F] 10:00〜21:00",
+        regularHoliday: "なし",
+        officialLinks: [
+            { label: "告知ポスト", url: "https://x.com/mirai_things/status/2062096960341831876?s=20" },
+            { label: "公式スポット一覧", url: STAMP_TOUR_OFFICIAL_SPOT_URL },
+        ],
+        mapQuery: "BOOKOFF SUPER BAZAAR 川崎モアーズ店",
+        sourceUrl: STAMP_TOUR_OFFICIAL_SPOT_URL,
+    },
 ];
 
 export const stampTourSpotTypeLabels: Record<StampTourSpotType, string> = {
