@@ -95,6 +95,20 @@ function DateCard({ entry }: { entry: DateEntry }) {
                     </div>
                 )}
 
+                {entry.type === "birthday" && entry.fullDateText && (
+                    <div className="dates-card-full-date">
+                        <span className="dates-elapsed-label">生年月日：</span>
+                        <span>{entry.fullDateText}</span>
+                    </div>
+                )}
+
+                {entry.type === "birthday" && entry.elapsed && (
+                    <div className="dates-card-elapsed">
+                        <span className="dates-elapsed-label">経過：</span>
+                        <span>{formatElapsed(entry.elapsed)}</span>
+                    </div>
+                )}
+
                 {entry.type === "anniversary" && entry.elapsed && !entry.isToday && (
                     <div className="dates-card-elapsed">
                         <span className="dates-elapsed-label">経過：</span>

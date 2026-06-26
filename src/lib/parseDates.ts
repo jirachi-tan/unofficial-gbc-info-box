@@ -5,6 +5,7 @@ export type DateEntryRaw = {
     category: "character" | "cast" | "other";
     month?: number;
     day?: number;
+    year?: number;
     startDate?: string;
 };
 
@@ -17,6 +18,8 @@ export type DateEntry = DateEntryRaw & {
     anniversaryYear?: number;
     /** For anniversary type: elapsed years/months/days from startDate to today */
     elapsed?: { years: number; months: number; days: number };
+    /** Full date text for display, such as 2023年2月28日 */
+    fullDateText?: string;
 };
 
 function z2(n: number): string {
@@ -87,7 +90,11 @@ export function parseDateEntries(raw: DateEntryRaw[], todayOverride?: string): D
             const thisYear = ymd(tokyo.year, m, d);
             const nextDate = thisYear >= todayYmd ? thisYear : ymd(tokyo.year + 1, m, d);
             const isToday = thisYear === todayYmd;
-            return { ...entry, nextDate, isToday };
+            const fullDateText = entry.year ? `${entry.year}年${m}月${d}日` : undefined;
+            const elapsed = entry.year
+                ? elapsedParts(entry.year, m, d, tokyo.year, tokyo.month, tokyo.day)
+                : undefined;
+            return { ...entry, nextDate, isToday, fullDateText, elapsed };
         }
 
         // anniversary

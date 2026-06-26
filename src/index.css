@@ -2713,6 +2713,14 @@ code {
   font-weight: 800;
 }
 
+.dates-card-full-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #475569;
+}
+
 .dates-card-elapsed {
   display: flex;
   align-items: center;

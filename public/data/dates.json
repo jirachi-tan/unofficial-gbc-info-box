@@ -44,6 +44,7 @@
         "title": "凪都さん",
         "type": "birthday",
         "category": "cast",
+        "year": 2001,
         "month": 8,
         "day": 23
     },
@@ -52,6 +53,7 @@
         "title": "夕莉さん",
         "type": "birthday",
         "category": "cast",
+        "year": 2000,
         "month": 9,
         "day": 26
     },
@@ -60,6 +62,7 @@
         "title": "美怜さん",
         "type": "birthday",
         "category": "cast",
+        "year": 2003,
         "month": 11,
         "day": 7
     },
@@ -68,6 +71,7 @@
         "title": "理名さん",
         "type": "birthday",
         "category": "cast",
+        "year": 2007,
         "month": 11,
         "day": 13
     },
@@ -76,8 +80,61 @@
         "title": "朱李さん",
         "type": "birthday",
         "category": "cast",
+        "year": 2003,
         "month": 12,
         "day": 22
+    },
+    {
+        "id": "mizunotsuki_himesaki_birthday",
+        "title": "紫乃月 姫咲さん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2004,
+        "month": 10,
+        "day": 9
+    },
+    {
+        "id": "shiina_zaon_birthday",
+        "title": "椎名 在音さん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2004,
+        "month": 3,
+        "day": 15
+    },
+    {
+        "id": "yano_yu_birthday",
+        "title": "箭野 結羽さん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2004,
+        "month": 1,
+        "day": 16
+    },
+    {
+        "id": "hayasaka_rin_birthday",
+        "title": "早坂 莉寧さん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2007,
+        "month": 11,
+        "day": 14
+    },
+    {
+        "id": "sano_sakur_birthday",
+        "title": "佐野 櫻さん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2006,
+        "month": 4,
+        "day": 5
+    },
+    {
+        "id": "canna_lily_1st_oneman_live",
+        "title": "Canna Lily 1st ONE-MAN LIVE「未明に咲く花」",
+        "type": "anniversary",
+        "category": "other",
+        "startDate": "2026-06-26"
     },
     {
         "id": "anime_broadcast_start",
