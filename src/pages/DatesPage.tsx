@@ -43,8 +43,11 @@ function CountdownTimer({ targetDate }: { targetDate: string }) {
 
 function DateCard({ entry }: { entry: DateEntry }) {
     const isBirthday = entry.type === "birthday";
+    const isUnpublishedBirthday = isBirthday && entry.unpublishedDate;
     const icon = isBirthday ? <Cake className="icon-18" /> : <Award className="icon-18" />;
-    const monthDay = entry.type === "birthday"
+    const monthDay = isUnpublishedBirthday
+        ? "非公表"
+        : entry.type === "birthday"
         ? `${entry.month}月${entry.day}日`
         : `${Number(entry.startDate!.slice(5, 7))}月${Number(entry.startDate!.slice(8, 10))}日`;
 
@@ -83,7 +86,7 @@ function DateCard({ entry }: { entry: DateEntry }) {
                     <span>{monthDay}</span>
                 </div>
 
-                {!entry.isToday && (
+                {!entry.isToday && !isUnpublishedBirthday && (
                     <div className="dates-card-countdown">
                         <Clock3 className="icon-14" />
                         <span className="dates-countdown-label">
@@ -95,14 +98,21 @@ function DateCard({ entry }: { entry: DateEntry }) {
                     </div>
                 )}
 
-                {entry.type === "birthday" && entry.fullDateText && (
+                {isUnpublishedBirthday && (
+                    <div className="dates-card-full-date">
+                        <span className="dates-elapsed-label">注記：</span>
+                        <span>誕生日は非公表</span>
+                    </div>
+                )}
+
+                {entry.type === "birthday" && !isUnpublishedBirthday && entry.fullDateText && (
                     <div className="dates-card-full-date">
                         <span className="dates-elapsed-label">生年月日：</span>
                         <span>{entry.fullDateText}</span>
                     </div>
                 )}
 
-                {entry.type === "birthday" && entry.elapsed && (
+                {entry.type === "birthday" && !isUnpublishedBirthday && entry.elapsed && (
                     <div className="dates-card-elapsed">
                         <span className="dates-elapsed-label">経過：</span>
                         <span>{formatElapsed(entry.elapsed)}</span>

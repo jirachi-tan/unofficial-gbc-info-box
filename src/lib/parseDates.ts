@@ -7,6 +7,7 @@ export type DateEntryRaw = {
     day?: number;
     year?: number;
     startDate?: string;
+    unpublished?: boolean;
 };
 
 export type DateEntry = DateEntryRaw & {
@@ -20,6 +21,8 @@ export type DateEntry = DateEntryRaw & {
     elapsed?: { years: number; months: number; days: number };
     /** Full date text for display, such as 2023年2月28日 */
     fullDateText?: string;
+    /** true when birthday date is not public */
+    unpublishedDate?: boolean;
 };
 
 function z2(n: number): string {
@@ -85,6 +88,16 @@ export function parseDateEntries(raw: DateEntryRaw[], todayOverride?: string): D
 
     return raw.map((entry) => {
         if (entry.type === "birthday") {
+            const hasBirthdayDate = typeof entry.month === "number" && typeof entry.day === "number";
+            if (!hasBirthdayDate) {
+                return {
+                    ...entry,
+                    nextDate: "9999-12-31",
+                    isToday: false,
+                    unpublishedDate: true,
+                };
+            }
+
             const m = entry.month!;
             const d = entry.day!;
             const thisYear = ymd(tokyo.year, m, d);
@@ -176,7 +189,12 @@ export function isDateEntryArray(value: unknown): value is DateEntryRaw[] {
                 typeof c.id === "string" &&
                 typeof c.title === "string" &&
                 (c.type === "birthday" || c.type === "anniversary") &&
-                (c.category === "character" || c.category === "cast" || c.category === "other")
+                (c.category === "character" || c.category === "cast" || c.category === "other") &&
+                (c.month === undefined || typeof c.month === "number") &&
+                (c.day === undefined || typeof c.day === "number") &&
+                (c.year === undefined || typeof c.year === "number") &&
+                (c.startDate === undefined || typeof c.startDate === "string") &&
+                (c.unpublished === undefined || typeof c.unpublished === "boolean")
             );
         })
     );

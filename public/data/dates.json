@@ -130,6 +130,49 @@
         "day": 5
     },
     {
+        "id": "f272_yoshi_birthday",
+        "title": "YOSHIさん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2007,
+        "month": 11,
+        "day": 30
+    },
+    {
+        "id": "f272_miyu_birthday",
+        "title": "MIYUさん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2006,
+        "month": 10,
+        "day": 20
+    },
+    {
+        "id": "f272_towa_birthday",
+        "title": "TOWAさん",
+        "type": "birthday",
+        "category": "cast",
+        "unpublished": true
+    },
+    {
+        "id": "f272_hinano_birthday",
+        "title": "HINANOさん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2006,
+        "month": 8,
+        "day": 24
+    },
+    {
+        "id": "f272_luca_birthday",
+        "title": "LUCAさん",
+        "type": "birthday",
+        "category": "cast",
+        "year": 2005,
+        "month": 7,
+        "day": 12
+    },
+    {
         "id": "canna_lily_1st_oneman_live",
         "title": "Canna Lily 1st ONE-MAN LIVE「未明に咲く花」",
         "type": "anniversary",
