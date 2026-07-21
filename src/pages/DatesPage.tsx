@@ -10,18 +10,27 @@ import {
     formatCountdown,
     formatElapsed,
     categoryLabels,
+    castGroupLabels,
     isDateEntryArray,
 } from "../lib/parseDates";
 
 const datesJsonPath = `${import.meta.env.BASE_URL}data/dates.json`;
 
 type CategoryFilter = "all" | "character" | "cast" | "other";
+type CastGroupFilter = "all" | "togenashi_togeari" | "canna_lily" | "f272";
 
 const filterTabs: Array<{ key: CategoryFilter; label: string }> = [
     { key: "all", label: "すべて" },
     { key: "character", label: "キャラクター" },
     { key: "cast", label: "キャスト" },
     { key: "other", label: "その他" },
+];
+
+const castGroupTabs: Array<{ key: CastGroupFilter; label: string }> = [
+    { key: "all", label: "すべて" },
+    { key: "togenashi_togeari", label: castGroupLabels.togenashi_togeari },
+    { key: "canna_lily", label: castGroupLabels.canna_lily },
+    { key: "f272", label: castGroupLabels.f272 },
 ];
 
 function CountdownTimer({ targetDate }: { targetDate: string }) {
@@ -134,6 +143,7 @@ export default function DatesPage() {
     const [raw, setRaw] = useState<DateEntryRaw[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [filter, setFilter] = useState<CategoryFilter>("all");
+    const [castGroupFilter, setCastGroupFilter] = useState<CastGroupFilter>("all");
 
     useEffect(() => {
         fetch(datesJsonPath)
@@ -150,9 +160,12 @@ export default function DatesPage() {
 
     const entries = useMemo(() => parseDateEntries(raw), [raw]);
     const sorted = useMemo(() => {
-        const filtered = filter === "all" ? entries : entries.filter((e) => e.category === filter);
+        const categoryFiltered = filter === "all" ? entries : entries.filter((e) => e.category === filter);
+        const filtered = filter === "cast" && castGroupFilter !== "all"
+            ? categoryFiltered.filter((e) => e.castGroup === castGroupFilter)
+            : categoryFiltered;
         return [...filtered].sort((a, b) => a.nextDate.localeCompare(b.nextDate));
-    }, [entries, filter]);
+    }, [entries, filter, castGroupFilter]);
 
     const todayEntries = sorted.filter((e) => e.isToday);
     const upcomingEntries = sorted.filter((e) => !e.isToday);
@@ -171,12 +184,33 @@ export default function DatesPage() {
                                 key={tab.key}
                                 type="button"
                                 className={`tab-button ${filter === tab.key ? "tab-button-active" : ""}`}
-                                onClick={() => { setFilter(tab.key); trackDatesFilter(tab.key); }}
+                                onClick={() => {
+                                    setFilter(tab.key);
+                                    if (tab.key !== "cast") setCastGroupFilter("all");
+                                    trackDatesFilter(tab.key);
+                                }}
                             >
                                 <span style={{ fontSize: 13, fontWeight: 800 }}>{tab.label}</span>
                             </button>
                         ))}
                     </div>
+                    {filter === "cast" && (
+                        <div className="tab-row" style={{ marginTop: "0.6rem" }}>
+                            {castGroupTabs.map((tab) => (
+                                <button
+                                    key={tab.key}
+                                    type="button"
+                                    className={`tab-button ${castGroupFilter === tab.key ? "tab-button-active" : ""}`}
+                                    onClick={() => {
+                                        setCastGroupFilter(tab.key);
+                                        trackDatesFilter(`cast:${tab.key}`);
+                                    }}
+                                >
+                                    <span style={{ fontSize: 13, fontWeight: 800 }}>{tab.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 {error && (

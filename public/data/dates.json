@@ -44,6 +44,7 @@
         "title": "凪都さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "togenashi_togeari",
         "year": 2001,
         "month": 8,
         "day": 23
@@ -53,6 +54,7 @@
         "title": "夕莉さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "togenashi_togeari",
         "year": 2000,
         "month": 9,
         "day": 26
@@ -62,6 +64,7 @@
         "title": "美怜さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "togenashi_togeari",
         "year": 2003,
         "month": 11,
         "day": 7
@@ -71,6 +74,7 @@
         "title": "理名さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "togenashi_togeari",
         "year": 2007,
         "month": 11,
         "day": 13
@@ -80,6 +84,7 @@
         "title": "朱李さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "togenashi_togeari",
         "year": 2003,
         "month": 12,
         "day": 22
@@ -89,6 +94,7 @@
         "title": "紫乃月 姫咲さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "canna_lily",
         "year": 2003,
         "month": 10,
         "day": 9
@@ -98,6 +104,7 @@
         "title": "椎名 在音さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "canna_lily",
         "year": 2004,
         "month": 3,
         "day": 15
@@ -107,6 +114,7 @@
         "title": "箭野 結羽さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "canna_lily",
         "year": 2004,
         "month": 1,
         "day": 16
@@ -116,6 +124,7 @@
         "title": "早坂 莉寧さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "canna_lily",
         "year": 2007,
         "month": 11,
         "day": 14
@@ -125,6 +134,7 @@
         "title": "佐野 櫻さん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "canna_lily",
         "year": 2006,
         "month": 4,
         "day": 5
@@ -134,6 +144,7 @@
         "title": "YOSHIさん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "f272",
         "year": 2007,
         "month": 11,
         "day": 30
@@ -143,6 +154,7 @@
         "title": "MIYUさん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "f272",
         "year": 2006,
         "month": 10,
         "day": 20
@@ -152,6 +164,7 @@
         "title": "TOWAさん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "f272",
         "unpublished": true
     },
     {
@@ -159,6 +172,7 @@
         "title": "HINANOさん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "f272",
         "year": 2006,
         "month": 8,
         "day": 24
@@ -168,6 +182,7 @@
         "title": "LUCAさん",
         "type": "birthday",
         "category": "cast",
+        "castGroup": "f272",
         "year": 2005,
         "month": 7,
         "day": 12
