@@ -36,6 +36,11 @@ function buildLocationNotice(spot: StampTourSpot) {
     const differentSpotAndStamp = isDifferentSpotAndStampLocation(spot);
     const differentSpotAndBadge = isDifferentSpotAndBadgeLocation(spot);
 
+    // If stamp and badge locations are identical, do not show a warning panel.
+    if (!splitStampAndBadge) {
+        return null;
+    }
+
     if (differentSpotAndStamp && differentSpotAndBadge) {
         return {
             tone: spot.spotType === "kawasaki_spot" ? "danger" : "warning",
