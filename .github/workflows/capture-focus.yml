@@ -1,0 +1,83 @@
+name: Capture Focus Images
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_to_pages:
+        description: "public/captures/latest に保存して GitHub Pages で公開する"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: capture-focus
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npx playwright install --with-deps chromium
+
+      - name: Run capture script
+        run: node scripts/capture-focus.mjs
+        env:
+          CAPTURE_SKIP_UPDATE: "1"
+
+      - name: Prepare publish directory
+        shell: bash
+        run: |
+          mkdir -p public/captures/latest
+          cp focus-1.png public/captures/latest/focus-1.png
+          cp focus-2.png public/captures/latest/focus-2.png
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > public/captures/latest/generated_at_utc.txt
+
+      - name: Upload artifact for mobile download
+        uses: actions/upload-artifact@v4
+        with:
+          name: focus-captures
+          path: |
+            focus-1.png
+            focus-2.png
+            public/captures/latest/generated_at_utc.txt
+          if-no-files-found: error
+
+      - id: changes
+        if: inputs.publish_to_pages == true
+        shell: bash
+        run: |
+          if [[ -n "$(git status --porcelain -- public/captures/latest)" ]]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Commit and push published images
+        if: inputs.publish_to_pages == true && steps.changes.outputs.changed == 'true'
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/captures/latest
+          git commit -m "chore: update focus captures"
+          git push
+
+      - name: Skip commit when unchanged
+        if: inputs.publish_to_pages == true && steps.changes.outputs.changed != 'true'
+        run: echo "No changes detected in public/captures/latest"
