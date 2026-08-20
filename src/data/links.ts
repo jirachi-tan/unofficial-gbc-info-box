@@ -173,6 +173,7 @@ export const bands: BandInfo[] = [
         name: "F-272",
         officialLinks: [
             { type: "x", url: "https://x.com/F_272_GBC" },
+            { type: "youtube", url: "https://www.youtube.com/@f272official" },
         ],
         members: [
             {
