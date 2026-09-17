@@ -188,6 +188,15 @@
         "day": 12
     },
     {
+        "id": "teshima_nari_birthday",
+        "title": "手島nariさん",
+        "type": "birthday",
+        "category": "other",
+        "year": 1996,
+        "month": 9,
+        "day": 18
+    },
+    {
         "id": "canna_lily_1st_oneman_live",
         "title": "Canna Lily 1st ONE-MAN LIVE「未明に咲く花」",
         "type": "anniversary",
