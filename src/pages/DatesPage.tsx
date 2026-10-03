@@ -17,7 +17,7 @@ import {
 const datesJsonPath = `${import.meta.env.BASE_URL}data/dates.json`;
 
 type CategoryFilter = "all" | "character" | "cast" | "other";
-type CastGroupFilter = "all" | "togenashi_togeari" | "canna_lily" | "f272";
+type CastGroupFilter = "all" | "togenashi_togeari" | "canna_lily" | "f272" | "kuzumimizuku";
 
 const filterTabs: Array<{ key: CategoryFilter; label: string }> = [
     { key: "all", label: "すべて" },
@@ -31,6 +31,7 @@ const castGroupTabs: Array<{ key: CastGroupFilter; label: string }> = [
     { key: "togenashi_togeari", label: castGroupLabels.togenashi_togeari },
     { key: "canna_lily", label: castGroupLabels.canna_lily },
     { key: "f272", label: castGroupLabels.f272 },
+    { key: "kuzumimizuku", label: castGroupLabels.kuzumimizuku },
 ];
 
 function CountdownTimer({ targetDate }: { targetDate: string }) {

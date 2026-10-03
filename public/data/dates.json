@@ -188,6 +188,46 @@
         "day": 12
     },
     {
+        "id": "kuzumimizuku_an_birthday",
+        "title": "和音(あん)さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "kuzumimizuku",
+        "unpublished": true
+    },
+    {
+        "id": "kuzumimizuku_mana_birthday",
+        "title": "茉那(まな)さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "kuzumimizuku",
+        "unpublished": true
+    },
+    {
+        "id": "kuzumimizuku_aina_birthday",
+        "title": "藍楠(あいな)さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "kuzumimizuku",
+        "unpublished": true
+    },
+    {
+        "id": "kuzumimizuku_noa_birthday",
+        "title": "乃逢(のあ)さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "kuzumimizuku",
+        "unpublished": true
+    },
+    {
+        "id": "kuzumimizuku_kaya_birthday",
+        "title": "佳哉(かや)さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "kuzumimizuku",
+        "unpublished": true
+    },
+    {
         "id": "teshima_nari_birthday",
         "title": "手島nariさん",
         "type": "birthday",

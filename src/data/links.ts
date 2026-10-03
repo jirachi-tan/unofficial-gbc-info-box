@@ -219,6 +219,59 @@ export const bands: BandInfo[] = [
         ],
     },
     {
+        name: "クズミミズク",
+        officialLinks: [
+            { type: "official", url: "https://kuzumimizuku-official.com" },
+        ],
+        members: [
+            {
+                name: "和音(あん)さん",
+                role: "若堀 若葉",
+                part: "Vo./Gt.",
+                links: [
+                    { type: "x", url: "https://x.com/an_kzmmzk" },
+                    { type: "instagram", url: "https://instagram.com/an_kzmmzk" },
+                ],
+            },
+            {
+                name: "茉那(まな)さん",
+                role: "飯豊 澄羽",
+                part: "Gt./Vo.",
+                links: [
+                    { type: "x", url: "https://x.com/mana_kzmmzk" },
+                    { type: "instagram", url: "https://instagram.com/mana_kzmmzk" },
+                ],
+            },
+            {
+                name: "藍楠(あいな)さん",
+                role: "乙津 歌留多",
+                part: "Ba.",
+                links: [
+                    { type: "x", url: "https://x.com/aina_kzmmzk" },
+                    { type: "instagram", url: "https://instagram.com/aina_kzmmzk" },
+                ],
+            },
+            {
+                name: "乃逢(のあ)さん",
+                role: "卯木 風薫",
+                part: "Dr.",
+                links: [
+                    { type: "x", url: "https://x.com/noa_kzmmzk" },
+                    { type: "instagram", url: "https://instagram.com/noa_kzmmzk" },
+                ],
+            },
+            {
+                name: "佳哉(かや)さん",
+                role: "八峰 志乃",
+                part: "Key.",
+                links: [
+                    { type: "x", url: "https://x.com/kaya_kzmmzk" },
+                    { type: "instagram", url: "https://instagram.com/kaya_kzmmzk" },
+                ],
+            },
+        ],
+    },
+    {
         name: "ダイヤモンドダスト",
         members: [
             {
