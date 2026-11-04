@@ -40,6 +40,38 @@
         "day": 9
     },
     {
+        "id": "diamond_dust_nana_birthday",
+        "title": "ナナ",
+        "type": "birthday",
+        "category": "character",
+        "month": 1,
+        "day": 14
+    },
+    {
+        "id": "diamond_dust_hina_birthday",
+        "title": "ヒナ",
+        "type": "birthday",
+        "category": "character",
+        "month": 5,
+        "day": 31
+    },
+    {
+        "id": "diamond_dust_rin_birthday",
+        "title": "リン",
+        "type": "birthday",
+        "category": "character",
+        "month": 7,
+        "day": 9
+    },
+    {
+        "id": "diamond_dust_ai_birthday",
+        "title": "アイ",
+        "type": "birthday",
+        "category": "character",
+        "month": 9,
+        "day": 14
+    },
+    {
         "id": "natsu_birthday",
         "title": "凪都さん",
         "type": "birthday",
