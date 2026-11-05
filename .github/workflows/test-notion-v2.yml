@@ -1,0 +1,32 @@
+﻿name: Test Notion V2 Access
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check Notion read access
+        shell: bash
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN_V2 }}
+          NOTION_DATA_SOURCE_ID: ${{ secrets.NOTION_DATA_SOURCE_ID }}
+        run: |
+          set -eu
+          test -n "$NOTION_TOKEN"
+          test -n "$NOTION_DATA_SOURCE_ID"
+
+          status=$(curl -sS -o /dev/null -w "%{http_code}" \
+            -X POST \
+            "https://api.notion.com/v1/data_sources/${NOTION_DATA_SOURCE_ID}/query" \
+            -H "Authorization: Bearer ${NOTION_TOKEN}" \
+            -H "Notion-Version: 2026-03-11" \
+            -H "Content-Type: application/json" \
+            --data '{"page_size":1}')
+
+          echo "Notion query HTTP status: $status"
+          test "$status" = "200"
