@@ -22,6 +22,11 @@ git commit -m "Apply mock site set"
 git push
 ```
 
+## 誕生日データ
+- 誕生日・周年データは `public/data/dates.json` で管理します。生年が分かる誕生日は `year`、`month`、`day` に登録します。
+- クズミミズクの誕生日はこのデータからカレンダーにも表示します。Notion 由来の同日の誕生日イベントがある場合は重複表示しません。
+- `public/data/events.json` は Notion 同期で生成されるため、カレンダーの誕生日を追加する目的で直接編集しません。
+
 ## スマホ向け: フォーカス画像の自動キャプチャ
 - GitHub Actions の `Capture Focus Images` を `Run workflow` で実行します。
 - 画像は 2 つの場所に保存されます。

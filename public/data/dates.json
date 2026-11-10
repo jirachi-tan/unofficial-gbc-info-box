@@ -225,7 +225,9 @@
         "type": "birthday",
         "category": "cast",
         "castGroup": "kuzumimizuku",
-        "unpublished": true
+        "year": 2004,
+        "month": 1,
+        "day": 14
     },
     {
         "id": "kuzumimizuku_mana_birthday",
@@ -233,7 +235,9 @@
         "type": "birthday",
         "category": "cast",
         "castGroup": "kuzumimizuku",
-        "unpublished": true
+        "year": 2008,
+        "month": 7,
+        "day": 26
     },
     {
         "id": "kuzumimizuku_aina_birthday",
@@ -241,7 +245,9 @@
         "type": "birthday",
         "category": "cast",
         "castGroup": "kuzumimizuku",
-        "unpublished": true
+        "year": 2005,
+        "month": 2,
+        "day": 26
     },
     {
         "id": "kuzumimizuku_noa_birthday",
@@ -249,7 +255,9 @@
         "type": "birthday",
         "category": "cast",
         "castGroup": "kuzumimizuku",
-        "unpublished": true
+        "year": 2006,
+        "month": 5,
+        "day": 5
     },
     {
         "id": "kuzumimizuku_kaya_birthday",
@@ -257,7 +265,9 @@
         "type": "birthday",
         "category": "cast",
         "castGroup": "kuzumimizuku",
-        "unpublished": true
+        "year": 2002,
+        "month": 12,
+        "day": 3
     },
     {
         "id": "teshima_nari_birthday",

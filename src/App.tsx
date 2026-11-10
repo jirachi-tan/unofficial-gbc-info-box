@@ -17,6 +17,8 @@ import {
   Route,
 } from "lucide-react";
 import { getTokyoTodayYmd, parseCsvRows, type EventItem, type RawCsvRow } from "./lib/parseEvents";
+import { getCalendarBirthdayEvents } from "./lib/calendarBirthdays";
+import type { DateEntryRaw } from "./lib/parseDates";
 import { trackScheduleView } from "./lib/gtag";
 import type { TodayAnniversaryTheme } from "./lib/anniversaryTheme";
 import type { LayoutOutletContext } from "./Layout";
@@ -1134,6 +1136,7 @@ function FocusView({ events, referenceDate, setSelectedEvent, view }: { events: 
 
 function CalendarView({
   events,
+  dateEntries,
   monthDate,
   setMonthDate,
   referenceDate,
@@ -1141,6 +1144,7 @@ function CalendarView({
   view,
 }: {
   events: EventItem[];
+  dateEntries: DateEntryRaw[];
   monthDate: Date;
   setMonthDate: React.Dispatch<React.SetStateAction<Date>>;
   referenceDate: string;
@@ -1150,6 +1154,10 @@ function CalendarView({
   const cells = useMemo(() => getMonthMatrix(monthDate), [monthDate]);
   const currentMonth = monthDate.getMonth();
   const [selectedDate, setSelectedDate] = useState(referenceDate);
+  const calendarEvents = useMemo(() => {
+    const years = [...cells.map((day) => day.getFullYear()), Number(selectedDate.slice(0, 4))];
+    return [...events, ...getCalendarBirthdayEvents(dateEntries, events, years)];
+  }, [cells, dateEntries, events, selectedDate]);
 
   const dayEventCountMap = useMemo(() => {
     const counts = new Map<string, number>();
@@ -1161,7 +1169,7 @@ function CalendarView({
     const visibleStartKey = formatYmd(visibleStart);
     const visibleEndKey = formatYmd(visibleEnd);
 
-    for (const event of events) {
+    for (const event of calendarEvents) {
       const eventEnd = event.endDate ?? event.date;
       if (event.date > visibleEndKey || eventEnd < visibleStartKey) continue;
 
@@ -1175,11 +1183,11 @@ function CalendarView({
     }
 
     return counts;
-  }, [cells, events]);
+  }, [cells, calendarEvents]);
 
   const selectedDayEvents = useMemo(() => {
-    return getSortedEvents(events.filter((event) => isInRange(selectedDate, event.date, event.endDate)));
-  }, [events, selectedDate]);
+    return getSortedEvents(calendarEvents.filter((event) => isInRange(selectedDate, event.date, event.endDate)));
+  }, [calendarEvents, selectedDate]);
 
   useEffect(() => {
     setSelectedDate(referenceDate);
@@ -1350,7 +1358,7 @@ function CalendarView({
 }
 
 export default function App() {
-  const { todayAnniversary } = useOutletContext<LayoutOutletContext>();
+  const { todayAnniversary, dateEntries } = useOutletContext<LayoutOutletContext>();
   const [events, setEvents] = useState<EventItem[]>([]);
   const [quizItems, setQuizItems] = useState<QuizItem[]>([]);
   const systemDate = getTokyoTodayYmd();
@@ -1488,6 +1496,7 @@ export default function App() {
           >
             <CalendarView
               events={events}
+              dateEntries={dateEntries}
               monthDate={monthDate}
               setMonthDate={setMonthDate}
               referenceDate={referenceDate}

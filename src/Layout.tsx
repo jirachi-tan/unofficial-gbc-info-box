@@ -333,6 +333,7 @@ const anniversaryDismissPrefix = "gbc-anniversary-popup-dismissed";
 
 export type LayoutOutletContext = {
     todayAnniversary: TodayAnniversaryTheme | null;
+    dateEntries: DateEntryRaw[];
 };
 
 function AnniversaryPopup({
@@ -385,6 +386,7 @@ export default function Layout() {
     const location = useLocation();
     const navigate = useNavigate();
     const [todayAnniversary, setTodayAnniversary] = useState<TodayAnniversaryTheme | null>(null);
+    const [dateEntries, setDateEntries] = useState<DateEntryRaw[]>([]);
     const [dismissedPopupDate, setDismissedPopupDate] = useState<string | null>(null);
 
     const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -418,10 +420,14 @@ export default function Layout() {
                 if (!isDateEntryArray(payload)) throw new Error("Invalid dates.json format");
 
                 if (!cancelled) {
-                    setTodayAnniversary(resolveTodayAnniversaryTheme(payload as DateEntryRaw[]));
+                    setDateEntries(payload);
+                    setTodayAnniversary(resolveTodayAnniversaryTheme(payload));
                 }
-            } catch {
-                if (!cancelled) setTodayAnniversary(null);
+            } catch (error) {
+                if (!cancelled) {
+                    console.error("Failed to load public/data/dates.json.", error);
+                    setTodayAnniversary(null);
+                }
             }
         }
 
@@ -490,7 +496,7 @@ export default function Layout() {
             <HeaderNav />
 
             <main className="shell main-stack">
-                <Outlet context={{ todayAnniversary } satisfies LayoutOutletContext} />
+                <Outlet context={{ todayAnniversary, dateEntries } satisfies LayoutOutletContext} />
 
                 <section className="footer-notice" aria-label="ご案内">
                     <div className="notice-card">
