@@ -17,7 +17,7 @@ import {
 const datesJsonPath = `${import.meta.env.BASE_URL}data/dates.json`;
 
 type CategoryFilter = "all" | "character" | "cast" | "other";
-type CastGroupFilter = "all" | "togenashi_togeari" | "canna_lily" | "f272" | "kuzumimizuku";
+type CastGroupFilter = "all" | "togenashi_togeari" | "diamond_dust" | "canna_lily" | "f272" | "kuzumimizuku";
 
 const filterTabs: Array<{ key: CategoryFilter; label: string }> = [
     { key: "all", label: "すべて" },
@@ -29,6 +29,16 @@ const filterTabs: Array<{ key: CategoryFilter; label: string }> = [
 const castGroupTabs: Array<{ key: CastGroupFilter; label: string }> = [
     { key: "all", label: "すべて" },
     { key: "togenashi_togeari", label: castGroupLabels.togenashi_togeari },
+    { key: "diamond_dust", label: castGroupLabels.diamond_dust },
+    { key: "canna_lily", label: castGroupLabels.canna_lily },
+    { key: "f272", label: castGroupLabels.f272 },
+    { key: "kuzumimizuku", label: castGroupLabels.kuzumimizuku },
+];
+
+const characterBandTabs: Array<{ key: CastGroupFilter; label: string }> = [
+    { key: "all", label: "すべて" },
+    { key: "togenashi_togeari", label: castGroupLabels.togenashi_togeari },
+    { key: "diamond_dust", label: castGroupLabels.diamond_dust },
     { key: "canna_lily", label: castGroupLabels.canna_lily },
     { key: "f272", label: castGroupLabels.f272 },
     { key: "kuzumimizuku", label: castGroupLabels.kuzumimizuku },
@@ -162,7 +172,7 @@ export default function DatesPage() {
     const entries = useMemo(() => parseDateEntries(raw), [raw]);
     const sorted = useMemo(() => {
         const categoryFiltered = filter === "all" ? entries : entries.filter((e) => e.category === filter);
-        const filtered = filter === "cast" && castGroupFilter !== "all"
+        const filtered = (filter === "cast" || filter === "character") && castGroupFilter !== "all"
             ? categoryFiltered.filter((e) => e.castGroup === castGroupFilter)
             : categoryFiltered;
         return [...filtered].sort((a, b) => a.nextDate.localeCompare(b.nextDate));
@@ -179,15 +189,15 @@ export default function DatesPage() {
                         <div className="eyebrow pink">anniversary list</div>
                         <h2 className="panel-title">記念日一覧</h2>
                     </div>
-                    <div className="tab-row">
+                    <div className="tab-row dates-filter-row dates-category-filter-row" aria-label="記念日を種類で絞り込み">
                         {filterTabs.map((tab) => (
                             <button
                                 key={tab.key}
                                 type="button"
                                 className={`tab-button ${filter === tab.key ? "tab-button-active" : ""}`}
                                 onClick={() => {
+                                    if (tab.key !== filter) setCastGroupFilter("all");
                                     setFilter(tab.key);
-                                    if (tab.key !== "cast") setCastGroupFilter("all");
                                     trackDatesFilter(tab.key);
                                 }}
                             >
@@ -195,16 +205,20 @@ export default function DatesPage() {
                             </button>
                         ))}
                     </div>
-                    {filter === "cast" && (
-                        <div className="tab-row" style={{ marginTop: "0.6rem" }}>
-                            {castGroupTabs.map((tab) => (
+                    {(filter === "cast" || filter === "character") && (
+                        <div
+                            className="tab-row dates-filter-row dates-band-filter-row"
+                            style={{ marginTop: "0.6rem" }}
+                            aria-label={filter === "character" ? "キャラクターをバンドで絞り込み" : "キャストをバンドで絞り込み"}
+                        >
+                            {(filter === "character" ? characterBandTabs : castGroupTabs).map((tab) => (
                                 <button
                                     key={tab.key}
                                     type="button"
                                     className={`tab-button ${castGroupFilter === tab.key ? "tab-button-active" : ""}`}
                                     onClick={() => {
                                         setCastGroupFilter(tab.key);
-                                        trackDatesFilter(`cast:${tab.key}`);
+                                        trackDatesFilter(`${filter}:${tab.key}`);
                                     }}
                                 >
                                     <span style={{ fontSize: 13, fontWeight: 800 }}>{tab.label}</span>

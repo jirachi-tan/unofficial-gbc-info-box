@@ -4,6 +4,7 @@
         "title": "海老塚智",
         "type": "birthday",
         "category": "character",
+        "castGroup": "togenashi_togeari",
         "month": 3,
         "day": 22
     },
@@ -12,6 +13,7 @@
         "title": "安和すばる",
         "type": "birthday",
         "category": "character",
+        "castGroup": "togenashi_togeari",
         "month": 4,
         "day": 27
     },
@@ -20,6 +22,7 @@
         "title": "ルパ",
         "type": "birthday",
         "category": "character",
+        "castGroup": "togenashi_togeari",
         "month": 6,
         "day": 28
     },
@@ -28,6 +31,7 @@
         "title": "井芹仁菜",
         "type": "birthday",
         "category": "character",
+        "castGroup": "togenashi_togeari",
         "month": 10,
         "day": 24
     },
@@ -36,6 +40,7 @@
         "title": "河原木桃香",
         "type": "birthday",
         "category": "character",
+        "castGroup": "togenashi_togeari",
         "month": 12,
         "day": 9
     },
@@ -44,6 +49,7 @@
         "title": "ナナ",
         "type": "birthday",
         "category": "character",
+        "castGroup": "diamond_dust",
         "month": 1,
         "day": 14
     },
@@ -52,6 +58,7 @@
         "title": "ヒナ",
         "type": "birthday",
         "category": "character",
+        "castGroup": "diamond_dust",
         "month": 5,
         "day": 31
     },
@@ -60,6 +67,7 @@
         "title": "リン",
         "type": "birthday",
         "category": "character",
+        "castGroup": "diamond_dust",
         "month": 7,
         "day": 9
     },
@@ -68,8 +76,144 @@
         "title": "アイ",
         "type": "birthday",
         "category": "character",
+        "castGroup": "diamond_dust",
         "month": 9,
         "day": 14
+    },
+    {
+        "id": "kuzumimizuku_karuta_birthday",
+        "title": "乙津 歌留多",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "kuzumimizuku",
+        "month": 1,
+        "day": 8
+    },
+    {
+        "id": "kuzumimizuku_shino_birthday",
+        "title": "八峰 志乃",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "kuzumimizuku",
+        "month": 2,
+        "day": 5
+    },
+    {
+        "id": "kuzumimizuku_suuha_birthday",
+        "title": "飯豊 澄羽",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "kuzumimizuku",
+        "month": 8,
+        "day": 4
+    },
+    {
+        "id": "kuzumimizuku_kazekaoru_birthday",
+        "title": "卯木 風薫",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "kuzumimizuku",
+        "month": 10,
+        "day": 10
+    },
+    {
+        "id": "kuzumimizuku_wakaba_birthday",
+        "title": "若堀 若葉",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "kuzumimizuku",
+        "month": 11,
+        "day": 23
+    },
+    {
+        "id": "f272_nakamura_yu_birthday",
+        "title": "中村 有",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "f272",
+        "month": 6,
+        "day": 11
+    },
+    {
+        "id": "f272_udagawa_koto_birthday",
+        "title": "宇田川 琴",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "f272",
+        "month": 12,
+        "day": 1
+    },
+    {
+        "id": "f272_kuromiya_hazuki_birthday",
+        "title": "黒宮 八月",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "f272",
+        "month": 8,
+        "day": 31
+    },
+    {
+        "id": "f272_asai_momono_birthday",
+        "title": "浅井 萌々乃",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "f272",
+        "month": 4,
+        "day": 16
+    },
+    {
+        "id": "f272_kato_sayori_birthday",
+        "title": "加藤 嗄生",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "f272",
+        "month": 10,
+        "day": 4
+    },
+    {
+        "id": "canna_lily_shion_birthday",
+        "title": "榊原 紫苑",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "canna_lily",
+        "month": 11,
+        "day": 11
+    },
+    {
+        "id": "canna_lily_rindo_birthday",
+        "title": "千ヶ崎 竜胆",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "canna_lily",
+        "month": 7,
+        "day": 22
+    },
+    {
+        "id": "canna_lily_ayame_birthday",
+        "title": "星 亜矢芽",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "canna_lily",
+        "month": 5,
+        "day": 5
+    },
+    {
+        "id": "canna_lily_kaede_birthday",
+        "title": "橘田 楓",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "canna_lily",
+        "month": 9,
+        "day": 6
+    },
+    {
+        "id": "canna_lily_nazuna_birthday",
+        "title": "雪志摩 ナズナ",
+        "type": "birthday",
+        "category": "character",
+        "castGroup": "canna_lily",
+        "month": 1,
+        "day": 25
     },
     {
         "id": "natsu_birthday",
@@ -218,6 +362,44 @@
         "year": 2005,
         "month": 7,
         "day": 12
+    },
+    {
+        "id": "diamond_dust_reina_kondo_birthday",
+        "title": "近藤 玲奈さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "diamond_dust",
+        "year": 1999,
+        "month": 1,
+        "day": 28
+    },
+    {
+        "id": "diamond_dust_yuuki_urushiyama_birthday",
+        "title": "漆山 ゆうきさん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "diamond_dust",
+        "month": 11,
+        "day": 24
+    },
+    {
+        "id": "diamond_dust_misato_matsuoka_birthday",
+        "title": "松岡 美里さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "diamond_dust",
+        "year": 2001,
+        "month": 3,
+        "day": 23
+    },
+    {
+        "id": "diamond_dust_momoko_miyashiro_birthday",
+        "title": "宮白 桃子さん",
+        "type": "birthday",
+        "category": "cast",
+        "castGroup": "diamond_dust",
+        "month": 5,
+        "day": 9
     },
     {
         "id": "kuzumimizuku_an_birthday",

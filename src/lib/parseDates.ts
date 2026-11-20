@@ -3,7 +3,7 @@ export type DateEntryRaw = {
     title: string;
     type: "birthday" | "anniversary";
     category: "character" | "cast" | "other";
-    castGroup?: "togenashi_togeari" | "canna_lily" | "f272" | "kuzumimizuku";
+    castGroup?: "togenashi_togeari" | "diamond_dust" | "canna_lily" | "f272" | "kuzumimizuku";
     month?: number;
     day?: number;
     year?: number;
@@ -182,6 +182,7 @@ export const categoryLabels: Record<string, string> = {
 
 export const castGroupLabels: Record<string, string> = {
     togenashi_togeari: "トゲナシトゲアリ",
+    diamond_dust: "ダイヤモンドダスト",
     canna_lily: "Canna Lily",
     f272: "F-272",
     kuzumimizuku: "クズミミズク",
@@ -198,7 +199,7 @@ export function isDateEntryArray(value: unknown): value is DateEntryRaw[] {
                 typeof c.title === "string" &&
                 (c.type === "birthday" || c.type === "anniversary") &&
                 (c.category === "character" || c.category === "cast" || c.category === "other") &&
-                (c.castGroup === undefined || c.castGroup === "togenashi_togeari" || c.castGroup === "canna_lily" || c.castGroup === "f272" || c.castGroup === "kuzumimizuku") &&
+                (c.castGroup === undefined || c.castGroup === "togenashi_togeari" || c.castGroup === "diamond_dust" || c.castGroup === "canna_lily" || c.castGroup === "f272" || c.castGroup === "kuzumimizuku") &&
                 (c.month === undefined || typeof c.month === "number") &&
                 (c.day === undefined || typeof c.day === "number") &&
                 (c.year === undefined || typeof c.year === "number") &&
