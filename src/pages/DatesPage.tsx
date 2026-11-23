@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { trackDatesFilter } from "../lib/gtag";
 import { CalendarDays, Cake, Award, Sparkles, Clock3 } from "lucide-react";
+import { getBirthdayDetails, getDateDisplayTitle } from "../lib/birthdayDetails";
 import {
     type DateEntry,
     type DateEntryRaw,
@@ -63,6 +64,8 @@ function CountdownTimer({ targetDate }: { targetDate: string }) {
 
 function DateCard({ entry }: { entry: DateEntry }) {
     const isBirthday = entry.type === "birthday";
+    const title = getDateDisplayTitle(entry);
+    const details = getBirthdayDetails(entry);
     const isUnpublishedBirthday = isBirthday && entry.unpublishedDate;
     const icon = isBirthday ? <Cake className="icon-18" /> : <Award className="icon-18" />;
     const monthDay = isUnpublishedBirthday
@@ -83,8 +86,8 @@ function DateCard({ entry }: { entry: DateEntry }) {
                 <div className="dates-today-banner">
                     <Sparkles className="icon-16" />
                     {isBirthday
-                        ? `今日は${entry.title.replace("誕生日", "")}の誕生日です！おめでとうございます！`
-                        : `本日で${entry.title}${entry.anniversaryYear}周年です！`}
+                        ? `今日は${title.replace("誕生日", "")}の誕生日です！おめでとうございます！`
+                        : `本日で${title}${entry.anniversaryYear}周年です！`}
                 </div>
             )}
 
@@ -99,12 +102,20 @@ function DateCard({ entry }: { entry: DateEntry }) {
                     </span>
                 </div>
 
-                <h3 className="dates-card-title">{entry.title}</h3>
+                <h3 className="dates-card-title">{title}</h3>
 
                 <div className="dates-card-meta">
                     <CalendarDays className="icon-14" />
                     <span>{monthDay}</span>
                 </div>
+
+                {details && (
+                    <dl className="dates-card-details">
+                        <div><dt>バンド</dt><dd>{details.band}</dd></div>
+                        {details.part && <div><dt>担当パート</dt><dd>{details.part}</dd></div>}
+                        {details.relatedName && <div><dt>{details.relatedLabel}</dt><dd>{details.relatedName}</dd></div>}
+                    </dl>
+                )}
 
                 {!entry.isToday && !isUnpublishedBirthday && (
                     <div className="dates-card-countdown">

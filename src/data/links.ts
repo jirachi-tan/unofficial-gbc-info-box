@@ -18,6 +18,9 @@ export type BandMember = {
     name: string;
     role: string;
     part: string;
+    /** Character's part, when it differs from the cast member's part. */
+    characterPart?: string;
+    birthdayIds: { character: string; cast: string };
     links: SnsLink[];
 };
 
@@ -78,6 +81,7 @@ export const bands: BandInfo[] = [
                 name: "理名さん",
                 role: "井芹仁菜",
                 part: "Vo.",
+                birthdayIds: { character: "iseri_nina_birthday", cast: "rina_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/rina_togetoge" },
                     { type: "instagram", url: "https://www.instagram.com/rina_togetoge/" },
@@ -87,6 +91,7 @@ export const bands: BandInfo[] = [
                 name: "夕莉さん",
                 role: "河原木桃香",
                 part: "Gt.",
+                birthdayIds: { character: "kawaragi_momoka_birthday", cast: "yuri_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/yuri_togetoge" },
                     { type: "instagram", url: "https://www.instagram.com/yuri_togetoge/" },
@@ -96,6 +101,7 @@ export const bands: BandInfo[] = [
                 name: "朱李さん",
                 role: "ルパ",
                 part: "Ba.",
+                birthdayIds: { character: "rupa_birthday", cast: "shuri_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/shuri_togetoge" },
                     { type: "instagram", url: "https://www.instagram.com/shuri_togetoge/" },
@@ -105,6 +111,7 @@ export const bands: BandInfo[] = [
                 name: "凪都さん",
                 role: "海老塚智",
                 part: "Key.",
+                birthdayIds: { character: "ebizuka_tomo_birthday", cast: "natsu_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/natsu_togetoge" },
                     { type: "instagram", url: "https://www.instagram.com/natsu_togetoge/" },
@@ -114,6 +121,7 @@ export const bands: BandInfo[] = [
                 name: "美怜さん",
                 role: "安和すばる",
                 part: "Dr.",
+                birthdayIds: { character: "awa_subaru_birthday", cast: "mirei_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/mirei_togetoge" },
                     { type: "instagram", url: "https://www.instagram.com/mirei_togetoge/" },
@@ -131,6 +139,7 @@ export const bands: BandInfo[] = [
                 name: "箭野 結羽さん",
                 role: "橘田楓",
                 part: "Vo.",
+                birthdayIds: { character: "canna_lily_kaede_birthday", cast: "yano_yu_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/YuwaCannaLily" },
                 ],
@@ -139,6 +148,7 @@ export const bands: BandInfo[] = [
                 name: "早坂 莉寧さん",
                 role: "星亜矢芽",
                 part: "Gt.",
+                birthdayIds: { character: "canna_lily_ayame_birthday", cast: "hayasaka_rin_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/RineCannaLily" },
                 ],
@@ -147,6 +157,7 @@ export const bands: BandInfo[] = [
                 name: "紫乃月 姫咲さん",
                 role: "榊原紫苑",
                 part: "Ba.",
+                birthdayIds: { character: "canna_lily_shion_birthday", cast: "mizunotsuki_himesaki_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/KisakiCannaLily" },
                 ],
@@ -155,6 +166,7 @@ export const bands: BandInfo[] = [
                 name: "佐野 櫻さん",
                 role: "雪志摩ナズナ",
                 part: "Key.",
+                birthdayIds: { character: "canna_lily_nazuna_birthday", cast: "sano_sakur_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/SakuraCannaLily" },
                 ],
@@ -163,6 +175,7 @@ export const bands: BandInfo[] = [
                 name: "椎名 在音さん",
                 role: "千ヶ崎竜胆",
                 part: "Dr.",
+                birthdayIds: { character: "canna_lily_rindo_birthday", cast: "shiina_zaon_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/AruneCannaLily" },
                 ],
@@ -180,6 +193,7 @@ export const bands: BandInfo[] = [
                 name: "LUCAさん",
                 role: "加藤嗄生",
                 part: "Vo.",
+                birthdayIds: { character: "f272_kato_sayori_birthday", cast: "f272_luca_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/luca_F272" },
                 ],
@@ -188,6 +202,7 @@ export const bands: BandInfo[] = [
                 name: "TOWAさん",
                 role: "宇田川琴",
                 part: "Gt.",
+                birthdayIds: { character: "f272_udagawa_koto_birthday", cast: "f272_towa_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/towa_F272" },
                 ],
@@ -196,6 +211,7 @@ export const bands: BandInfo[] = [
                 name: "MIYUさん",
                 role: "黒宮八月",
                 part: "Gt.",
+                birthdayIds: { character: "f272_kuromiya_hazuki_birthday", cast: "f272_miyu_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/miyu_F272" },
                 ],
@@ -204,6 +220,7 @@ export const bands: BandInfo[] = [
                 name: "HINANOさん",
                 role: "浅井萌々乃",
                 part: "Ba.",
+                birthdayIds: { character: "f272_asai_momono_birthday", cast: "f272_hinano_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/hinano_F272" },
                 ],
@@ -212,6 +229,7 @@ export const bands: BandInfo[] = [
                 name: "YOSHIさん",
                 role: "中村有",
                 part: "Dr.",
+                birthdayIds: { character: "f272_nakamura_yu_birthday", cast: "f272_yoshi_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/yoshi_F272" },
                 ],
@@ -228,6 +246,8 @@ export const bands: BandInfo[] = [
                 name: "和音(あん)さん",
                 role: "若堀 若葉",
                 part: "Vo./Gt.",
+                characterPart: "Vo.",
+                birthdayIds: { character: "kuzumimizuku_wakaba_birthday", cast: "kuzumimizuku_an_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/an_kzmmzk" },
                     { type: "instagram", url: "https://instagram.com/an_kzmmzk" },
@@ -237,6 +257,8 @@ export const bands: BandInfo[] = [
                 name: "茉那(まな)さん",
                 role: "飯豊 澄羽",
                 part: "Gt./Vo.",
+                characterPart: "Gt.",
+                birthdayIds: { character: "kuzumimizuku_suuha_birthday", cast: "kuzumimizuku_mana_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/mana_kzmmzk" },
                     { type: "instagram", url: "https://instagram.com/mana_kzmmzk" },
@@ -246,6 +268,7 @@ export const bands: BandInfo[] = [
                 name: "藍楠(あいな)さん",
                 role: "乙津 歌留多",
                 part: "Ba.",
+                birthdayIds: { character: "kuzumimizuku_karuta_birthday", cast: "kuzumimizuku_aina_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/aina_kzmmzk" },
                     { type: "instagram", url: "https://instagram.com/aina_kzmmzk" },
@@ -255,6 +278,7 @@ export const bands: BandInfo[] = [
                 name: "乃逢(のあ)さん",
                 role: "卯木 風薫",
                 part: "Dr.",
+                birthdayIds: { character: "kuzumimizuku_kazekaoru_birthday", cast: "kuzumimizuku_noa_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/noa_kzmmzk" },
                     { type: "instagram", url: "https://instagram.com/noa_kzmmzk" },
@@ -264,6 +288,7 @@ export const bands: BandInfo[] = [
                 name: "佳哉(かや)さん",
                 role: "八峰 志乃",
                 part: "Key.",
+                birthdayIds: { character: "kuzumimizuku_shino_birthday", cast: "kuzumimizuku_kaya_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/kaya_kzmmzk" },
                     { type: "instagram", url: "https://instagram.com/kaya_kzmmzk" },
@@ -278,6 +303,7 @@ export const bands: BandInfo[] = [
                 name: "近藤 玲奈さん",
                 role: "ヒナ",
                 part: "Vo.",
+                birthdayIds: { character: "diamond_dust_hina_birthday", cast: "diamond_dust_reina_kondo_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/reina_kondo" },
                 ],
@@ -286,6 +312,7 @@ export const bands: BandInfo[] = [
                 name: "漆山 ゆうきさん",
                 role: "リン",
                 part: "Gt.",
+                birthdayIds: { character: "diamond_dust_rin_birthday", cast: "diamond_dust_yuuki_urushiyama_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/urushiyamayuuki" },
                 ],
@@ -294,6 +321,7 @@ export const bands: BandInfo[] = [
                 name: "松岡 美里さん",
                 role: "ナナ",
                 part: "Ba.",
+                birthdayIds: { character: "diamond_dust_nana_birthday", cast: "diamond_dust_misato_matsuoka_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/Matsuoka_Misato" },
                 ],
@@ -302,6 +330,7 @@ export const bands: BandInfo[] = [
                 name: "宮白 桃子さん",
                 role: "アイ",
                 part: "Dr.",
+                birthdayIds: { character: "diamond_dust_ai_birthday", cast: "diamond_dust_momoko_miyashiro_birthday" },
                 links: [
                     { type: "x", url: "https://x.com/miyamo_0509" },
                 ],

@@ -3,6 +3,8 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { getCalendarBirthdayEvents } from "../src/lib/calendarBirthdays.ts";
 import { isDateEntryArray, parseDateEntries } from "../src/lib/parseDates.ts";
+import { getBirthdayDetails, getDateDisplayTitle } from "../src/lib/birthdayDetails.ts";
+import { bands } from "../src/data/links.ts";
 
 const entries = JSON.parse(await readFile(new URL("../public/data/dates.json", import.meta.url), "utf8"));
 const expected = [
@@ -50,6 +52,49 @@ const existingBandCharacters = [
     ["diamond_dust_rin_birthday", "diamond_dust"],
     ["diamond_dust_ai_birthday", "diamond_dust"],
 ];
+
+test("birthday details use explicit member IDs for both sides of each pairing", () => {
+    const mappedIds = new Set();
+    const normalize = (value) => value.replace(/\([^)]*\)/g, "").replace(/\s/g, "");
+    for (const band of bands) {
+        for (const member of band.members) {
+            for (const category of ["character", "cast"]) {
+                const id = member.birthdayIds[category];
+                assert.ok(!mappedIds.has(id), `duplicate birthday ID: ${id}`);
+                mappedIds.add(id);
+                const entry = entries.find((item) => item.id === id);
+                assert.ok(entry, `missing birthday: ${id}`);
+                assert.equal(entry.category, category);
+                assert.equal(normalize(entry.title), normalize(category === "character" ? member.role : member.name));
+                const details = getBirthdayDetails(entry);
+                assert.equal(details.band, band.name);
+                assert.equal(details.relatedLabel, category === "character" ? "CV" : "担当キャラクター");
+                assert.equal(normalize(details.relatedName), normalize(category === "character" ? member.name : member.role));
+            }
+        }
+    }
+    assert.equal(mappedIds.size, entries.filter((entry) => entry.type === "birthday" && entry.castGroup).length);
+});
+
+test("birthday details distinguish character and cast parts without changing birthday data", () => {
+    const character = entries.find((entry) => entry.id === "kuzumimizuku_wakaba_birthday");
+    const cast = entries.find((entry) => entry.id === "kuzumimizuku_an_birthday");
+    assert.deepEqual(getBirthdayDetails(character), {
+        band: "クズミミズク", part: "Vo.", relatedName: "和音さん", relatedLabel: "CV",
+    });
+    assert.deepEqual(getBirthdayDetails(cast), {
+        band: "クズミミズク", part: "Vo./Gt.", relatedName: "若堀 若葉", relatedLabel: "担当キャラクター",
+    });
+    assert.equal(getDateDisplayTitle(cast), "和音さん");
+    assert.equal(parseDateEntries([cast], "2026-01-14")[0].fullDateText, "2004年1月14日");
+    assert.equal(cast.title, "和音(あん)さん");
+    assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "diamond_dust_reina_kondo_birthday")).part, undefined);
+    assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "teshima_nari_birthday")), null);
+    assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "togenashi_formation")), null);
+    const unpublished = entries.find((entry) => entry.id === "f272_towa_birthday");
+    assert.equal(getBirthdayDetails(unpublished).relatedName, "宇田川琴");
+    assert.equal(parseDateEntries([unpublished], "2026-01-14")[0].unpublishedDate, true);
+});
 
 test("birthday data retains the existing entries and full birth dates", () => {
     assert.ok(isDateEntryArray(entries));

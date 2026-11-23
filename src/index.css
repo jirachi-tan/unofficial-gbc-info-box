@@ -2718,6 +2718,33 @@ code {
   font-weight: 600;
 }
 
+.dates-card-details {
+  display: grid;
+  gap: 5px;
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(248, 250, 252, 0.8);
+  color: #334155;
+  font-size: 13px;
+}
+
+.dates-card-details div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+}
+
+.dates-card-details dt {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.dates-card-details dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
 .dates-card-countdown {
   display: flex;
   align-items: center;
