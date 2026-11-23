@@ -14,12 +14,14 @@ export function getBirthdayDetails(entry: DateEntryRaw) {
     const bandName = castGroupLabels[entry.castGroup];
     const band = bands.find((item) => item.name === bandName);
     const member = band?.members.find((item) => item.birthdayIds[category] === entry.id);
+    const isDiamondDustCast = category === "cast" && entry.castGroup === "diamond_dust";
 
     return {
         band: bandName,
-        part: member && (category === "character"
+        part: member && (category === "character" || isDiamondDustCast
             ? member.characterPart ?? member.part
-            : entry.castGroup === "diamond_dust" ? undefined : member.part),
+            : member.part),
+        partLabel: isDiamondDustCast ? "キャラのパート" : "担当パート",
         relatedName: member && (category === "character"
             ? getDateDisplayTitle({ ...entry, category: "cast", title: member.name })
             : member.role),

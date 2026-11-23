@@ -80,20 +80,33 @@ test("birthday details distinguish character and cast parts without changing bir
     const character = entries.find((entry) => entry.id === "kuzumimizuku_wakaba_birthday");
     const cast = entries.find((entry) => entry.id === "kuzumimizuku_an_birthday");
     assert.deepEqual(getBirthdayDetails(character), {
-        band: "クズミミズク", part: "Vo.", relatedName: "和音さん", relatedLabel: "CV",
+        band: "クズミミズク", part: "Vo.", partLabel: "担当パート", relatedName: "和音さん", relatedLabel: "CV",
     });
     assert.deepEqual(getBirthdayDetails(cast), {
-        band: "クズミミズク", part: "Vo./Gt.", relatedName: "若堀 若葉", relatedLabel: "担当キャラクター",
+        band: "クズミミズク", part: "Vo./Gt.", partLabel: "担当パート", relatedName: "若堀 若葉", relatedLabel: "担当キャラクター",
     });
     assert.equal(getDateDisplayTitle(cast), "和音さん");
     assert.equal(parseDateEntries([cast], "2026-01-14")[0].fullDateText, "2004年1月14日");
     assert.equal(cast.title, "和音(あん)さん");
-    assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "diamond_dust_reina_kondo_birthday")).part, undefined);
     assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "teshima_nari_birthday")), null);
     assert.equal(getBirthdayDetails(entries.find((entry) => entry.id === "togenashi_formation")), null);
     const unpublished = entries.find((entry) => entry.id === "f272_towa_birthday");
     assert.equal(getBirthdayDetails(unpublished).relatedName, "宇田川琴");
     assert.equal(parseDateEntries([unpublished], "2026-01-14")[0].unpublishedDate, true);
+});
+
+test("Diamond Dust cast cards show the character's part, not the cast member's", () => {
+    for (const [id, role, part] of [
+        ["diamond_dust_yuuki_urushiyama_birthday", "リン", "Gt."],
+        ["diamond_dust_reina_kondo_birthday", "ヒナ", "Vo."],
+        ["diamond_dust_misato_matsuoka_birthday", "ナナ", "Ba."],
+        ["diamond_dust_momoko_miyashiro_birthday", "アイ", "Dr."],
+    ]) {
+        const details = getBirthdayDetails(entries.find((entry) => entry.id === id));
+        assert.equal(details.partLabel, "キャラのパート");
+        assert.equal(details.part, part);
+        assert.equal(details.relatedName, role);
+    }
 });
 
 test("birthday data retains the existing entries and full birth dates", () => {

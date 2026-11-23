@@ -112,7 +112,7 @@ function DateCard({ entry }: { entry: DateEntry }) {
                 {details && (
                     <dl className="dates-card-details">
                         <div><dt>バンド</dt><dd>{details.band}</dd></div>
-                        {details.part && <div><dt>担当パート</dt><dd>{details.part}</dd></div>}
+                        {details.part && <div><dt>{details.partLabel}</dt><dd>{details.part}</dd></div>}
                         {details.relatedName && <div><dt>{details.relatedLabel}</dt><dd>{details.relatedName}</dd></div>}
                     </dl>
                 )}
